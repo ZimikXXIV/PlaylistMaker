@@ -3,5 +3,7 @@
     <dimen name="button_cornerRadius">16dp</dimen>
     <dimen name="button_margin">16dp</dimen>
     <dimen name="button_padding">16dp</dimen>
-    <dimen name="setting_text_size">18dp</dimen>
+    <dimen name="setting_text_size">16sp</dimen>
+    <dimen name="textview_margin">16dp</dimen>
+    <dimen name="headtext_size">24sp</dimen>
 </resources>
