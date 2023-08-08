@@ -24,7 +24,7 @@
         >
 
         <Button
-            android:id="@+id/search"
+            android:id="@+id/btnSearch"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_margin="@dimen/button_margin"
@@ -40,7 +40,7 @@
             app:iconTint="@color/YP_Black" />
 
         <Button
-            android:id="@+id/medialibrary"
+            android:id="@+id/btnMedialibrary"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_margin="@dimen/button_margin"
@@ -56,7 +56,7 @@
             app:iconTint="@color/YP_Black" />
 
         <Button
-            android:id="@+id/settings"
+            android:id="@+id/btnSettings"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_margin="@dimen/button_margin"

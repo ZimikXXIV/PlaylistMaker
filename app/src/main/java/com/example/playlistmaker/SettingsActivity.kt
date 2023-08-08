@@ -11,7 +11,7 @@ class SettingsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
 
-        val medialibraryButton = findViewById<TextView>(R.id.backButton)
+        val medialibraryButton = findViewById<TextView>(R.id.btnBack)
 
         medialibraryButton.setOnClickListener{
             finish()

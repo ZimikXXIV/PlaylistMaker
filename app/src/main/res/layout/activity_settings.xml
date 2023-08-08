@@ -8,7 +8,7 @@
     >
 
     <TextView
-        android:id="@+id/backButton"
+        android:id="@+id/btnBack"
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:layout_marginHorizontal="@dimen/textview_margin"
@@ -31,8 +31,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_weight="1">
+            android:orientation="horizontal">
 
             <TextView
                 android:layout_width="match_parent"
