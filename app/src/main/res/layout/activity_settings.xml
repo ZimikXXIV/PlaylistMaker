@@ -7,7 +7,6 @@
 
     <TextView
         android:id="@+id/btnBack"
-        android:layout_height="36dp"
         android:text="@string/settings_text"
         app:drawableStartCompat="@drawable/back_icon"
         style="@style/Header_txtViewStyle">
