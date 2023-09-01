@@ -1,88 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@color/YP_White"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/Main_layoutVertical"
     >
 
     <TextView
         android:id="@+id/btnBack"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:layout_marginHorizontal="@dimen/textview_margin"
-        android:minHeight="48dp"
-        android:layout_marginTop="@dimen/textview_margin"
-        android:paddingHorizontal="@dimen/textview_margin"
-        android:drawablePadding="16dp"
-        android:gravity="center_vertical"
+        android:layout_height="36dp"
         android:text="@string/settings_text"
-        android:textSize="@dimen/headtext_size"
-        app:drawableStartCompat="@drawable/back_icon">
+        app:drawableStartCompat="@drawable/back_icon"
+        style="@style/Header_txtViewStyle">
     </TextView>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:paddingHorizontal="16dp">
+        android:paddingHorizontal="16dp"
+        >
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginVertical="@dimen/textview_margin"
             android:orientation="horizontal">
 
             <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:minHeight="54dp"
                 android:text="@string/darktheme_text"
-                android:textSize="@dimen/setting_text_size"
-                android:gravity="center_vertical"
+                style="@style/Settings_txtViewWithSwitchStyle"
                 >
             </TextView>
 
             <Switch
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="3">
+                style="@style/Settings_switchStyle"
+                android:layout_weight="3"
+                android:minHeight="48dp"
+                tools:ignore="UseSwitchCompatOrMaterialXml">
             </Switch>
 
         </LinearLayout>
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            style="@style/Settings_txtViewStyle"
             android:layout_weight="1"
             android:text="@string/share_text"
-            android:textSize="@dimen/setting_text_size"
-            android:gravity="center_vertical"
-            android:layout_marginVertical="@dimen/textview_margin"
             app:drawableEndCompat="@drawable/shareapp_icon">
         </TextView>
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
             android:layout_weight="1"
             android:text="@string/techsupport_text"
-            android:textSize="@dimen/setting_text_size"
-            android:gravity="center_vertical"
-            android:layout_marginVertical="@dimen/textview_margin"
-            app:drawableEndCompat="@drawable/techsupport_icon">
+            app:drawableEndCompat="@drawable/techsupport_icon"
+            style="@style/Settings_txtViewStyle">
         </TextView>
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
             android:layout_weight="1"
             android:text="@string/license_text"
-            android:textSize="@dimen/setting_text_size"
-            android:gravity="center_vertical"
             android:layout_marginVertical="@dimen/textview_margin"
-            app:drawableEndCompat="@drawable/arrowright_icon">
+            app:drawableEndCompat="@drawable/arrowright_icon"
+            style="@style/Settings_txtViewStyle">
         </TextView>
 
     </LinearLayout>
