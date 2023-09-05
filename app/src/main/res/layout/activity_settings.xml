@@ -42,6 +42,7 @@
         </LinearLayout>
 
         <TextView
+            android:id="@+id/btnShare"
             style="@style/Settings_txtViewStyle"
             android:layout_weight="1"
             android:text="@string/share_text"
@@ -49,6 +50,7 @@
         </TextView>
 
         <TextView
+            android:id="@+id/btnSupport"
             android:layout_weight="1"
             android:text="@string/techsupport_text"
             app:drawableEndCompat="@drawable/techsupport_icon"
@@ -56,6 +58,7 @@
         </TextView>
 
         <TextView
+            android:id="@+id/btnLicense"
             android:layout_weight="1"
             android:text="@string/license_text"
             android:layout_marginVertical="@dimen/textview_margin"
