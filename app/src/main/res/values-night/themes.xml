@@ -6,7 +6,7 @@
     </style>
     <style name="Theme.PlaylistMaker" parent="Base.Theme.PlaylistMaker">
         <item name="colorPrimary">@color/YP_Black</item>
-        <item name="colorSurface">@color/YP_White</item>
+        <item name="colorOnPrimary">@color/YP_White</item>
         <item name="android:colorBackground">@color/YP_Black</item>
     </style>
 </resources>

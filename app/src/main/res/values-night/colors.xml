@@ -6,8 +6,8 @@
     <color name="YP_BlueLight">#9FBBF3</color>
     <color name="YP_Grey">#AEAFB4</color>>
     <color name="YP_GreyLight">#E6E8EB</color>>
-    <color name="Switch_track">@color/YP_GreyLight</color>
-    <color name="Switch_thumb">@color/YP_Grey</color>
-    <color name="IconTint">@color/YP_Grey</color>
-    <color name="MainBackground">@color/YP_Blue</color>
+    <color name="Switch_track">@color/YP_BlueLight</color>
+    <color name="Switch_thumb">@color/YP_Blue</color>
+    <color name="IconTint">@color/YP_White</color>
+    <color name="MainBackground">@color/YP_Black</color>
 </resources>

@@ -38,7 +38,7 @@
         <item name="android:gravity">center_vertical</item>
         <item name="android:textSize">@dimen/setting_text_size</item>
         <item name="android:textColor">?attr/colorOnPrimary</item>
-        <item name="android:drawableTint">@color/YP_Grey</item>
+        <item name="android:drawableTint">@color/IconTint</item>
     </style>
     <style name = "Settings_txtViewWithSwitchStyle">
         <item name="android:layout_width">match_parent</item>
@@ -51,7 +51,7 @@
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:gravity">center_vertical</item>
-        <item name="android:thumbTint">@color/YP_Grey</item>
-        <item name="android:trackTint">@color/YP_GreyLight</item>
+        <item name="android:thumbTint">@color/Switch_thumb</item>
+        <item name="android:trackTint">@color/Switch_track</item>
     </style>
 </resources>

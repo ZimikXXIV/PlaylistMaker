@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     style="@style/Main_layoutVertical"
-    android:background="@color/YP_Blue"
+    android:background="@color/MainBackground"
     >
     <TextView
         android:text="@string/app_name"
