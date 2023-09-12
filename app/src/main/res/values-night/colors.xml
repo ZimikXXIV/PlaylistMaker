@@ -10,4 +10,7 @@
     <color name="Switch_thumb">@color/YP_Blue</color>
     <color name="IconTint">@color/YP_White</color>
     <color name="MainBackground">@color/YP_Black</color>
+    <color name="SearchBackground">@color/YP_White</color>
+    <color name="SearchTextColor">@color/YP_Black</color>
+    <color name="SearchHintColor">@color/YP_Black</color>
 </resources>

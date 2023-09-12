@@ -5,7 +5,7 @@
     android:background="@color/MainBackground"
     >
     <TextView
-        android:text="@string/app_name"
+        android:text="@string/appName"
         style="@style/Header_txtViewStyle">
     </TextView>
 
@@ -14,17 +14,17 @@
         >
         <Button
             android:id="@+id/btnSearch"
-            android:text="@string/search_text"
+            android:text="@string/searchText"
             app:icon="@drawable/search_icon"
             style="@style/Main_btnStyle"/>
         <Button
             android:id="@+id/btnMedialibrary"
-            android:text="@string/medialibrary_text"
+            android:text="@string/medialibraryText"
             app:icon="@drawable/medialibrary_icon"
             style="@style/Main_btnStyle"/>
         <Button
             android:id="@+id/btnSettings"
-            android:text="@string/settings_text"
+            android:text="@string/settingsText"
             app:icon="@drawable/settings_icon"
             style="@style/Main_btnStyle"/>
 

@@ -2,60 +2,95 @@ package com.example.playlistmaker
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.content.res.Configuration
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Button
+import android.os.PersistableBundle
+import android.util.Log
+import android.widget.Switch
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
+import java.security.AccessController.getContext
+
 
 class SettingsActivity : AppCompatActivity() {
 
+    private lateinit var textViewMedialibrary : TextView
+    private lateinit var textViewShare : TextView
+    private lateinit var textViewSupport : TextView
+    private lateinit var textViewLicense : TextView
+    private lateinit var switchDayNight : Switch
     @SuppressLint("IntentReset")
     fun init_settings() :Unit{
-        val btnMedialibrary = findViewById<TextView>(R.id.btnBack)
+        textViewMedialibrary = findViewById<TextView>(R.id.btnBack)
 
-        btnMedialibrary.setOnClickListener{
+        textViewMedialibrary.setOnClickListener{
             finish()
         }
 
-        val btnShare = findViewById<TextView>(R.id.btnShare)
+        textViewShare = findViewById<TextView>(R.id.btnShare)
 
-        btnShare.setOnClickListener{
-            val shareText = "https://practicum.yandex.ru/profile/android-developer/"
+        textViewShare.setOnClickListener{
+            val shareLink = getString(R.string.shareLink)
             val shareIntent = Intent(Intent.ACTION_SEND)
-            shareIntent.putExtra(Intent.EXTRA_TEXT, shareText)
+            shareIntent.putExtra(Intent.EXTRA_TEXT, shareLink)
             shareIntent.setType("text/plain")
 
             startActivity(shareIntent)
         }
 
-        val btnSupport = findViewById<TextView>(R.id.btnSupport)
+        textViewSupport = findViewById<TextView>(R.id.btnSupport)
 
-        btnSupport.setOnClickListener{
-            val subjectText = "Сообщение разработчикам и разработчицам приложения Playlist Maker"
-            val bodyText = "Спасибо разработчикам и разработчицам за крутое приложение!"
+        textViewSupport.setOnClickListener{
+            val subjectText = getString(R.string.mailSubject)
+            val bodyText = getString(R.string.mailBody)
             val mailIntent = Intent(Intent.ACTION_SEND)
 
             mailIntent.data = Uri.parse("mailto:")
-            mailIntent.putExtra(Intent.EXTRA_EMAIL, arrayOf("Zimik24@yandex.ru"))
+            mailIntent.setType("text/plain")
+            mailIntent.putExtra(Intent.EXTRA_EMAIL, arrayOf( getString(R.string.mailDeveloper)))
             mailIntent.putExtra(Intent.EXTRA_SUBJECT, subjectText)
             mailIntent.putExtra(Intent.EXTRA_TEXT, bodyText)
-            mailIntent.setType("text/plain")
 
             startActivity(mailIntent)
         }
 
-        val btnLicense = findViewById<TextView>(R.id.btnLicense)
+        textViewLicense = findViewById<TextView>(R.id.btnLicense)
 
-        btnLicense.setOnClickListener{
-            val linkText = "https://yandex.ru/legal/practicum_offer/"
+        textViewLicense.setOnClickListener{
+            val linkText = getString(R.string.licenseLink)
             val linkIntent = Intent(Intent.ACTION_VIEW, Uri.parse(linkText))
 
             startActivity(linkIntent)
         }
 
-    }
+        switchDayNight = findViewById<Switch>(R.id.switchDayNight)
 
+        val DarkModeFlags = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
+
+        if(DarkModeFlags == Configuration.UI_MODE_NIGHT_YES)
+        {
+            switchDayNight.isChecked = true;
+        }
+
+
+
+        switchDayNight.setOnCheckedChangeListener { compoundButton, isChecked ->
+            if (isChecked)
+            {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+            }
+            else
+            {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+            }
+        }
+
+    }
+    companion object {
+        const val SWITCH_DAY_NIGHT = "SWITCH_DAY_NIGHT"
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
@@ -63,4 +98,25 @@ class SettingsActivity : AppCompatActivity() {
         init_settings()
 
     }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        Log.d("Save", "onSaveInstanceState")
+        outState.putBoolean(
+            SWITCH_DAY_NIGHT,
+            switchDayNight.isChecked
+        )
+    }
+
+    override fun onRestoreInstanceState(
+        savedInstanceState: Bundle?,
+        persistentState: PersistableBundle?
+    ) {
+        super.onRestoreInstanceState(savedInstanceState, persistentState)
+        Log.d("Restore", "onRestoreInstanceState")
+        if (savedInstanceState != null) {
+            switchDayNight.isChecked = savedInstanceState.getBoolean(SWITCH_DAY_NIGHT, false)
+        }
+    }
+
 }

@@ -7,7 +7,7 @@
 
     <TextView
         android:id="@+id/btnBack"
-        android:text="@string/settings_text"
+        android:text="@string/settingsText"
         app:drawableStartCompat="@drawable/back_icon"
         style="@style/Header_txtViewStyle">
     </TextView>
@@ -27,13 +27,14 @@
 
             <TextView
                 android:layout_weight="1"
-                android:text="@string/darktheme_text"
+                android:text="@string/darkThemeText"
                 style="@style/Settings_txtViewWithSwitchStyle"
                 >
             </TextView>
 
             <Switch
                 style="@style/Settings_switchStyle"
+                android:id="@+id/switchDayNight"
                 android:layout_weight="3"
                 android:minHeight="48dp"
                 tools:ignore="UseSwitchCompatOrMaterialXml">
@@ -45,14 +46,14 @@
             android:id="@+id/btnShare"
             style="@style/Settings_txtViewStyle"
             android:layout_weight="1"
-            android:text="@string/share_text"
+            android:text="@string/shareText"
             app:drawableEndCompat="@drawable/shareapp_icon">
         </TextView>
 
         <TextView
             android:id="@+id/btnSupport"
             android:layout_weight="1"
-            android:text="@string/techsupport_text"
+            android:text="@string/techsupportText"
             app:drawableEndCompat="@drawable/techsupport_icon"
             style="@style/Settings_txtViewStyle">
         </TextView>
@@ -60,7 +61,7 @@
         <TextView
             android:id="@+id/btnLicense"
             android:layout_weight="1"
-            android:text="@string/license_text"
+            android:text="@string/licenseText"
             android:layout_marginVertical="@dimen/textview_margin"
             app:drawableEndCompat="@drawable/arrowright_icon"
             style="@style/Settings_txtViewStyle">
