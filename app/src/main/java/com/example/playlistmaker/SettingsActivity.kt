@@ -43,10 +43,9 @@ class SettingsActivity : AppCompatActivity() {
         textViewSupport.setOnClickListener {
             val subjectText = getString(R.string.mail_subject)
             val bodyText = getString(R.string.mail_body)
-            val mailIntent = Intent(Intent.ACTION_SEND)
+            val mailIntent = Intent(Intent.ACTION_SENDTO)
 
             mailIntent.data = Uri.parse("mailto:")
-            mailIntent.type = "text/plain"
             mailIntent.putExtra(Intent.EXTRA_EMAIL, arrayOf(getString(R.string.mail_developer)))
             mailIntent.putExtra(Intent.EXTRA_SUBJECT, subjectText)
             mailIntent.putExtra(Intent.EXTRA_TEXT, bodyText)
