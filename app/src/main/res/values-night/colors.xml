@@ -8,9 +8,9 @@
     <color name="YP_GreyLight">#E6E8EB</color>>
     <color name="Switch_track">@color/YP_BlueLight</color>
     <color name="Switch_thumb">@color/YP_Blue</color>
-    <color name="IconTint">@color/YP_White</color>
-    <color name="MainBackground">@color/YP_Black</color>
-    <color name="SearchBackground">@color/YP_White</color>
-    <color name="SearchTextColor">@color/YP_Black</color>
-    <color name="SearchHintColor">@color/YP_Black</color>
+    <color name="Icon_Tint">@color/YP_White</color>
+    <color name="Main_Background">@color/YP_Black</color>
+    <color name="Search_Background">@color/YP_White</color>
+    <color name="Search_Text_Color">@color/YP_Black</color>
+    <color name="Search_Hint_Color">@color/YP_Black</color>
 </resources>

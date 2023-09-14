@@ -1,31 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        tools:ignore="MissingConstraints">
+        android:layout_height="wrap_content">
+
+        <ImageButton
+            android:id="@+id/btnBack"
+            android:visibility="visible"
+            app:srcCompat="@drawable/back_icon"
+            style="@style/Header_btnBackStyle"/>
 
         <TextView
-            android:id="@+id/btnBack"
             style="@style/Header_txtViewStyle"
-            android:text="@string/searchText"
-            app:drawableStartCompat="@drawable/back_icon" />
+            android:text="@string/search_text" />
+    </LinearLayout>
 
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
         <EditText
             android:id="@+id/edtxtSearch"
+            style="@style/Search_editViewStyle"
             android:inputType="text"
             app:drawableStartCompat="@drawable/search_icon"
-            app:endIconMode="clear_text"
-            style="@style/Search_editViewStyle"/>
-    </LinearLayout>
+            app:endIconMode="clear_text" />
+
+        <ImageButton
+            android:id="@+id/btnClear"
+            style="@style/Search_editViewStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|center_vertical"
+            android:visibility="invisible"
+            app:srcCompat="@drawable/clear_icon" />
+
+    </FrameLayout>
 
 </LinearLayout>

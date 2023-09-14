@@ -1,58 +1,50 @@
 package com.example.playlistmaker
 
-import android.annotation.SuppressLint
+import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.PersistableBundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.view.MotionEvent
+import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
-import android.widget.TextView
+import android.widget.ImageButton
 
 class SearchActivity : AppCompatActivity() {
 
     private lateinit var editTextViewSearch: EditText
-    private lateinit var textViewMedialibrary: TextView
-
-    @SuppressLint("ClickableViewAccessibility")
-    fun EditText.onRightDrawableClicked(onClicked: (view: EditText) -> Unit) {
-        this.setOnTouchListener { v, event ->
-            var hasConsumed = false
-            if (v is EditText) {
-                if (event.x >= v.width - v.totalPaddingRight) {
-                    if (event.action == MotionEvent.ACTION_UP) {
-                        onClicked(this)
-                    }
-                    hasConsumed = true
-                }
-            }
-            hasConsumed
-        }
-    }
+    private lateinit var btnClear: ImageButton
+    private lateinit var btnBack: ImageButton
+    var searchSavedText: String = String()
 
 
-    fun init_search(): Unit {
+    fun initSearch() {
 
-        textViewMedialibrary = findViewById<TextView>(R.id.btnBack)
+        btnBack = findViewById<ImageButton>(R.id.btnBack)
 
-        textViewMedialibrary.setOnClickListener{
+        btnBack.setOnClickListener {
             finish()
         }
 
 
-        editTextViewSearch = findViewById<EditText>(R.id.edtxtSearch)
+        btnClear = findViewById<ImageButton>(R.id.btnClear)
 
-        editTextViewSearch.onRightDrawableClicked { it.text.clear() }
+        val imageClickListener: View.OnClickListener = object : View.OnClickListener {
+            override fun onClick(p0: View?) {
+                editTextViewSearch.text.clear()
+                val inputMethodManager =
+                    getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+                inputMethodManager?.hideSoftInputFromWindow(editTextViewSearch.windowToken, 0)
+            }
+        }
+        btnClear.setOnClickListener(imageClickListener)
+
+        editTextViewSearch = findViewById<EditText>(R.id.edtxtSearch)
 
         val simpleTextWatcher = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                editTextViewSearch.setCompoundDrawablesRelativeWithIntrinsicBounds(
-                    R.drawable.search_icon,
-                    0,
-                    R.drawable.clear_icon,
-                    0
-                )
+                btnClear.visibility = View.VISIBLE
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
@@ -60,20 +52,14 @@ class SearchActivity : AppCompatActivity() {
             }
 
             override fun afterTextChanged(s: Editable?) {
+
                 if (editTextViewSearch.text.isNullOrEmpty()) {
-                    editTextViewSearch.setCompoundDrawablesRelativeWithIntrinsicBounds(
-                        R.drawable.search_icon,
-                        0,
-                        0,
-                        0
-                    )
+
+                    btnClear.visibility = View.INVISIBLE
                 } else {
-                    editTextViewSearch.setCompoundDrawablesRelativeWithIntrinsicBounds(
-                        R.drawable.search_icon,
-                        0,
-                        R.drawable.clear_icon,
-                        0
-                    )
+                    searchSavedText = editTextViewSearch.text.toString()
+
+                    btnClear.visibility = View.VISIBLE
                 }
             }
         }
@@ -87,13 +73,10 @@ class SearchActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
 
-        init_search();
+        initSearch()
 
     }
 
-    companion object {
-        const val SEARCH_TEXT = "SEARCH_TEXT"
-    }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
@@ -114,6 +97,10 @@ class SearchActivity : AppCompatActivity() {
             editTextViewSearch.setText(savedInstanceState.getString(SEARCH_TEXT, ""))
 
         }
+    }
+
+    companion object {
+        const val SEARCH_TEXT = "SEARCH_TEXT"
     }
 
 }

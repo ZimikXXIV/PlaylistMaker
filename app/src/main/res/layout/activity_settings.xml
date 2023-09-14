@@ -2,22 +2,28 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    style="@style/Main_layoutVertical"
-    >
+    style="@style/Main_layoutVertical">
 
-    <TextView
-        android:id="@+id/btnBack"
-        android:text="@string/settingsText"
-        app:drawableStartCompat="@drawable/back_icon"
-        style="@style/Header_txtViewStyle">
-    </TextView>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageButton
+            android:id="@+id/btnBack"
+            android:visibility="visible"
+            app:srcCompat="@drawable/back_icon"
+            style="@style/Header_btnBackStyle" />
+
+        <TextView
+            style="@style/Header_txtViewStyle"
+            android:text="@string/settings_text" />
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:paddingHorizontal="16dp"
-        >
+        android:paddingHorizontal="16dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -26,19 +32,16 @@
             android:orientation="horizontal">
 
             <TextView
-                android:layout_weight="1"
-                android:text="@string/darkThemeText"
                 style="@style/Settings_txtViewWithSwitchStyle"
-                >
-            </TextView>
+                android:layout_weight="1"
+                android:text="@string/dark_theme_text" />
 
             <Switch
-                style="@style/Settings_switchStyle"
                 android:id="@+id/switchDayNight"
+                style="@style/Settings_switchStyle"
                 android:layout_weight="3"
                 android:minHeight="48dp"
-                tools:ignore="UseSwitchCompatOrMaterialXml">
-            </Switch>
+                tools:ignore="UseSwitchCompatOrMaterialXml" />
 
         </LinearLayout>
 
@@ -46,26 +49,23 @@
             android:id="@+id/btnShare"
             style="@style/Settings_txtViewStyle"
             android:layout_weight="1"
-            android:text="@string/shareText"
-            app:drawableEndCompat="@drawable/shareapp_icon">
-        </TextView>
+            android:text="@string/share_text"
+            app:drawableEndCompat="@drawable/shareapp_icon" />
 
         <TextView
             android:id="@+id/btnSupport"
+            style="@style/Settings_txtViewStyle"
             android:layout_weight="1"
-            android:text="@string/techsupportText"
-            app:drawableEndCompat="@drawable/techsupport_icon"
-            style="@style/Settings_txtViewStyle">
-        </TextView>
+            android:text="@string/techsupport_text"
+            app:drawableEndCompat="@drawable/techsupport_icon" />
 
         <TextView
             android:id="@+id/btnLicense"
-            android:layout_weight="1"
-            android:text="@string/licenseText"
+            style="@style/Settings_txtViewStyle"
             android:layout_marginVertical="@dimen/textview_margin"
-            app:drawableEndCompat="@drawable/arrowright_icon"
-            style="@style/Settings_txtViewStyle">
-        </TextView>
+            android:layout_weight="1"
+            android:text="@string/license_text"
+            app:drawableEndCompat="@drawable/arrowright_icon" />
 
     </LinearLayout>
 

@@ -2,31 +2,32 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     style="@style/Main_layoutVertical"
-    android:background="@color/MainBackground"
-    >
-    <TextView
-        android:text="@string/appName"
-        style="@style/Header_txtViewStyle">
-    </TextView>
+    android:background="@color/Main_Background">
 
-    <LinearLayout
-        style="@style/Main_layoutVertical"
-        >
+    <TextView
+        style="@style/Header_txtViewStyle"
+        android:text="@string/app_name"
+        android:textColor="@color/YP_White" />
+
+    <LinearLayout style="@style/Main_layoutVertical">
+
         <Button
             android:id="@+id/btnSearch"
-            android:text="@string/searchText"
-            app:icon="@drawable/search_icon"
-            style="@style/Main_btnStyle"/>
+            style="@style/Main_btnStyle"
+            android:text="@string/search_text"
+            app:icon="@drawable/search_icon" />
+
         <Button
             android:id="@+id/btnMedialibrary"
-            android:text="@string/medialibraryText"
-            app:icon="@drawable/medialibrary_icon"
-            style="@style/Main_btnStyle"/>
+            style="@style/Main_btnStyle"
+            android:text="@string/medialibrary_text"
+            app:icon="@drawable/medialibrary_icon" />
+
         <Button
             android:id="@+id/btnSettings"
-            android:text="@string/settingsText"
-            app:icon="@drawable/settings_icon"
-            style="@style/Main_btnStyle"/>
+            style="@style/Main_btnStyle"
+            android:text="@string/settings_text"
+            app:icon="@drawable/settings_icon" />
 
     </LinearLayout>
 
