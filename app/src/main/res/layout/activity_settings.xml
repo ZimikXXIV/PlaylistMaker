@@ -10,9 +10,10 @@
 
         <ImageButton
             android:id="@+id/btnBack"
+            style="@style/Header_btnBackStyle"
             android:visibility="visible"
             app:srcCompat="@drawable/back_icon"
-            style="@style/Header_btnBackStyle" />
+            />
 
         <TextView
             style="@style/Header_txtViewStyle"
@@ -40,7 +41,6 @@
                 android:id="@+id/switchDayNight"
                 style="@style/Settings_switchStyle"
                 android:layout_weight="3"
-                android:minHeight="48dp"
                 tools:ignore="UseSwitchCompatOrMaterialXml" />
 
         </LinearLayout>
