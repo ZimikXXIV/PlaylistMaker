@@ -2,21 +2,22 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    style="@style/Main_layoutVertical">
+    style="@style/MainLayoutVertical">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/header_margin">
 
         <ImageButton
             android:id="@+id/btnBack"
-            style="@style/Header_btnBackStyle"
+            style="@style/HeaderBtnBackStyle"
             android:visibility="visible"
             app:srcCompat="@drawable/back_icon"
             />
 
         <TextView
-            style="@style/Header_txtViewStyle"
+            style="@style/HeaderTextViewStyle"
             android:text="@string/settings_text" />
     </LinearLayout>
 
@@ -24,48 +25,47 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:paddingHorizontal="16dp">
+        android:paddingHorizontal="@dimen/button_margin">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="@dimen/textview_margin"
             android:layout_weight="1"
             android:orientation="horizontal">
 
             <TextView
-                style="@style/Settings_txtViewWithSwitchStyle"
+                style="@style/SettingsTextViewWithSwitchStyle"
                 android:layout_weight="1"
-                android:layout_marginVertical="21dp"
+                android:layout_marginVertical="@dimen/margin_21dp"
                 android:text="@string/dark_theme_text" />
 
             <Switch
                 android:id="@+id/switchDayNight"
-                style="@style/Settings_switchStyle"
+                style="@style/SettingsSwitchStyle"
                 android:layout_weight="3"
-                android:layout_marginVertical="21dp"
+                android:layout_marginVertical="@dimen/margin_21dp"
                 tools:ignore="UseSwitchCompatOrMaterialXml" />
 
         </LinearLayout>
 
         <TextView
             android:id="@+id/btnShare"
-            style="@style/Settings_txtViewStyle"
+            style="@style/SettingsTextViewStyle"
             android:layout_weight="1"
             android:text="@string/share_text"
             app:drawableEndCompat="@drawable/shareapp_icon" />
 
         <TextView
             android:id="@+id/btnSupport"
-            style="@style/Settings_txtViewStyle"
+            style="@style/SettingsTextViewStyle"
             android:layout_weight="1"
             android:text="@string/techsupport_text"
             app:drawableEndCompat="@drawable/techsupport_icon" />
 
         <TextView
             android:id="@+id/btnLicense"
-            style="@style/Settings_txtViewStyle"
-            android:layout_marginVertical="@dimen/textview_margin"
+            style="@style/SettingsTextViewStyle"
             android:layout_weight="1"
             android:text="@string/license_text"
             app:drawableEndCompat="@drawable/arrowright_icon" />

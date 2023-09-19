@@ -1,31 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    style="@style/Main_layoutVertical"
+    style="@style/MainLayoutVertical"
     android:background="@color/Main_Background">
 
     <TextView
-        style="@style/Header_txtViewStyle"
+        style="@style/HeaderTextViewStyle"
         android:text="@string/app_name"
+        android:layout_marginBottom="24dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="12dp"
         android:textColor="@color/YP_White" />
 
-    <LinearLayout style="@style/Main_layoutVertical">
+    <LinearLayout style="@style/MainLayoutVertical">
 
         <Button
             android:id="@+id/btnSearch"
-            style="@style/Main_btnStyle"
+            style="@style/MainBtnStyle"
             android:text="@string/search_text"
             app:icon="@drawable/search_icon" />
 
         <Button
             android:id="@+id/btnMedialibrary"
-            style="@style/Main_btnStyle"
+            style="@style/MainBtnStyle"
             android:text="@string/medialibrary_text"
             app:icon="@drawable/medialibrary_icon" />
 
         <Button
             android:id="@+id/btnSettings"
-            style="@style/Main_btnStyle"
+            style="@style/MainBtnStyle"
             android:text="@string/settings_text"
             app:icon="@drawable/settings_icon" />
 

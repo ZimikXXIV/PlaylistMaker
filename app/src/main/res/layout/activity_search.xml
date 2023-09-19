@@ -7,16 +7,17 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/header_margin">
 
         <ImageButton
             android:id="@+id/btnBack"
             android:visibility="visible"
             app:srcCompat="@drawable/back_icon"
-            style="@style/Header_btnBackStyle"/>
+            style="@style/HeaderBtnBackStyle"/>
 
         <TextView
-            style="@style/Header_txtViewStyle"
+            style="@style/HeaderTextViewStyle"
             android:text="@string/search_text" />
     </LinearLayout>
 
@@ -26,14 +27,14 @@
 
         <EditText
             android:id="@+id/edtxtSearch"
-            style="@style/Search_editViewStyle"
+            style="@style/SearchEditViewStyle"
             android:inputType="text"
             app:drawableStartCompat="@drawable/search_icon"
             app:endIconMode="clear_text" />
 
         <ImageButton
             android:id="@+id/btnClear"
-            style="@style/Search_editViewStyle"
+            style="@style/SearchEditViewStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end|center_vertical"
