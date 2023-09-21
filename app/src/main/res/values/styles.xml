@@ -73,6 +73,7 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:background">@drawable/search_shape</item>
         <item name="android:layout_margin">@dimen/editview_margin</item>
+        <item name="android:drawablePadding">6dp</item>
         <item name="android:paddingHorizontal">@dimen/editview_padding</item>
         <item name="android:minHeight">36dp</item>
         <item name="android:textSize">@dimen/regular_text_size</item>
