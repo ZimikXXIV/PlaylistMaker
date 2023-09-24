@@ -10,6 +10,7 @@
     <dimen name="editview_padding">16dp</dimen>
     <dimen name="head_text_size">26sp</dimen>
     <dimen name="regular_text_size">19sp</dimen>
+    <dimen name="small_text_size">13sp</dimen>
     <dimen name="search_corner_radius">8dp</dimen>
     <dimen name="drawable_padding">16dp</dimen>
     <dimen name="search_text_size">16dp</dimen>
