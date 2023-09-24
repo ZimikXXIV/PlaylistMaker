@@ -31,6 +31,7 @@ class TrackHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             .load(model.artworkUrl100)
             .placeholder(R.drawable.place_holder_img)
             .transform(RoundedCorners(10))
+            .centerCrop()
             .into(cover)
     }
 

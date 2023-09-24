@@ -115,11 +115,11 @@ class SearchActivity : AppCompatActivity() {
         editTextViewSearch.addTextChangedListener(simpleTextWatcher)
 
         val recyclerView = findViewById<RecyclerView>(R.id.trackList)
-        val weatherAdapter = TrackAdapter(testTrackList())
+        val trackAdapter = TrackAdapter(testTrackList())
 
 
         recyclerView.layoutManager = LinearLayoutManager(this)
-        recyclerView.adapter = weatherAdapter
+        recyclerView.adapter = trackAdapter
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
