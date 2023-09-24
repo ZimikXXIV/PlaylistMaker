@@ -6,11 +6,11 @@
     <color name="YP_BlueLight">#9FBBF3</color>
     <color name="YP_Grey">#AEAFB4</color>>
     <color name="YP_GreyLight">#E6E8EB</color>>
-    <color name="Switch_track">@color/YP_GreyLight</color>
-    <color name="Switch_thumb">@color/YP_Grey</color>
-    <color name="Icon_Tint">@color/YP_Grey</color>
-    <color name="Main_Background">@color/YP_Blue</color>
-    <color name="Search_Background">@color/YP_GreyLight</color>
-    <color name="Search_Hint_Color">@color/YP_Grey</color>
+    <color name="Switch_track">@color/YP_BlueLight</color>
+    <color name="Switch_thumb">@color/YP_Blue</color>
+    <color name="Icon_Tint">@color/YP_White</color>
+    <color name="Main_Background">@color/YP_Black</color>
+    <color name="Search_Background">@color/YP_White</color>
     <color name="Search_Text_Color">@color/YP_Black</color>
+    <color name="Search_Hint_Color">@color/YP_Black</color>
 </resources>

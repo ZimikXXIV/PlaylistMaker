@@ -1,89 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@color/YP_White"
-    >
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/MainLayoutVertical">
 
-    <TextView
-        android:id="@+id/btnBack"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:layout_marginHorizontal="@dimen/textview_margin"
-        android:minHeight="48dp"
-        android:layout_marginTop="@dimen/textview_margin"
-        android:paddingHorizontal="@dimen/textview_margin"
-        android:drawablePadding="16dp"
-        android:gravity="center_vertical"
-        android:text="@string/settings_text"
-        android:textSize="@dimen/headtext_size"
-        app:drawableStartCompat="@drawable/back_icon">
-    </TextView>
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/header_margin">
+
+        <ImageButton
+            android:id="@+id/btnBack"
+            style="@style/HeaderBtnBackStyle"
+            android:visibility="visible"
+            app:srcCompat="@drawable/back_icon"
+            />
+
+        <TextView
+            style="@style/HeaderTextViewStyle"
+            android:text="@string/settings_text" />
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:paddingHorizontal="16dp">
+        android:paddingHorizontal="@dimen/button_margin">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/textview_margin"
+            android:layout_weight="1"
             android:orientation="horizontal">
 
             <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                style="@style/SettingsTextViewWithSwitchStyle"
                 android:layout_weight="1"
-                android:minHeight="54dp"
-                android:text="@string/darktheme_text"
-                android:textSize="@dimen/setting_text_size"
-                android:gravity="center_vertical"
-                >
-            </TextView>
+                android:layout_marginVertical="@dimen/margin_21dp"
+                android:text="@string/dark_theme_text" />
 
             <Switch
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="3">
-            </Switch>
+                android:id="@+id/switchDayNight"
+                style="@style/SettingsSwitchStyle"
+                android:layout_weight="3"
+                android:layout_marginVertical="@dimen/margin_21dp"
+                tools:ignore="UseSwitchCompatOrMaterialXml" />
 
         </LinearLayout>
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:id="@+id/btnShare"
+            style="@style/SettingsTextViewStyle"
             android:layout_weight="1"
             android:text="@string/share_text"
-            android:textSize="@dimen/setting_text_size"
-            android:gravity="center_vertical"
-            android:layout_marginVertical="@dimen/textview_margin"
-            app:drawableEndCompat="@drawable/shareapp_icon">
-        </TextView>
+            app:drawableEndCompat="@drawable/shareapp_icon" />
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:id="@+id/btnSupport"
+            style="@style/SettingsTextViewStyle"
             android:layout_weight="1"
             android:text="@string/techsupport_text"
-            android:textSize="@dimen/setting_text_size"
-            android:gravity="center_vertical"
-            android:layout_marginVertical="@dimen/textview_margin"
-            app:drawableEndCompat="@drawable/techsupport_icon">
-        </TextView>
+            app:drawableEndCompat="@drawable/techsupport_icon" />
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:id="@+id/btnLicense"
+            style="@style/SettingsTextViewStyle"
             android:layout_weight="1"
             android:text="@string/license_text"
-            android:textSize="@dimen/setting_text_size"
-            android:gravity="center_vertical"
-            android:layout_marginVertical="@dimen/textview_margin"
-            app:drawableEndCompat="@drawable/arrowright_icon">
-        </TextView>
+            app:drawableEndCompat="@drawable/arrowright_icon" />
 
     </LinearLayout>
 
