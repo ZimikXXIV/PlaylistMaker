@@ -1,7 +1,6 @@
 package com.example.playlistmaker
 
 import android.content.Context
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.PersistableBundle
 import android.text.Editable
@@ -10,6 +9,12 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ImageButton
+import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+
+
+
 
 class SearchActivity : AppCompatActivity() {
 
@@ -66,7 +71,12 @@ class SearchActivity : AppCompatActivity() {
 
         editTextViewSearch.addTextChangedListener(simpleTextWatcher)
 
+        val recyclerView = findViewById<RecyclerView>(R.id.trackList)
+        val trackAdapter = TrackAdapter(Track.testTrackList())
 
+
+        recyclerView.layoutManager = LinearLayoutManager(this)
+        recyclerView.adapter = trackAdapter
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

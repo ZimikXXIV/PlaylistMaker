@@ -13,4 +13,6 @@
     <color name="Search_Background">@color/YP_GreyLight</color>
     <color name="Search_Hint_Color">@color/YP_Grey</color>
     <color name="Search_Text_Color">@color/YP_Black</color>
+    <color name="Track_List_Name_color">@color/YP_Black</color>
+    <color name="Track_List_Under_Name_Color">@color/YP_Grey</color>
 </resources>
