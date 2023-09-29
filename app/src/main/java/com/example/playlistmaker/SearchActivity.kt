@@ -6,14 +6,20 @@ import android.os.PersistableBundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
+import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ImageButton
+import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-
-
+import com.google.android.material.button.MaterialButton
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
 
 class SearchActivity : AppCompatActivity() {
@@ -21,8 +27,23 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var editTextViewSearch: EditText
     private lateinit var btnClear: ImageButton
     private lateinit var btnBack: ImageButton
+    private lateinit var layoutEmptyTrackList: LinearLayout
+    private lateinit var layoutBadConnection: LinearLayout
+    private lateinit var recyclerTrackList: RecyclerView
+    private lateinit var btnRefresh: MaterialButton
     var searchSavedText: String = String()
 
+
+    private val itunesBaseUrl = "https://itunes.apple.com"
+
+    private val retrofit = Retrofit.Builder()
+        .baseUrl(itunesBaseUrl)
+        .addConverterFactory(GsonConverterFactory.create())
+        .build()
+
+    private val itunesService = retrofit.create(ItunesAPI::class.java)
+
+    private val trackList = ArrayList<Track>()
 
     fun initSearch() {
 
@@ -32,12 +53,21 @@ class SearchActivity : AppCompatActivity() {
             finish()
         }
 
+        layoutEmptyTrackList = findViewById(R.id.layoutEmptyTrackList)
+        layoutBadConnection = findViewById(R.id.layoutBadConnection)
+        recyclerTrackList = findViewById(R.id.recyclerTrackList)
+        btnRefresh = findViewById(R.id.btnRefresh)
+        btnClear = findViewById(R.id.btnClear)
 
-        btnClear = findViewById<ImageButton>(R.id.btnClear)
+        btnRefresh.setOnClickListener {
+            editTextViewSearch.onEditorAction(EditorInfo.IME_ACTION_DONE)
+        }
+
 
         val imageClickListener: View.OnClickListener = object : View.OnClickListener {
             override fun onClick(p0: View?) {
                 editTextViewSearch.text.clear()
+                changeVisibility(false, false, false)
                 val inputMethodManager =
                     getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
                 inputMethodManager?.hideSoftInputFromWindow(editTextViewSearch.windowToken, 0)
@@ -60,7 +90,7 @@ class SearchActivity : AppCompatActivity() {
 
                 if (editTextViewSearch.text.isNullOrEmpty()) {
 
-                    btnClear.visibility = View.INVISIBLE
+                    btnClear.visibility = View.GONE
                 } else {
                     searchSavedText = editTextViewSearch.text.toString()
 
@@ -69,15 +99,66 @@ class SearchActivity : AppCompatActivity() {
             }
         }
 
+
+
+
+
+
+
         editTextViewSearch.addTextChangedListener(simpleTextWatcher)
 
-        val recyclerView = findViewById<RecyclerView>(R.id.trackList)
-        val trackAdapter = TrackAdapter(Track.testTrackList())
+
+        val trackAdapter = TrackAdapter(trackList)
 
 
-        recyclerView.layoutManager = LinearLayoutManager(this)
-        recyclerView.adapter = trackAdapter
+        recyclerTrackList.layoutManager = LinearLayoutManager(this)
+        recyclerTrackList.adapter = trackAdapter
+
+
+        editTextViewSearch.setOnEditorActionListener { _, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                itunesService.search(editTextViewSearch.text.toString())
+                    .enqueue(object : Callback<SearchResponse> {
+                        override fun onResponse(
+                            call: Call<SearchResponse>,
+                            response: Response<SearchResponse>
+                        ) {
+                            if (response.code() == 200) {
+                                trackList.clear()
+                                if (response.body()?.results?.isNotEmpty() == true) {
+                                    trackList.addAll(response.body()?.results!!)
+                                    trackAdapter.notifyDataSetChanged()
+                                }
+                                if (trackList.isEmpty()) {
+                                    changeVisibility(true, false, false)
+                                } else {
+                                    changeVisibility(false, false, true)
+                                }
+                            } else {
+                                changeVisibility(false, true, false)
+                            }
+                        }
+
+                        override fun onFailure(call: Call<SearchResponse>, t: Throwable) {
+                            changeVisibility(false, true, false)
+                        }
+
+                    })
+            }
+            false
+        }
+
+
     }
+
+    fun changeVisibility(
+        isEmpty: Boolean, isBadConnectin: Boolean, isShowTrackList: Boolean
+    ) {
+        layoutEmptyTrackList.visibility = if (isEmpty) View.VISIBLE else View.GONE
+        layoutBadConnection.visibility = if (isBadConnectin) View.VISIBLE else View.GONE
+        recyclerTrackList.visibility = if (isShowTrackList) View.VISIBLE else View.GONE
+    }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
