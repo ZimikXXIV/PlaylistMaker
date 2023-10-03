@@ -1,10 +1,10 @@
 package com.example.playlistmaker
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
+import androidx.appcompat.app.AppCompatActivity
 
 class MainActivity : AppCompatActivity() {
 
@@ -25,7 +25,7 @@ class MainActivity : AppCompatActivity() {
         val medialibraryButton = findViewById<Button>(R.id.btnMedialibrary)
 
         medialibraryButton.setOnClickListener {
-            val intent = Intent(this, MedialibraryActivity::class.java)
+            val intent = Intent(this, MediaLibraryActivity::class.java)
             startActivity(intent)
         }
 

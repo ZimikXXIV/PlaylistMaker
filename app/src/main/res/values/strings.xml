@@ -8,9 +8,12 @@
     <string name="techsupport_text">Написать в поддержку</string>
     <string name="license_text">Пользовательское соглашение</string>
     <string name="search_hint">Поиcк</string>
+    <string name="refresh_text">Обновить</string>
     <string name="license_link">https://yandex.ru/legal/practicum_offer/</string>
     <string name="share_link">https://practicum.yandex.ru/profile/android-developer/</string>
     <string name="mail_subject">Сообщение разработчикам и разработчицам приложения Playlist Maker</string>
     <string name="mail_body">Спасибо разработчикам и разработчицам за крутое приложение!</string>
     <string name="mail_developer">Zimik24@yandex.ru</string>
+    <string name="empty_track_list_error">Ничего не нашлось</string>
+    <string name="bad_internet_connection_error">Проблемы со связью \n\n Загрузка не удалась. Проверьте подключение к интернету</string>
 </resources>
