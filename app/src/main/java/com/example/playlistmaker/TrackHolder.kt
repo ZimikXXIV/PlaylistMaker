@@ -11,12 +11,14 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import java.text.SimpleDateFormat
 import java.util.Locale
 
-class TrackHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+class TrackHolder(itemView: View, private val onClick: TrackListClickListenerInterface?) :
+    RecyclerView.ViewHolder(itemView) {
 
     private val trackName: TextView = itemView.findViewById(R.id.trackNameTextView)
     private val artistName: TextView = itemView.findViewById(R.id.artistNameTextView)
     private val duration: TextView = itemView.findViewById(R.id.durationTextView)
     private val cover: ImageView = itemView.findViewById(R.id.coverAlbum)
+
     private fun dpToPx(dp: Float): Int {
         return TypedValue.applyDimension(
             TypedValue.COMPLEX_UNIT_DIP,
@@ -25,19 +27,26 @@ class TrackHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         ).toInt()
     }
 
+    fun bind(track: Track) {
 
-    fun bind(model: Track) {
-
-        trackName.text = model.trackName
-        artistName.text = model.artistName
+        trackName.text = track.trackName
+        artistName.text = track.artistName
         duration.text =
-            SimpleDateFormat("mm:ss", Locale.getDefault()).format(model.trackTimeMillis.toLong())
+            SimpleDateFormat("mm:ss", Locale.getDefault()).format(track.trackTimeMillis.toLong())
+
+        itemView.setOnClickListener {
+            onClick?.onClick(track)
+        }
+
         Glide.with(itemView)
-            .load(model.artworkUrl100)
+            .load(track.artworkUrl100)
             .placeholder(R.drawable.placeholder_ico)
             .transform(RoundedCorners(dpToPx(2f)))
             .centerCrop()
             .into(cover)
     }
+
+
+
 
 }

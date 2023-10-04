@@ -16,4 +16,6 @@
     <string name="mail_developer">Zimik24@yandex.ru</string>
     <string name="empty_track_list_error">Ничего не нашлось</string>
     <string name="bad_internet_connection_error">Проблемы со связью \n\n Загрузка не удалась. Проверьте подключение к интернету</string>
+    <string name="your_history_text">Вы искали</string>
+    <string name="clear_history">Очистить историю</string>
 </resources>

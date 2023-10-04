@@ -40,7 +40,7 @@
                 android:layout_marginVertical="@dimen/margin_21dp"
                 android:text="@string/dark_theme_text" />
 
-            <Switch
+            <com.google.android.material.switchmaterial.SwitchMaterial
                 android:id="@+id/switchDayNight"
                 style="@style/SettingsSwitchStyle"
                 android:layout_weight="3"
