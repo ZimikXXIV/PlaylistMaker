@@ -14,6 +14,7 @@ import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.playlistmaker.TrackHistory.Companion.TRACK_HISTORY
 import com.google.android.material.button.MaterialButton
 import retrofit2.Call
 import retrofit2.Callback
@@ -34,6 +35,7 @@ class SearchActivity : AppCompatActivity(), TrackListClickListenerInterface {
     private lateinit var recyclerHistoryList: RecyclerView
     private lateinit var btnRefresh: MaterialButton
     private lateinit var btnClearHistory: MaterialButton
+    private lateinit var trackHistory: TrackHistory
     var searchSavedText: String = String()
 
 
@@ -45,9 +47,9 @@ class SearchActivity : AppCompatActivity(), TrackListClickListenerInterface {
     private val itunesService = retrofit.create(ItunesAPI::class.java)
 
     private val trackList = ArrayList<Track>()
-    private var trackHistory: ArrayList<Track> = ArrayList()
+    private var trackHistoryArray: ArrayList<Track> = ArrayList()
     override fun onClick(track: Track) {
-        (applicationContext as SharedPreferences).addToTrackHistoryWithSave(track, trackHistory)
+        trackHistory.addToTrackHistoryWithSave(track, trackHistoryArray)
         recyclerHistoryList.adapter?.notifyDataSetChanged()
     }
 
@@ -62,7 +64,7 @@ class SearchActivity : AppCompatActivity(), TrackListClickListenerInterface {
         }
 
         btnClearHistory.setOnClickListener {
-            trackHistory.clear()
+            trackHistoryArray.clear()
             recyclerHistoryList.adapter?.notifyDataSetChanged()
             changeVisibility(SearchVisibility.NONE)
         }
@@ -104,7 +106,7 @@ class SearchActivity : AppCompatActivity(), TrackListClickListenerInterface {
         editTextViewSearch.addTextChangedListener(simpleTextWatcher)
 
         editTextViewSearch.setOnFocusChangeListener { v, hasFocus ->
-            if (trackHistory.count() > 0)
+            if (trackHistoryArray.count() > 0)
                 changeVisibility(
                     SearchVisibility.SEARCH_HISTORY
                 )
@@ -148,7 +150,7 @@ class SearchActivity : AppCompatActivity(), TrackListClickListenerInterface {
             false
         }
 
-        val historyAdapter = TrackAdapter(trackHistory, null)
+        val historyAdapter = TrackAdapter(trackHistoryArray, null)
 
         recyclerHistoryList.layoutManager = LinearLayoutManager(this)
         recyclerHistoryList.adapter = historyAdapter
@@ -168,7 +170,8 @@ class SearchActivity : AppCompatActivity(), TrackListClickListenerInterface {
         btnClear = findViewById(R.id.btnClear)
         editTextViewSearch = findViewById(R.id.edtxtSearch)
         btnClearHistory = findViewById(R.id.btnClearHistory)
-        trackHistory = (applicationContext as SharedPreferences).loadTrackHistory()
+        trackHistory = TrackHistory(getSharedPreferences(TRACK_HISTORY, MODE_PRIVATE))
+        trackHistoryArray = trackHistory.loadTrackHistory()
 
         setEvents()
         editTextViewSearch.requestFocus()
@@ -201,7 +204,7 @@ class SearchActivity : AppCompatActivity(), TrackListClickListenerInterface {
 
     override fun onStop() {
         super.onStop()
-        (applicationContext as SharedPreferences).saveTrackHistory(trackHistory)
+        trackHistory.saveTrackHistory(trackHistoryArray)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

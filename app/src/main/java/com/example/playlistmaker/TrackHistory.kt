@@ -1,23 +1,10 @@
 package com.example.playlistmaker
 
-import android.app.Application
 import android.content.SharedPreferences
-import androidx.appcompat.app.AppCompatDelegate
 import com.google.gson.Gson
 
 
-class SharedPreferences : Application() {
-    private var darkTheme = false
-
-    private lateinit var sharedPrefsTrackHistory: SharedPreferences
-    private lateinit var sharedPrefsDarkTheme: SharedPreferences
-    override fun onCreate() {
-        super.onCreate()
-
-        sharedPrefsTrackHistory = getSharedPreferences(TRACK_HISTORY, MODE_PRIVATE)
-        sharedPrefsDarkTheme = getSharedPreferences(DARK_THEME, MODE_PRIVATE)
-        darkTheme = sharedPrefsDarkTheme.getBoolean(DARK_THEME, false)
-    }
+class TrackHistory(private val sharedPrefsTrackHistory: SharedPreferences) {
 
     fun loadTrackHistory(): ArrayList<Track> {
 
@@ -49,22 +36,7 @@ class SharedPreferences : Application() {
         saveTrackHistory(trackHistory)
     }
 
-    fun switchTheme(darkThemeEnabled: Boolean) {
-        darkTheme = darkThemeEnabled
-        AppCompatDelegate.setDefaultNightMode(
-            if (darkThemeEnabled) {
-                AppCompatDelegate.MODE_NIGHT_YES
-            } else {
-                AppCompatDelegate.MODE_NIGHT_NO
-            }
-        )
-        sharedPrefsDarkTheme.edit()
-            .putBoolean(DARK_THEME, darkTheme)
-            .apply()
-    }
-
     companion object {
         const val TRACK_HISTORY = "track_history"
-        const val DARK_THEME = "dark_theme"
     }
 }

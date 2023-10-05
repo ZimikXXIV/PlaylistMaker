@@ -6,7 +6,7 @@ import android.os.Bundle
 import android.widget.ImageButton
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import com.example.playlistmaker.SharedPreferences.Companion.DARK_THEME
+import com.example.playlistmaker.DarkTheme.Companion.DARK_THEME
 import com.google.android.material.switchmaterial.SwitchMaterial
 
 
@@ -17,7 +17,7 @@ class SettingsActivity : AppCompatActivity() {
     private lateinit var textViewLicense: TextView
     private lateinit var btnBack: ImageButton
     private lateinit var switchDayNight: SwitchMaterial
-
+    private lateinit var darkTheme: DarkTheme
     private fun setEvents() {
 
         btnBack.setOnClickListener {
@@ -54,9 +54,9 @@ class SettingsActivity : AppCompatActivity() {
         }
 
         switchDayNight.setOnCheckedChangeListener { switcher, checked ->
-            (applicationContext as SharedPreferences).switchTheme(checked)
-
-
+            (applicationContext as App).switchTheme(checked)
+            darkTheme.darkTheme = checked
+            darkTheme.saveDarkTheme()
         }
     }
 
@@ -67,10 +67,12 @@ class SettingsActivity : AppCompatActivity() {
         textViewLicense = findViewById<TextView>(R.id.btnLicense)
         switchDayNight = findViewById<SwitchMaterial>(R.id.switchDayNight)
 
-        val sharedPrefs = getSharedPreferences(DARK_THEME, MODE_PRIVATE)
-        switchDayNight.isChecked = sharedPrefs.getBoolean(DARK_THEME, false)
+        darkTheme = DarkTheme(getSharedPreferences(DARK_THEME, MODE_PRIVATE))
 
         setEvents()
+
+        darkTheme.loadDarkTheme()
+        switchDayNight.isChecked = darkTheme.darkTheme
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

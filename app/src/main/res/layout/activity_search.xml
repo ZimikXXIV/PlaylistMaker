@@ -29,6 +29,7 @@
             android:id="@+id/edtxtSearch"
             style="@style/SearchEditViewStyle"
             android:inputType="text"
+            android:textCursorDrawable="@drawable/cursor_color"
             app:drawableStartCompat="@drawable/search_icon"
             app:endIconMode="clear_text" />
 
@@ -114,7 +115,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_24dp"
             android:orientation="vertical"
-            android:visibility="gone">
+            android:visibility="visible">
 
             <TextView
                 android:id="@+id/textViewSearchHistory"
