@@ -31,4 +31,5 @@
     <dimen name="margin_8dp">8dp</dimen>
     <dimen name="margin_24dp">24dp</dimen>
     <dimen name="cursor_width">2px</dimen>
+    <dimen name="empty_dp">0dp</dimen>
 </resources>
