@@ -82,5 +82,4 @@ class SettingsActivity : AppCompatActivity() {
         initSettings()
 
     }
-
 }

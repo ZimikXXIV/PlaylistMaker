@@ -33,6 +33,4 @@
             app:icon="@drawable/settings_icon" />
 
     </LinearLayout>
-
-
 </LinearLayout>

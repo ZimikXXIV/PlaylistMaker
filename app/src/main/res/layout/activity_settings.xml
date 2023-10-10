@@ -34,7 +34,7 @@
             android:orientation="horizontal">
 
             <TextView
-                android:layout_width="@dimen/empty_dp"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 style="@style/SettingsTextViewWithSwitchStyle"
                 android:layout_weight="1"
@@ -69,5 +69,4 @@
             app:drawableEndCompat="@drawable/arrowright_icon" />
 
     </LinearLayout>
-
 </LinearLayout>

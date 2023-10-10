@@ -115,7 +115,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_24dp"
             android:orientation="vertical"
-            android:visibility="visible">
+            android:visibility="gone">
 
             <TextView
                 android:id="@+id/textViewSearchHistory"

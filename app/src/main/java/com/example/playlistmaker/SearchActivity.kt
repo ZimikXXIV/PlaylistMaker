@@ -235,6 +235,4 @@ class SearchActivity : AppCompatActivity(), TrackListClickListenerInterface {
     enum class SearchVisibility {
         SEARCH_HISTORY, ERROR_EMPTY, ERROR_BAD_CONNECTION, SEARCH_RESULT, NONE
     }
-
-
 }

@@ -68,6 +68,4 @@
         android:src="@drawable/arrowright_icon"
 
         />
-
-
 </LinearLayout>
