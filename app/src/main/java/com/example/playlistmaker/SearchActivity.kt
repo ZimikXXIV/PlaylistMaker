@@ -14,6 +14,7 @@ import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.playlistmaker.TrackHistory.Companion.TRACK_HISTORY
 import com.google.android.material.button.MaterialButton
 import retrofit2.Call
 import retrofit2.Callback
@@ -22,60 +23,63 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 
-class SearchActivity : AppCompatActivity() {
+class SearchActivity : AppCompatActivity(), TrackListClickListenerInterface {
 
     private lateinit var editTextViewSearch: EditText
     private lateinit var btnClear: ImageButton
     private lateinit var btnBack: ImageButton
     private lateinit var layoutEmptyTrackList: LinearLayout
     private lateinit var layoutBadConnection: LinearLayout
+    private lateinit var layoutHistory: LinearLayout
     private lateinit var recyclerTrackList: RecyclerView
+    private lateinit var recyclerHistoryList: RecyclerView
     private lateinit var btnRefresh: MaterialButton
+    private lateinit var btnClearHistory: MaterialButton
+    private lateinit var trackHistory: TrackHistory
     var searchSavedText: String = String()
 
 
-    private val itunesBaseUrl = "https://itunes.apple.com"
-
     private val retrofit = Retrofit.Builder()
-        .baseUrl(itunesBaseUrl)
+        .baseUrl(ITUNES_BASE_URL)
         .addConverterFactory(GsonConverterFactory.create())
         .build()
 
     private val itunesService = retrofit.create(ItunesAPI::class.java)
 
     private val trackList = ArrayList<Track>()
+    private var trackHistoryArray: ArrayList<Track> = ArrayList()
+    override fun onClick(track: Track) {
+        trackHistory.addToTrackHistoryWithSave(track, trackHistoryArray)
+        recyclerHistoryList.adapter?.notifyDataSetChanged()
+    }
 
-    fun initSearch() {
-
-        btnBack = findViewById<ImageButton>(R.id.btnBack)
+    private fun setEvents() {
 
         btnBack.setOnClickListener {
             finish()
         }
 
-        layoutEmptyTrackList = findViewById(R.id.layoutEmptyTrackList)
-        layoutBadConnection = findViewById(R.id.layoutBadConnection)
-        recyclerTrackList = findViewById(R.id.recyclerTrackList)
-        btnRefresh = findViewById(R.id.btnRefresh)
-        btnClear = findViewById(R.id.btnClear)
-
         btnRefresh.setOnClickListener {
             editTextViewSearch.onEditorAction(EditorInfo.IME_ACTION_DONE)
         }
 
+        btnClearHistory.setOnClickListener {
+            trackHistoryArray.clear()
+            recyclerHistoryList.adapter?.notifyDataSetChanged()
+            changeVisibility(SearchVisibility.NONE)
+        }
 
         val imageClickListener: View.OnClickListener = object : View.OnClickListener {
             override fun onClick(p0: View?) {
                 editTextViewSearch.text.clear()
-                changeVisibility(false, false, false)
+                changeVisibility(SearchVisibility.SEARCH_HISTORY)
                 val inputMethodManager =
                     getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
                 inputMethodManager?.hideSoftInputFromWindow(editTextViewSearch.windowToken, 0)
             }
         }
-        btnClear.setOnClickListener(imageClickListener)
 
-        editTextViewSearch = findViewById<EditText>(R.id.edtxtSearch)
+        btnClear.setOnClickListener(imageClickListener)
 
         val simpleTextWatcher = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
@@ -83,7 +87,7 @@ class SearchActivity : AppCompatActivity() {
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                // empty
+                //Empty
             }
 
             override fun afterTextChanged(s: Editable?) {
@@ -99,21 +103,19 @@ class SearchActivity : AppCompatActivity() {
             }
         }
 
-
-
-
-
-
-
         editTextViewSearch.addTextChangedListener(simpleTextWatcher)
 
+        editTextViewSearch.setOnFocusChangeListener { v, hasFocus ->
+            if (trackHistoryArray.count() > 0)
+                changeVisibility(
+                    SearchVisibility.SEARCH_HISTORY
+                )
+        }
 
-        val trackAdapter = TrackAdapter(trackList)
-
+        val trackAdapter = TrackAdapter(trackList, this)
 
         recyclerTrackList.layoutManager = LinearLayoutManager(this)
         recyclerTrackList.adapter = trackAdapter
-
 
         editTextViewSearch.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
@@ -130,17 +132,17 @@ class SearchActivity : AppCompatActivity() {
                                     trackAdapter.notifyDataSetChanged()
                                 }
                                 if (trackList.isEmpty()) {
-                                    changeVisibility(true, false, false)
+                                    changeVisibility(SearchVisibility.ERROR_EMPTY)
                                 } else {
-                                    changeVisibility(false, false, true)
+                                    changeVisibility(SearchVisibility.SEARCH_RESULT)
                                 }
                             } else {
-                                changeVisibility(false, true, false)
+                                changeVisibility(SearchVisibility.ERROR_BAD_CONNECTION)
                             }
                         }
 
                         override fun onFailure(call: Call<SearchResponse>, t: Throwable) {
-                            changeVisibility(false, true, false)
+                            changeVisibility(SearchVisibility.ERROR_BAD_CONNECTION)
                         }
 
                     })
@@ -148,17 +150,49 @@ class SearchActivity : AppCompatActivity() {
             false
         }
 
+        val historyAdapter = TrackAdapter(trackHistoryArray, null)
 
+        recyclerHistoryList.layoutManager = LinearLayoutManager(this)
+        recyclerHistoryList.adapter = historyAdapter
+
+
+    }
+
+    private fun initSearch() {
+
+        btnBack = findViewById(R.id.btnBack)
+        layoutEmptyTrackList = findViewById(R.id.layoutEmptyTrackList)
+        layoutBadConnection = findViewById(R.id.layoutBadConnection)
+        layoutHistory = findViewById(R.id.layoutHistory)
+        recyclerTrackList = findViewById(R.id.recyclerTrackList)
+        recyclerHistoryList = findViewById(R.id.recyclerHistoryList)
+        btnRefresh = findViewById(R.id.btnRefresh)
+        btnClear = findViewById(R.id.btnClear)
+        editTextViewSearch = findViewById(R.id.edtxtSearch)
+        btnClearHistory = findViewById(R.id.btnClearHistory)
+        trackHistory = TrackHistory(getSharedPreferences(TRACK_HISTORY, MODE_PRIVATE))
+        trackHistoryArray = trackHistory.loadTrackHistory()
+
+        setEvents()
+        editTextViewSearch.requestFocus()
     }
 
     fun changeVisibility(
-        isEmpty: Boolean, isBadConnectin: Boolean, isShowTrackList: Boolean
+        visibleType: SearchVisibility
     ) {
-        layoutEmptyTrackList.visibility = if (isEmpty) View.VISIBLE else View.GONE
-        layoutBadConnection.visibility = if (isBadConnectin) View.VISIBLE else View.GONE
-        recyclerTrackList.visibility = if (isShowTrackList) View.VISIBLE else View.GONE
-    }
+        layoutEmptyTrackList.visibility = View.GONE
+        layoutBadConnection.visibility = View.GONE
+        recyclerTrackList.visibility = View.GONE
+        layoutHistory.visibility = View.GONE
 
+        when (visibleType) {
+            SearchVisibility.SEARCH_HISTORY -> layoutHistory.visibility = View.VISIBLE
+            SearchVisibility.SEARCH_RESULT -> recyclerTrackList.visibility = View.VISIBLE
+            SearchVisibility.ERROR_BAD_CONNECTION -> layoutBadConnection.visibility = View.VISIBLE
+            SearchVisibility.ERROR_EMPTY -> layoutEmptyTrackList.visibility = View.VISIBLE
+            else -> {}
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -168,6 +202,10 @@ class SearchActivity : AppCompatActivity() {
 
     }
 
+    override fun onStop() {
+        super.onStop()
+        trackHistory.saveTrackHistory(trackHistoryArray)
+    }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
@@ -184,14 +222,17 @@ class SearchActivity : AppCompatActivity() {
     ) {
         super.onRestoreInstanceState(savedInstanceState, persistentState)
         if (savedInstanceState != null) {
-
             editTextViewSearch.setText(savedInstanceState.getString(SEARCH_TEXT, ""))
-
         }
     }
 
     companion object {
         const val SEARCH_TEXT = "SEARCH_TEXT"
+        const val MAX_SEARCH_COUNT = 10
+        const val ITUNES_BASE_URL = "https://itunes.apple.com"
     }
 
+    enum class SearchVisibility {
+        SEARCH_HISTORY, ERROR_EMPTY, ERROR_BAD_CONNECTION, SEARCH_RESULT, NONE
+    }
 }

@@ -4,10 +4,16 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 
-class TrackAdapter(private val tracks: List<Track>) : RecyclerView.Adapter<TrackHolder>() {
+class TrackAdapter(
+    private val tracks: List<Track>,
+    private val onClick: TrackListClickListenerInterface?
+) : RecyclerView.Adapter<TrackHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TrackHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.track_list, parent, false)
-        return TrackHolder(view)
+        if (onClick != null)
+            return TrackHolder(view, onClick)
+        else
+            return TrackHolder(view, null)
     }
 
     override fun onBindViewHolder(holder: TrackHolder, position: Int) {
