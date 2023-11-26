@@ -15,18 +15,18 @@ import java.util.Locale
 
 class AudioPlayerActivity : AppCompatActivity() {
 
-    lateinit var textViewDuration: TextView
-    lateinit var textViewDurationInfo: TextView
-    lateinit var textViewAlbumInfo: TextView
-    lateinit var textViewYearInfo: TextView
-    lateinit var textViewGenreInfo: TextView
-    lateinit var textViewCountryInfo: TextView
-    lateinit var textViewTrackName: TextView
-    lateinit var textViewArtistName: TextView
-    lateinit var imageViewCoverAlbum: ImageView
+    private lateinit var textViewDuration: TextView
+    private lateinit var textViewDurationInfo: TextView
+    private lateinit var textViewAlbumInfo: TextView
+    private lateinit var textViewYearInfo: TextView
+    private lateinit var textViewGenreInfo: TextView
+    private lateinit var textViewCountryInfo: TextView
+    private lateinit var textViewTrackName: TextView
+    private lateinit var textViewArtistName: TextView
+    private lateinit var imageViewCoverAlbum: ImageView
 
 
-    fun showTrackInfo(track: Track) {
+    private fun showTrackInfo(track: Track) {
 
         textViewArtistName.text = track.artistName
         textViewTrackName.text = track.trackName
@@ -50,7 +50,7 @@ class AudioPlayerActivity : AppCompatActivity() {
 
     }
 
-    fun initPlayer() {
+    private fun initPlayer() {
         textViewDuration = findViewById(R.id.durationTrack)
         textViewDurationInfo = findViewById(R.id.durationTrackInfo)
         textViewAlbumInfo = findViewById(R.id.albumTrackInfo)
