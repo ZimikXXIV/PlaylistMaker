@@ -9,8 +9,6 @@ import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.TrackHolder.Companion.dpToPx
-import java.text.SimpleDateFormat
-import java.util.Locale
 
 
 class AudioPlayerActivity : AppCompatActivity() {
@@ -37,16 +35,14 @@ class AudioPlayerActivity : AppCompatActivity() {
         textViewAlbumInfo.text = track.collectionName
 
         Glide.with(this)
-            .load(track.artworkUrl100?.replaceAfterLast('/', "512x512bb.jpg"))
+            .load(track.getIamge("512"))
             .placeholder(R.drawable.placeholder_big_icon)
             .transform(RoundedCorners(dpToPx(8f)))
             .centerCrop()
             .into(imageViewCoverAlbum)
 
-        textViewDuration.text =
-            SimpleDateFormat("mm:ss", Locale.getDefault()).format(track.trackTimeMillis!!.toLong())
-        textViewDurationInfo.text =
-            SimpleDateFormat("mm:ss", Locale.getDefault()).format(track.trackTimeMillis!!.toLong())
+        textViewDuration.text = track.convertTimeToString("mm:ss")
+        textViewDurationInfo.text = track.convertTimeToString("mm:ss")
 
     }
 
