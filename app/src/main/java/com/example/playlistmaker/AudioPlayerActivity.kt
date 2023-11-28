@@ -1,7 +1,10 @@
 package com.example.playlistmaker
 
+import android.media.MediaPlayer
 import android.os.Build.VERSION.SDK_INT
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
@@ -9,6 +12,8 @@ import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.TrackHolder.Companion.dpToPx
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 
 class AudioPlayerActivity : AppCompatActivity() {
@@ -22,7 +27,79 @@ class AudioPlayerActivity : AppCompatActivity() {
     private lateinit var textViewTrackName: TextView
     private lateinit var textViewArtistName: TextView
     private lateinit var imageViewCoverAlbum: ImageView
+    private lateinit var playButton: ImageView
+    private var mediaPlayer = MediaPlayer()
+    private var playerState = PlayerState.STATE_DEFAULT
 
+
+    private val handler = Handler(Looper.getMainLooper())
+    private val searchRunnable = Runnable { setCurrentPosition() }
+
+    private fun setCurrentPosition() {
+        when (playerState) {
+            PlayerState.STATE_PLAYING -> {
+                textViewDuration.text = SimpleDateFormat(
+                    "mm:ss",
+                    Locale.getDefault()
+                ).format(mediaPlayer.currentPosition)
+            }
+
+            PlayerState.STATE_PREPARED -> {
+                textViewDuration.text = "00:00"
+            }
+
+            else -> {}
+        }
+        handler.postDelayed(searchRunnable, DURATION_REFRESH_DELAY)
+    }
+
+    private fun playbackControl() {
+        when (playerState) {
+            PlayerState.STATE_PLAYING -> {
+                pausePlayer()
+            }
+
+            PlayerState.STATE_PREPARED, PlayerState.STATE_PAUSED -> {
+                startPlayer()
+            }
+
+            else -> {}
+        }
+    }
+
+    private fun startPlayer() {
+        mediaPlayer.start()
+        playerState = PlayerState.STATE_PLAYING
+        playButton.setImageResource(R.drawable.pause_button_icon)
+        handler.postDelayed(searchRunnable, DURATION_REFRESH_DELAY)
+    }
+
+    private fun pausePlayer() {
+        mediaPlayer.pause()
+        playerState = PlayerState.STATE_PAUSED
+        playButton.setImageResource(R.drawable.play_button_icon)
+        handler.removeCallbacks(searchRunnable)
+    }
+
+    private fun preparePlayer(track: Track) {
+        if (track.previewUrl.isNullOrEmpty()) {
+            return
+        }
+        playButton.setOnClickListener {
+            playbackControl()
+        }
+
+        mediaPlayer.setDataSource(track.previewUrl)
+        mediaPlayer.prepareAsync()
+        mediaPlayer.setOnPreparedListener {
+            playButton.isEnabled = true
+            playerState = PlayerState.STATE_PREPARED
+        }
+        mediaPlayer.setOnCompletionListener {
+            playerState = PlayerState.STATE_PREPARED
+            playButton.setImageResource(R.drawable.play_button_icon)
+        }
+    }
 
     private fun showTrackInfo(track: Track) {
 
@@ -35,13 +112,13 @@ class AudioPlayerActivity : AppCompatActivity() {
         textViewAlbumInfo.text = track.collectionName
 
         Glide.with(this)
-            .load(track.getIamge("512"))
+            .load(track.getIamgeByResolution("512x512"))
             .placeholder(R.drawable.placeholder_big_icon)
             .transform(RoundedCorners(dpToPx(8f)))
             .centerCrop()
             .into(imageViewCoverAlbum)
 
-        textViewDuration.text = track.convertTimeToString("mm:ss")
+        textViewDuration.text = "00:00"
         textViewDurationInfo.text = track.convertTimeToString("mm:ss")
 
     }
@@ -56,6 +133,7 @@ class AudioPlayerActivity : AppCompatActivity() {
         textViewTrackName = findViewById(R.id.trackName)
         textViewArtistName = findViewById(R.id.artistName)
         imageViewCoverAlbum = findViewById(R.id.coverAlbum)
+        playButton = findViewById(R.id.playBtn)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -78,10 +156,27 @@ class AudioPlayerActivity : AppCompatActivity() {
 
         showTrackInfo(trackInfo)
 
+        preparePlayer(trackInfo)
 
+    }
+
+    override fun onPause() {
+        super.onPause()
+        pausePlayer()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        mediaPlayer.release()
+    }
+
+    enum class PlayerState {
+        STATE_DEFAULT, STATE_PREPARED, STATE_PLAYING, STATE_PAUSED
     }
 
     companion object {
         const val TRACK_INFO = "track_info"
+        private const val DURATION_REFRESH_DELAY = 400L
     }
+
 }

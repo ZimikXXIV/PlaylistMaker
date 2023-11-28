@@ -48,6 +48,23 @@
         android:layout_height="match_parent">
 
         <LinearLayout
+            android:id="@+id/layoutProgressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/margin_140dp"
+            android:orientation="vertical"
+            android:visibility="visible">
+
+            <ProgressBar
+                android:layout_width="@dimen/progress_bar_size"
+                android:layout_height="@dimen/progress_bar_size"
+                android:layout_gravity="center"
+                android:indeterminateTint="@color/YP_Blue"></ProgressBar>
+
+        </LinearLayout>
+
+        <LinearLayout
             android:id="@+id/layoutBadConnection"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
