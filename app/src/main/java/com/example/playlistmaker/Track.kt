@@ -15,7 +15,8 @@ data class Track(
     val primaryGenreName: String?,
     val country: String?,
     val trackTimeMillis: String?,
-    val artworkUrl100: String?
+    val artworkUrl100: String?,
+    val previewUrl: String?
 ) : Parcelable {
     fun convertTimeToString(timeFormat: String): String {
         return SimpleDateFormat(
@@ -24,8 +25,8 @@ data class Track(
         ).format(this.trackTimeMillis!!.toLong())
     }
 
-    fun getIamge(sizeFormat: String): String? {
-        return this.artworkUrl100?.replaceAfterLast('/', "${sizeFormat}x${sizeFormat}bb.jpg")
+    fun getIamgeByResolution(resolution: String): String? {
+        return this.artworkUrl100?.replaceAfterLast('/', "${resolution}bb.jpg")
     }
 
 }
