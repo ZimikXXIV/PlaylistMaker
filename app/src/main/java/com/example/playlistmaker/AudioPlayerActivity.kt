@@ -135,6 +135,7 @@ class AudioPlayerActivity : AppCompatActivity() {
         textViewTrackName = findViewById(R.id.trackName)
         textViewArtistName = findViewById(R.id.artistName)
         imageViewCoverAlbum = findViewById(R.id.coverAlbum)
+        playButton = findViewById(R.id.playBtn)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

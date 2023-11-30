@@ -185,6 +185,7 @@ class SearchActivity : AppCompatActivity(), TrackListClickListenerInterface {
         btnClear = findViewById(R.id.btnClear)
         editTextViewSearch = findViewById(R.id.edtxtSearch)
         btnClearHistory = findViewById(R.id.btnClearHistory)
+        layoutProgressBar = findViewById(R.id.layoutProgressBar)
         trackHistory = TrackHistory(getSharedPreferences(TRACK_HISTORY, MODE_PRIVATE))
         trackHistoryArray = trackHistory.loadTrackHistory()
 
@@ -199,8 +200,9 @@ class SearchActivity : AppCompatActivity(), TrackListClickListenerInterface {
         layoutBadConnection.visibility = View.GONE
         recyclerTrackList.visibility = View.GONE
         layoutHistory.visibility = View.GONE
-
+        layoutProgressBar.visibility = View.GONE
         when (visibleType) {
+            SearchVisibility.PROGRESS_BAR -> layoutProgressBar.visibility = View.VISIBLE
             SearchVisibility.SEARCH_HISTORY -> layoutHistory.visibility = View.VISIBLE
             SearchVisibility.SEARCH_RESULT -> recyclerTrackList.visibility = View.VISIBLE
             SearchVisibility.ERROR_BAD_CONNECTION -> layoutBadConnection.visibility = View.VISIBLE
