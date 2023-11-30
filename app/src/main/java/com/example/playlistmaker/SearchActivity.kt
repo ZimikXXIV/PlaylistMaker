@@ -2,8 +2,6 @@ package com.example.playlistmaker
 
 import android.content.Context
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.os.PersistableBundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -16,6 +14,8 @@ import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.playlistmaker.Debounce.clickDebounce
+import com.example.playlistmaker.Debounce.debounce
 import com.example.playlistmaker.TrackHistory.Companion.TRACK_HISTORY
 import com.google.android.material.button.MaterialButton
 import retrofit2.Call
@@ -39,11 +39,9 @@ class SearchActivity : AppCompatActivity(), TrackListClickListenerInterface {
     private lateinit var btnRefresh: MaterialButton
     private lateinit var btnClearHistory: MaterialButton
     private lateinit var trackHistory: TrackHistory
-    private var isClickAllowed = true
-    private val handler = Handler(Looper.getMainLooper())
-    private val searchRunnable = Runnable { searchRequest() }
     private var searchSavedText: String = String()
 
+    private val searchRunnable = Runnable { searchRequest() }
 
     private val retrofit = Retrofit.Builder()
         .baseUrl(ITUNES_BASE_URL)
@@ -66,7 +64,7 @@ class SearchActivity : AppCompatActivity(), TrackListClickListenerInterface {
         }
 
         btnRefresh.setOnClickListener {
-            searchDebounce()
+            debounce(searchRunnable)
             searchRequest()
         }
 
@@ -94,7 +92,7 @@ class SearchActivity : AppCompatActivity(), TrackListClickListenerInterface {
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                searchDebounce()
+                debounce(searchRunnable)
             }
 
             override fun afterTextChanged(s: Editable?) {
@@ -173,19 +171,7 @@ class SearchActivity : AppCompatActivity(), TrackListClickListenerInterface {
         editTextViewSearch.onEditorAction(EditorInfo.IME_ACTION_DONE)
     }
 
-    private fun clickDebounce(): Boolean {
-        val current = isClickAllowed
-        if (isClickAllowed) {
-            isClickAllowed = false
-            handler.postDelayed({ isClickAllowed = true }, CLICK_DEBOUNCE_DELAY)
-        }
-        return current
-    }
 
-    private fun searchDebounce() {
-        handler.removeCallbacks(searchRunnable)
-        handler.postDelayed(searchRunnable, SEARCH_DEBOUNCE_DELAY)
-    }
 
     private fun initSearch() {
 
@@ -262,8 +248,6 @@ class SearchActivity : AppCompatActivity(), TrackListClickListenerInterface {
         const val SEARCH_TEXT = "SEARCH_TEXT"
         const val MAX_SEARCH_COUNT = 10
         const val ITUNES_BASE_URL = "https://itunes.apple.com"
-        private const val CLICK_DEBOUNCE_DELAY = 1000L
-        private const val SEARCH_DEBOUNCE_DELAY = 2000L
     }
 
     enum class SearchVisibility {

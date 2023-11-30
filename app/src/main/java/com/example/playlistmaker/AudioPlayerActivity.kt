@@ -28,7 +28,7 @@ class AudioPlayerActivity : AppCompatActivity() {
     private lateinit var textViewArtistName: TextView
     private lateinit var imageViewCoverAlbum: ImageView
     private lateinit var playButton: ImageView
-    private var mediaPlayer = MediaPlayer()
+    private val mediaPlayer = MediaPlayer()
     private var playerState = PlayerState.STATE_DEFAULT
 
 
@@ -45,7 +45,7 @@ class AudioPlayerActivity : AppCompatActivity() {
             }
 
             PlayerState.STATE_PREPARED -> {
-                textViewDuration.text = "00:00"
+                textViewDuration.text = DEFAULT_DURATION
             }
 
             else -> {}
@@ -88,17 +88,19 @@ class AudioPlayerActivity : AppCompatActivity() {
         playButton.setOnClickListener {
             playbackControl()
         }
+        with(mediaPlayer) {
+            setDataSource(track.previewUrl)
+            prepareAsync()
+            setOnPreparedListener {
+                playButton.isEnabled = true
+                playerState = PlayerState.STATE_PREPARED
+            }
+            setOnCompletionListener {
+                playerState = PlayerState.STATE_PREPARED
+                playButton.setImageResource(R.drawable.play_button_icon)
+            }
+        }
 
-        mediaPlayer.setDataSource(track.previewUrl)
-        mediaPlayer.prepareAsync()
-        mediaPlayer.setOnPreparedListener {
-            playButton.isEnabled = true
-            playerState = PlayerState.STATE_PREPARED
-        }
-        mediaPlayer.setOnCompletionListener {
-            playerState = PlayerState.STATE_PREPARED
-            playButton.setImageResource(R.drawable.play_button_icon)
-        }
     }
 
     private fun showTrackInfo(track: Track) {
@@ -176,6 +178,7 @@ class AudioPlayerActivity : AppCompatActivity() {
 
     companion object {
         const val TRACK_INFO = "track_info"
+        private const val DEFAULT_DURATION = "00:00"
         private const val DURATION_REFRESH_DELAY = 400L
     }
 

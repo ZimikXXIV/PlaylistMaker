@@ -54,7 +54,7 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="@dimen/margin_140dp"
             android:orientation="vertical"
-            android:visibility="visible">
+            android:visibility="gone">
 
             <ProgressBar
                 android:layout_width="@dimen/progress_bar_size"

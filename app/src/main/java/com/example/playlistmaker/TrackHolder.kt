@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.AudioPlayerActivity.Companion.TRACK_INFO
+import com.example.playlistmaker.Debounce.clickDebounce
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -33,6 +34,11 @@ class TrackHolder(itemView: View, private val onClick: TrackListClickListenerInt
 
         itemView.setOnClickListener {
             onClick?.onClick(track)
+
+            if (!clickDebounce()) {
+                return@setOnClickListener
+            }
+
             val intent = Intent(itemView.context, AudioPlayerActivity::class.java)
             intent.putExtra(TRACK_INFO, track)
             it.context.startActivity(intent)
