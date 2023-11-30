@@ -14,6 +14,8 @@ import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.playlistmaker.Debounce.clickDebounce
+import com.example.playlistmaker.Debounce.debounce
 import com.example.playlistmaker.TrackHistory.Companion.TRACK_HISTORY
 import com.google.android.material.button.MaterialButton
 import retrofit2.Call
@@ -31,13 +33,15 @@ class SearchActivity : AppCompatActivity(), TrackListClickListenerInterface {
     private lateinit var layoutEmptyTrackList: LinearLayout
     private lateinit var layoutBadConnection: LinearLayout
     private lateinit var layoutHistory: LinearLayout
+    private lateinit var layoutProgressBar: LinearLayout
     private lateinit var recyclerTrackList: RecyclerView
     private lateinit var recyclerHistoryList: RecyclerView
     private lateinit var btnRefresh: MaterialButton
     private lateinit var btnClearHistory: MaterialButton
     private lateinit var trackHistory: TrackHistory
-    var searchSavedText: String = String()
+    private var searchSavedText: String = String()
 
+    private val searchRunnable = Runnable { searchRequest() }
 
     private val retrofit = Retrofit.Builder()
         .baseUrl(ITUNES_BASE_URL)
@@ -60,7 +64,8 @@ class SearchActivity : AppCompatActivity(), TrackListClickListenerInterface {
         }
 
         btnRefresh.setOnClickListener {
-            editTextViewSearch.onEditorAction(EditorInfo.IME_ACTION_DONE)
+            debounce(searchRunnable)
+            searchRequest()
         }
 
         btnClearHistory.setOnClickListener {
@@ -87,7 +92,7 @@ class SearchActivity : AppCompatActivity(), TrackListClickListenerInterface {
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                //Empty
+                debounce(searchRunnable)
             }
 
             override fun afterTextChanged(s: Editable?) {
@@ -118,7 +123,11 @@ class SearchActivity : AppCompatActivity(), TrackListClickListenerInterface {
         recyclerTrackList.adapter = trackAdapter
 
         editTextViewSearch.setOnEditorActionListener { _, actionId, _ ->
-            if (actionId == EditorInfo.IME_ACTION_DONE) {
+            if (actionId == EditorInfo.IME_ACTION_DONE
+                && clickDebounce()
+                && editTextViewSearch.text.isNotEmpty()
+            ) {
+                changeVisibility(SearchVisibility.PROGRESS_BAR)
                 itunesService.search(editTextViewSearch.text.toString())
                     .enqueue(object : Callback<SearchResponse> {
                         override fun onResponse(
@@ -158,6 +167,12 @@ class SearchActivity : AppCompatActivity(), TrackListClickListenerInterface {
 
     }
 
+    private fun searchRequest() {
+        editTextViewSearch.onEditorAction(EditorInfo.IME_ACTION_DONE)
+    }
+
+
+
     private fun initSearch() {
 
         btnBack = findViewById(R.id.btnBack)
@@ -170,6 +185,7 @@ class SearchActivity : AppCompatActivity(), TrackListClickListenerInterface {
         btnClear = findViewById(R.id.btnClear)
         editTextViewSearch = findViewById(R.id.edtxtSearch)
         btnClearHistory = findViewById(R.id.btnClearHistory)
+        layoutProgressBar = findViewById(R.id.layoutProgressBar)
         trackHistory = TrackHistory(getSharedPreferences(TRACK_HISTORY, MODE_PRIVATE))
         trackHistoryArray = trackHistory.loadTrackHistory()
 
@@ -184,8 +200,9 @@ class SearchActivity : AppCompatActivity(), TrackListClickListenerInterface {
         layoutBadConnection.visibility = View.GONE
         recyclerTrackList.visibility = View.GONE
         layoutHistory.visibility = View.GONE
-
+        layoutProgressBar.visibility = View.GONE
         when (visibleType) {
+            SearchVisibility.PROGRESS_BAR -> layoutProgressBar.visibility = View.VISIBLE
             SearchVisibility.SEARCH_HISTORY -> layoutHistory.visibility = View.VISIBLE
             SearchVisibility.SEARCH_RESULT -> recyclerTrackList.visibility = View.VISIBLE
             SearchVisibility.ERROR_BAD_CONNECTION -> layoutBadConnection.visibility = View.VISIBLE
@@ -233,6 +250,6 @@ class SearchActivity : AppCompatActivity(), TrackListClickListenerInterface {
     }
 
     enum class SearchVisibility {
-        SEARCH_HISTORY, ERROR_EMPTY, ERROR_BAD_CONNECTION, SEARCH_RESULT, NONE
+        PROGRESS_BAR, SEARCH_HISTORY, ERROR_EMPTY, ERROR_BAD_CONNECTION, SEARCH_RESULT, NONE
     }
 }

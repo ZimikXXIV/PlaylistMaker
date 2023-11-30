@@ -37,9 +37,11 @@
     <dimen name="margin_26dp">26dp</dimen>
     <dimen name="margin_30dp">30dp</dimen>
     <dimen name="margin_55dp">55dp</dimen>
+    <dimen name="margin_140dp">140dp</dimen>
     <dimen name="cover_size">45dp</dimen>
     <dimen name="image_size">24dp</dimen>
     <dimen name="cursor_width">2dp</dimen>
     <dimen name="empty_dp">0dp</dimen>
     <dimen name="height_52dp">52dp</dimen>
+    <dimen name="progress_bar_size">44dp</dimen>
 </resources>
