@@ -1,7 +1,10 @@
 package com.example.playlistmaker
 
+import android.media.MediaPlayer
 import android.os.Build.VERSION.SDK_INT
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
@@ -9,6 +12,8 @@ import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.TrackHolder.Companion.dpToPx
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 
 class AudioPlayerActivity : AppCompatActivity() {
@@ -115,7 +120,7 @@ class AudioPlayerActivity : AppCompatActivity() {
             .centerCrop()
             .into(imageViewCoverAlbum)
 
-        textViewDuration.text = "00:00"
+        textViewDuration.text = DEFAULT_DURATION
         textViewDurationInfo.text = track.convertTimeToString("mm:ss")
 
     }
