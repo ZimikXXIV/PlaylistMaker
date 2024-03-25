@@ -7,7 +7,6 @@ object Debounce {
 
 
     private const val CLICK_DEBOUNCE_DELAY = 1000L
-    private const val SEARCH_DEBOUNCE_DELAY = 2000L
     private var isClickAllowed = true
     private val handler = Handler(Looper.getMainLooper())
 
@@ -20,9 +19,9 @@ object Debounce {
         return current
     }
 
-    fun debounce(runnable: Runnable) {
+    fun debounce(runnable: Runnable, debounceDelay: Long) {
         handler.removeCallbacks(runnable)
-        handler.postDelayed(runnable, SEARCH_DEBOUNCE_DELAY)
+        handler.postDelayed(runnable, debounceDelay)
     }
 
 }
