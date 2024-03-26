@@ -12,14 +12,16 @@ import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.playlistmaker.Creator.Creator
 import com.example.playlistmaker.Debounce.clickDebounce
 import com.example.playlistmaker.Debounce.debounce
 import com.example.playlistmaker.R
-import com.example.playlistmaker.Search.data.repository.TrackListClickListenerInterface
-import com.example.playlistmaker.Search.domain.api.SearchTrackInteractor
+import com.example.playlistmaker.Search.domain.api.ConsumerData
+import com.example.playlistmaker.Search.domain.api.TrackConsumer
+import com.example.playlistmaker.Search.domain.api.TrackListClickListenerInterface
 import com.example.playlistmaker.Search.domain.impl.HistoryTrackInteractorImpl
 import com.example.playlistmaker.Search.domain.model.SearchConst
 import com.example.playlistmaker.Search.domain.model.SearchStatus
@@ -44,7 +46,7 @@ class SearchActivity : AppCompatActivity(), TrackListClickListenerInterface {
     private val searchRunnable = Runnable { searchRequest() }
     private lateinit var trackHistory: HistoryTrackInteractorImpl
     private val searchTrackRetrofit = Creator.provideSearchTrackInteractor()
-
+    private var isBadConnection: Boolean = false;
 
     private val trackList = ArrayList<Track>()
     private var trackHistoryArray: ArrayList<Track> = ArrayList()
@@ -60,7 +62,7 @@ class SearchActivity : AppCompatActivity(), TrackListClickListenerInterface {
         }
 
         btnRefresh.setOnClickListener {
-            debounce(searchRunnable, SearchConst.SEARCH_DEBOUNCE_DELAY)
+            debounce(searchRunnable, SearchConst.SEARCH_DEBOUNCE_DELAY_MILLIS)
             searchRequest()
         }
 
@@ -88,7 +90,7 @@ class SearchActivity : AppCompatActivity(), TrackListClickListenerInterface {
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                debounce(searchRunnable, SearchConst.SEARCH_DEBOUNCE_DELAY)
+                debounce(searchRunnable, SearchConst.SEARCH_DEBOUNCE_DELAY_MILLIS)
             }
 
             override fun afterTextChanged(s: Editable?) {
@@ -125,20 +127,25 @@ class SearchActivity : AppCompatActivity(), TrackListClickListenerInterface {
             ) {
                 changeVisibility(SearchStatus.PROGRESS_BAR)
 
+                isBadConnection = false
+
                 searchTrackRetrofit.searchTrack(
                     editTextViewSearch.text.toString(),
-                    object : SearchTrackInteractor.TrackConsumer {
-                        override fun consume(foundTracks: List<Track>) {
+                    object : TrackConsumer<List<Track>> {
+                        override fun consume(consumerData: ConsumerData<List<Track>>) {
                             trackList.clear()
-                            if (foundTracks.isEmpty()) {
-                            } else {
-                                trackList.addAll(foundTracks)
+                            if (consumerData is ConsumerData.Error) {
+                                isBadConnection = true
+                            } else if (consumerData is ConsumerData.Data) {
+                                trackList.addAll(consumerData.data!!)
                             }
                         }
 
                     }
                 )
-
+                if (isBadConnection) {
+                    changeVisibility(SearchStatus.ERROR_BAD_CONNECTION)
+                }
                 if (trackList.isEmpty()) {
                     changeVisibility(SearchStatus.ERROR_EMPTY)
                 } else {
@@ -185,17 +192,17 @@ class SearchActivity : AppCompatActivity(), TrackListClickListenerInterface {
     fun changeVisibility(
         visibleType: SearchStatus
     ) {
-        layoutEmptyTrackList.visibility = View.GONE
-        layoutBadConnection.visibility = View.GONE
-        recyclerTrackList.visibility = View.GONE
-        layoutHistory.visibility = View.GONE
-        layoutProgressBar.visibility = View.GONE
+        layoutEmptyTrackList.isVisible = false
+        layoutBadConnection.isVisible = false
+        recyclerTrackList.isVisible = false
+        layoutHistory.isVisible = false
+        layoutProgressBar.isVisible = false
         when (visibleType) {
-            SearchStatus.PROGRESS_BAR -> layoutProgressBar.visibility = View.VISIBLE
-            SearchStatus.SEARCH_HISTORY -> layoutHistory.visibility = View.VISIBLE
-            SearchStatus.SEARCH_RESULT -> recyclerTrackList.visibility = View.VISIBLE
-            SearchStatus.ERROR_BAD_CONNECTION -> layoutBadConnection.visibility = View.VISIBLE
-            SearchStatus.ERROR_EMPTY -> layoutEmptyTrackList.visibility = View.VISIBLE
+            SearchStatus.PROGRESS_BAR -> layoutProgressBar.isVisible = true
+            SearchStatus.SEARCH_HISTORY -> layoutHistory.isVisible = true
+            SearchStatus.SEARCH_RESULT -> recyclerTrackList.isVisible = true
+            SearchStatus.ERROR_BAD_CONNECTION -> layoutBadConnection.isVisible = true
+            SearchStatus.ERROR_EMPTY -> layoutEmptyTrackList.isVisible = true
             else -> {}
         }
     }

@@ -1,4 +1,4 @@
-package com.example.playlistmaker.Search.data.mapper
+package com.example.playlistmaker.Search.presentation.mapper
 
 import com.example.playlistmaker.Search.data.dto.TrackDto
 import com.example.playlistmaker.Search.domain.model.Track

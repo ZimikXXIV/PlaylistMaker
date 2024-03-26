@@ -1,15 +1,15 @@
-package com.example.playlistmaker.Player.data
+package com.example.playlistmaker.Player.domain.impl
 
 import android.media.MediaPlayer
-import com.example.playlistmaker.Player.domain.PlayerState
 import com.example.playlistmaker.Player.domain.api.PlayerInteractor
+import com.example.playlistmaker.Player.domain.model.PlayerState
 import java.text.SimpleDateFormat
 import java.util.Locale
 
 class PlayerInteractorImpl : PlayerInteractor {
 
     private val mediaPlayer = MediaPlayer()
-    private var playerState = PlayerState.STATE_DEFAULT
+    private var playerState = PlayerState.DEFAULT
 
     override fun createPlayer(previewUrl: String) {
 
@@ -17,10 +17,10 @@ class PlayerInteractorImpl : PlayerInteractor {
             setDataSource(previewUrl)
             prepareAsync()
             setOnPreparedListener {
-                playerState = PlayerState.STATE_PREPARED
+                playerState = PlayerState.PREPARED
             }
             setOnCompletionListener {
-                playerState = PlayerState.STATE_PREPARED
+                playerState = PlayerState.PREPARED
             }
         }
     }
@@ -31,12 +31,12 @@ class PlayerInteractorImpl : PlayerInteractor {
 
     override fun play() {
         mediaPlayer.start()
-        playerState = PlayerState.STATE_PLAYING
+        playerState = PlayerState.PLAYING
     }
 
     override fun pause() {
         mediaPlayer.pause()
-        playerState = PlayerState.STATE_PAUSED
+        playerState = PlayerState.PAUSED
     }
 
     override fun getPosition(): Int {

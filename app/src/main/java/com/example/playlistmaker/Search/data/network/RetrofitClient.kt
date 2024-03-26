@@ -9,10 +9,12 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class RetrofitClient : NetworkClient {
 
-    private val retrofit = Retrofit.Builder()
-        .baseUrl(SearchConst.ITUNES_BASE_URL)
-        .addConverterFactory(GsonConverterFactory.create())
-        .build()
+    private val retrofit by lazy {
+        Retrofit.Builder()
+            .baseUrl(SearchConst.ITUNES_BASE_URL)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+    }
 
     private val iTunesService = retrofit.create(iTunesApi::class.java)
 

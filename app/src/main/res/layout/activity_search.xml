@@ -57,10 +57,11 @@
             android:visibility="gone">
 
             <ProgressBar
+                android:id="@+id/loadingProgressBar"
                 android:layout_width="@dimen/progress_bar_size"
                 android:layout_height="@dimen/progress_bar_size"
                 android:layout_gravity="center"
-                android:indeterminateTint="@color/YP_Blue"></ProgressBar>
+                android:indeterminateTint="@color/YP_Blue" />
 
         </LinearLayout>
 

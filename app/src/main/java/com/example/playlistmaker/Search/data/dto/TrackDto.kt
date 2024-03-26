@@ -9,5 +9,6 @@ data class TrackDto(
     val primaryGenreName: String?,
     val country: String?,
     val trackTimeMillis: String?,
-    val artworkUrl100: String?, val previewUrl: String?
+    val artworkUrl100: String?,
+    val previewUrl: String?
 )

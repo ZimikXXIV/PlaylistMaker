@@ -1,8 +1,8 @@
 package com.example.playlistmaker.Creator
 
 import android.content.Context
-import com.example.playlistmaker.Player.data.PlayerInteractorImpl
 import com.example.playlistmaker.Player.domain.api.PlayerInteractor
+import com.example.playlistmaker.Player.domain.impl.PlayerInteractorImpl
 import com.example.playlistmaker.Search.data.SearchTrackRepositoryImpl
 import com.example.playlistmaker.Search.data.TrackHistoryRepositoryImpl
 import com.example.playlistmaker.Search.data.network.RetrofitClient

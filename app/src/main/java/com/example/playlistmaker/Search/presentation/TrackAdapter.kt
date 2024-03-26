@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.playlistmaker.R
-import com.example.playlistmaker.Search.data.repository.TrackListClickListenerInterface
+import com.example.playlistmaker.Search.domain.api.TrackListClickListenerInterface
 import com.example.playlistmaker.Search.domain.model.Track
 
 class TrackAdapter(

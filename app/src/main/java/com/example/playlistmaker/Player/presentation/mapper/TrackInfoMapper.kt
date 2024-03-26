@@ -6,7 +6,6 @@ import com.example.playlistmaker.Search.domain.model.Track
 import com.example.playlistmaker.Utils
 
 object TrackInfoMapper {
-
     fun map(track: Track): TrackInfo {
         return TrackInfo(
             trackId = track.trackId,

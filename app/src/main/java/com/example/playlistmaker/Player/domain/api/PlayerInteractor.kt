@@ -1,6 +1,6 @@
 package com.example.playlistmaker.Player.domain.api
 
-import com.example.playlistmaker.Player.domain.PlayerState
+import com.example.playlistmaker.Player.domain.model.PlayerState
 
 interface PlayerInteractor {
     fun createPlayer(previewUrl: String)

@@ -10,9 +10,9 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.Creator.Creator
 import com.example.playlistmaker.Debounce.debounce
-import com.example.playlistmaker.Player.domain.PlayerConst
-import com.example.playlistmaker.Player.domain.PlayerConst.TRACK_INFO
-import com.example.playlistmaker.Player.domain.PlayerState
+import com.example.playlistmaker.Player.domain.model.PlayerConst
+import com.example.playlistmaker.Player.domain.model.PlayerConst.TRACK_INFO
+import com.example.playlistmaker.Player.domain.model.PlayerState
 import com.example.playlistmaker.Player.domain.model.TrackInfo
 import com.example.playlistmaker.Player.presentation.mapper.TrackInfoMapper
 import com.example.playlistmaker.R
@@ -66,26 +66,26 @@ class AudioPlayerActivity : AppCompatActivity() {
 
     private fun setCurrentPosition() {
         when (playerControl.getPlayerState()) {
-            PlayerState.STATE_PLAYING -> {
+            PlayerState.PLAYING -> {
                 textViewDuration.text = playerControl.getPositionStr()
             }
 
-            PlayerState.STATE_PREPARED -> {
+            PlayerState.PREPARED -> {
                 textViewDuration.text = PlayerConst.DEFAULT_DURATION
             }
 
             else -> {}
         }
-        debounce(searchRunnable, PlayerConst.DURATION_REFRESH_DELAY)
+        debounce(searchRunnable, PlayerConst.DURATION_REFRESH_DELAY_MILLIS)
     }
 
     private fun playbackControl() {
         when (playerControl.getPlayerState()) {
-            PlayerState.STATE_PLAYING -> {
+            PlayerState.PLAYING -> {
                 pausePlayer()
             }
 
-            PlayerState.STATE_PREPARED, PlayerState.STATE_PAUSED -> {
+            PlayerState.PREPARED, PlayerState.PAUSED -> {
                 startPlayer()
             }
 
@@ -96,13 +96,13 @@ class AudioPlayerActivity : AppCompatActivity() {
     private fun startPlayer() {
         playerControl.play()
         playButton.setImageResource(R.drawable.pause_button_icon)
-        debounce(searchRunnable, PlayerConst.DURATION_REFRESH_DELAY)
+        debounce(searchRunnable, PlayerConst.DURATION_REFRESH_DELAY_MILLIS)
     }
 
     private fun pausePlayer() {
         playerControl.pause()
         playButton.setImageResource(R.drawable.play_button_icon)
-        debounce(searchRunnable, PlayerConst.DURATION_REFRESH_DELAY)
+        debounce(searchRunnable, PlayerConst.DURATION_REFRESH_DELAY_MILLIS)
     }
 
     private fun preparePlayer(track: TrackInfo) {
