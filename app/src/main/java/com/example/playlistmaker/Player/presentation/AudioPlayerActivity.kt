@@ -33,9 +33,7 @@ class AudioPlayerActivity : AppCompatActivity() {
     private lateinit var imageViewCoverAlbum: ImageView
     private lateinit var playButton: ImageView
 
-    private val playerControl = Creator.getPlayerInteractor()
-
-
+    private val playerControl = Creator.providePlayerInteractor()
     private val searchRunnable = Runnable { setCurrentPosition() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
