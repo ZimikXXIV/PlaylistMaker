@@ -13,8 +13,8 @@ import com.example.playlistmaker.Debounce.debounce
 import com.example.playlistmaker.Player.domain.model.PlayerConst
 import com.example.playlistmaker.Player.domain.model.PlayerConst.TRACK_INFO
 import com.example.playlistmaker.Player.domain.model.PlayerState
-import com.example.playlistmaker.Player.domain.model.TrackInfo
 import com.example.playlistmaker.Player.presentation.mapper.TrackInfoMapper
+import com.example.playlistmaker.Player.presentation.model.TrackInfo
 import com.example.playlistmaker.R
 import com.example.playlistmaker.Search.domain.model.Track
 import com.example.playlistmaker.Search.presentation.TrackHolder.Companion.dpToPx

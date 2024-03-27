@@ -24,8 +24,8 @@ import com.example.playlistmaker.Search.domain.api.TrackConsumer
 import com.example.playlistmaker.Search.domain.api.TrackListClickListenerInterface
 import com.example.playlistmaker.Search.domain.impl.HistoryTrackInteractorImpl
 import com.example.playlistmaker.Search.domain.model.SearchConst
-import com.example.playlistmaker.Search.domain.model.SearchStatus
 import com.example.playlistmaker.Search.domain.model.Track
+import com.example.playlistmaker.Search.presentation.model.SearchStatus
 import com.google.android.material.button.MaterialButton
 
 

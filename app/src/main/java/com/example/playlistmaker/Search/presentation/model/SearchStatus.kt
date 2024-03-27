@@ -1,4 +1,4 @@
-package com.example.playlistmaker.Search.domain.model
+package com.example.playlistmaker.Search.presentation.model
 
 
 enum class SearchStatus {

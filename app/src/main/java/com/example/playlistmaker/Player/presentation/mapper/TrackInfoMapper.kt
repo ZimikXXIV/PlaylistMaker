@@ -1,7 +1,7 @@
 package com.example.playlistmaker.Player.presentation.mapper
 
 
-import com.example.playlistmaker.Player.domain.model.TrackInfo
+import com.example.playlistmaker.Player.presentation.model.TrackInfo
 import com.example.playlistmaker.Search.domain.model.Track
 import com.example.playlistmaker.Utils
 
