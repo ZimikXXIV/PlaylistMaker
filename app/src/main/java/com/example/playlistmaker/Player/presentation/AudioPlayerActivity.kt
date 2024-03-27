@@ -2,9 +2,6 @@ package com.example.playlistmaker.Player.presentation
 
 import android.os.Build.VERSION.SDK_INT
 import android.os.Bundle
-import android.widget.ImageButton
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
@@ -18,35 +15,25 @@ import com.example.playlistmaker.Player.presentation.model.TrackInfo
 import com.example.playlistmaker.R
 import com.example.playlistmaker.Search.domain.model.Track
 import com.example.playlistmaker.Search.presentation.TrackHolder.Companion.dpToPx
+import com.example.playlistmaker.databinding.ActivityAudioplayerBinding
 
 
 class AudioPlayerActivity : AppCompatActivity() {
 
-    private lateinit var textViewDuration: TextView
-    private lateinit var textViewDurationInfo: TextView
-    private lateinit var textViewAlbumInfo: TextView
-    private lateinit var textViewYearInfo: TextView
-    private lateinit var textViewGenreInfo: TextView
-    private lateinit var textViewCountryInfo: TextView
-    private lateinit var textViewTrackName: TextView
-    private lateinit var textViewArtistName: TextView
-    private lateinit var imageViewCoverAlbum: ImageView
-    private lateinit var playButton: ImageView
+    private val binding by lazy {
+        ActivityAudioplayerBinding.inflate(layoutInflater)
+    }
 
     private val playerControl = Creator.providePlayerInteractor()
     private val searchRunnable = Runnable { setCurrentPosition() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_audioplayer)
+        setContentView(binding.root)
 
-        val btnBack = findViewById<ImageButton>(R.id.btnBack)
-
-        btnBack.setOnClickListener {
+        binding.btnBack.setOnClickListener {
             finish()
         }
-
-        initPlayer()
 
         val track = if (SDK_INT >= 33) {
             intent.getSerializableExtra(TRACK_INFO, Track::class.java)!!
@@ -65,11 +52,11 @@ class AudioPlayerActivity : AppCompatActivity() {
     private fun setCurrentPosition() {
         when (playerControl.getPlayerState()) {
             PlayerState.PLAYING -> {
-                textViewDuration.text = playerControl.getPositionStr()
+                binding.durationTrack.text = playerControl.getPositionStr()
             }
 
             PlayerState.PREPARED -> {
-                textViewDuration.text = PlayerConst.DEFAULT_DURATION
+                binding.durationTrack.text = PlayerConst.DEFAULT_DURATION
             }
 
             else -> {}
@@ -93,13 +80,13 @@ class AudioPlayerActivity : AppCompatActivity() {
 
     private fun startPlayer() {
         playerControl.play()
-        playButton.setImageResource(R.drawable.pause_button_icon)
+        binding.playBtn.setImageResource(R.drawable.pause_button_icon)
         debounce(searchRunnable, PlayerConst.DURATION_REFRESH_DELAY_MILLIS)
     }
 
     private fun pausePlayer() {
         playerControl.pause()
-        playButton.setImageResource(R.drawable.play_button_icon)
+        binding.playBtn.setImageResource(R.drawable.play_button_icon)
         debounce(searchRunnable, PlayerConst.DURATION_REFRESH_DELAY_MILLIS)
     }
 
@@ -107,7 +94,7 @@ class AudioPlayerActivity : AppCompatActivity() {
         if (track.previewUrl.isNullOrEmpty()) {
             return
         }
-        playButton.setOnClickListener {
+        binding.playBtn.setOnClickListener {
             playbackControl()
         }
 
@@ -115,41 +102,22 @@ class AudioPlayerActivity : AppCompatActivity() {
     }
 
     private fun showTrackInfo(track: TrackInfo) {
-
-        textViewArtistName.text = track.artistName
-        textViewTrackName.text = track.trackName
-        textViewCountryInfo.text = track.country
-        textViewGenreInfo.text = track.primaryGenreName
-        textViewYearInfo.text = track.releaseDate.toString().take(4)
-
-        textViewAlbumInfo.text = track.collectionName
+        binding.artistName.text = track.artistName
+        binding.trackName.text = track.trackName
+        binding.countryTrackInfo.text = track.country
+        binding.genreTrackInfo.text = track.primaryGenreName
+        binding.yearTrackInfo.text = track.releaseDate.toString().take(4)
+        binding.albumTrackInfo.text = track.collectionName
+        binding.durationTrack.text = PlayerConst.DEFAULT_DURATION
+        binding.durationTrackInfo.text = track.trackTimeMillis
 
         Glide.with(this)
             .load(track.artworkUrl512)
             .placeholder(R.drawable.placeholder_big_icon)
             .transform(RoundedCorners(dpToPx(8f)))
             .centerCrop()
-            .into(imageViewCoverAlbum)
-
-        textViewDuration.text = PlayerConst.DEFAULT_DURATION
-        textViewDurationInfo.text = track.trackTimeMillis
-
+            .into(binding.coverAlbum)
     }
-
-    private fun initPlayer() {
-        textViewDuration = findViewById(R.id.durationTrack)
-        textViewDurationInfo = findViewById(R.id.durationTrackInfo)
-        textViewAlbumInfo = findViewById(R.id.albumTrackInfo)
-        textViewYearInfo = findViewById(R.id.yearTrackInfo)
-        textViewGenreInfo = findViewById(R.id.genreTrackInfo)
-        textViewCountryInfo = findViewById(R.id.countryTrackInfo)
-        textViewTrackName = findViewById(R.id.trackName)
-        textViewArtistName = findViewById(R.id.artistName)
-        imageViewCoverAlbum = findViewById(R.id.coverAlbum)
-        playButton = findViewById(R.id.playBtn)
-    }
-
-
 
     override fun onPause() {
         super.onPause()

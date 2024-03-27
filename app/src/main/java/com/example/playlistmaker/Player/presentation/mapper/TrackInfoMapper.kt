@@ -16,7 +16,7 @@ object TrackInfoMapper {
             primaryGenreName = track.releaseDate.toString().take(4),
             country = track.country,
             trackTimeMillis = Utils.convertTimeToString(track.trackTimeMillis, "mm:ss"),
-            artworkUrl512 = Utils.getIamgeByResolution(track.artworkUrl100, "512"),
+            artworkUrl512 = Utils.getIamgeByResolution(track.artworkUrl100, "512x512"),
             previewUrl = track.previewUrl
         )
     }
