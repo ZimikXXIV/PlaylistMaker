@@ -24,4 +24,8 @@ object Debounce {
         handler.postDelayed(runnable, debounceDelay)
     }
 
+    fun removeCallbacks(runnable: Runnable) {
+        handler.removeCallbacks(runnable)
+    }
+
 }

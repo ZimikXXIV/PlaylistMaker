@@ -11,10 +11,14 @@ import com.example.playlistmaker.Search.presentation.mapper.TrackMapper
 class SearchTrackRepositoryImpl(private val networkClient: NetworkClient) : SearchTrackRepository {
     override fun searchTrack(expression: String): ConsumerData<List<Track>> {
         val response = networkClient.doRequest(SearchRequest(expression))
-        if (response.resultCode == 200) {
-            return ConsumerData.Data(TrackMapper.map((response as SearchResponse).results))
-        } else {
-            return ConsumerData.Error("Ошибка соединения")
+        return when (response.resultCode) {
+            -1 -> ConsumerData.Error("Проверьте подключение к интернету")
+
+            200 -> ConsumerData.Data(TrackMapper.map((response as SearchResponse).results))
+
+            else -> {
+                ConsumerData.Error("Ошибка сервера")
+            }
         }
     }
 }

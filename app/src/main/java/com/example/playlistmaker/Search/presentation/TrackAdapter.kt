@@ -8,9 +8,14 @@ import com.example.playlistmaker.Search.domain.api.TrackListClickListenerInterfa
 import com.example.playlistmaker.Search.domain.model.Track
 
 class TrackAdapter(
-    private val tracks: List<Track>,
     private val onClick: TrackListClickListenerInterface?
 ) : RecyclerView.Adapter<TrackHolder>() {
+
+    private var trackList: List<Track> = emptyList()
+    fun setTrackList(tracks: List<Track>) {
+        trackList = tracks
+        notifyDataSetChanged()
+    }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TrackHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.track_list, parent, false)
         if (onClick != null)
@@ -20,10 +25,11 @@ class TrackAdapter(
     }
 
     override fun onBindViewHolder(holder: TrackHolder, position: Int) {
-        holder.bind(tracks[position])
+        holder.bind(trackList[position])
     }
 
     override fun getItemCount(): Int {
-        return tracks.size
+        return trackList.size
     }
 }
+
