@@ -6,7 +6,7 @@ import androidx.appcompat.app.AppCompatDelegate
 class App : Application() {
 
     var darkTheme = false
-
+    var debounce = Debounce
     override fun onCreate() {
         super.onCreate()
         val darkTheme = DarkTheme(getSharedPreferences(DarkTheme.DARK_THEME, MODE_PRIVATE))
@@ -24,4 +24,6 @@ class App : Application() {
             }
         )
     }
+
+
 }

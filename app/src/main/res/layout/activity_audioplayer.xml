@@ -68,7 +68,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/artistName"
-        app:srcCompat="@drawable/play_icon" />
+        app:srcCompat="@drawable/play_button_icon" />
 
     <ImageView
         android:id="@+id/addToPlaylist"
