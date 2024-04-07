@@ -1,4 +1,4 @@
-package com.example.playlistmaker.Search.data
+package com.example.playlistmaker.Search.data.impl
 
 import android.content.Context
 import android.content.Context.MODE_PRIVATE
@@ -10,7 +10,7 @@ import com.google.gson.Gson
 
 class TrackHistoryRepositoryImpl(context: Context) :
     HistoryTrackRepository {
-    private val sharedPrefs = context.getSharedPreferences(TRACK_HISTORY, MODE_PRIVATE)
+    private val sharedPrefs = context.getSharedPreferences(PLAYLISTMAKER_PREFERENCES, MODE_PRIVATE)
     override fun addToTrackHistoryWithSave(track: Track, trackHistory: ArrayList<Track>) {
 
         trackHistory.removeIf { it.trackId == track.trackId }
@@ -34,11 +34,11 @@ class TrackHistoryRepositoryImpl(context: Context) :
 
         val jsonTrackHistory = sharedPrefs.getString(TRACK_HISTORY, null)
 
-        if (jsonTrackHistory != null)
-            return Gson().fromJson(jsonTrackHistory, Array<Track>::class.java)
+        return if (jsonTrackHistory != null)
+            Gson().fromJson(jsonTrackHistory, Array<Track>::class.java)
                 .toCollection(ArrayList<Track>())
         else
-            return ArrayList()
+            ArrayList()
     }
 
     override fun clearTrackHistory() {
@@ -47,5 +47,6 @@ class TrackHistoryRepositoryImpl(context: Context) :
 
     companion object {
         const val TRACK_HISTORY = "track_history"
+        const val PLAYLISTMAKER_PREFERENCES = "playlistmaker_preferences"
     }
 }

@@ -5,14 +5,17 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
+import com.example.playlistmaker.Creator.Creator
 import com.example.playlistmaker.MediaLibrary.MediaLibraryActivity
 import com.example.playlistmaker.R
-import com.example.playlistmaker.Search.presentation.SearchActivity
-import com.example.playlistmaker.Settings.SettingsActivity
+import com.example.playlistmaker.Search.ui.SearchActivity
+import com.example.playlistmaker.Settings.domain.api.SettingsInteractor
+import com.example.playlistmaker.Settings.ui.SettingsActivity
 
 class MainActivity : AppCompatActivity() {
 
 
+    private lateinit var settingsIterator: SettingsInteractor
     fun init_form() {
         val packageIntent = this
         val searchButton = findViewById<Button>(R.id.btnSearch)
@@ -44,6 +47,8 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        settingsIterator = Creator.getSettingsInteractor(this)
 
         init_form()
 

@@ -1,4 +1,4 @@
-package com.example.playlistmaker.Search.presentation
+package com.example.playlistmaker.Search.ui
 
 import android.content.Intent
 import android.content.res.Resources
@@ -11,7 +11,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.Debounce.clickDebounce
 import com.example.playlistmaker.Player.domain.model.PlayerConst
-import com.example.playlistmaker.Player.presentation.AudioPlayerActivity
+import com.example.playlistmaker.Player.ui.AudioPlayerActivity
 import com.example.playlistmaker.R
 import com.example.playlistmaker.Search.domain.api.TrackListClickListenerInterface
 import com.example.playlistmaker.Search.domain.model.Track

@@ -19,13 +19,13 @@
             android:name=".MediaLibrary.MediaLibraryActivity"
             android:exported="false" />
         <activity
-            android:name=".Search.presentation.SearchActivity"
+            android:name=".Search.ui.SearchActivity"
             android:exported="false" />
         <activity
-            android:name=".Settings.SettingsActivity"
+            android:name=".Settings.ui.SettingsActivity"
             android:exported="false" />
         <activity
-            android:name=".Player.presentation.AudioPlayerActivity"
+            android:name=".Player.ui.AudioPlayerActivity"
             android:exported="false" />
         <activity
             android:name=".Main.MainActivity"

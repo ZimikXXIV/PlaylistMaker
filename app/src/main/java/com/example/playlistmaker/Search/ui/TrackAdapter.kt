@@ -1,4 +1,4 @@
-package com.example.playlistmaker.Search.presentation
+package com.example.playlistmaker.Search.ui
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -18,10 +18,10 @@ class TrackAdapter(
     }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TrackHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.track_list, parent, false)
-        if (onClick != null)
-            return TrackHolder(view, onClick)
+        return if (onClick != null)
+            TrackHolder(view, onClick)
         else
-            return TrackHolder(view, null)
+            TrackHolder(view, null)
     }
 
     override fun onBindViewHolder(holder: TrackHolder, position: Int) {

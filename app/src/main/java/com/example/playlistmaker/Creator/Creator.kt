@@ -1,22 +1,24 @@
 package com.example.playlistmaker.Creator
 
-import android.app.Activity
 import android.content.Context
 import com.example.playlistmaker.Player.data.PlayerRepositoryImpl
 import com.example.playlistmaker.Player.domain.api.PlayerInteractor
 import com.example.playlistmaker.Player.domain.api.PlayerRepository
 import com.example.playlistmaker.Player.domain.impl.PlayerInteractorImpl
-import com.example.playlistmaker.Player.presentation.InfoController
-import com.example.playlistmaker.Search.data.SearchTrackRepositoryImpl
-import com.example.playlistmaker.Search.data.TrackHistoryRepositoryImpl
+import com.example.playlistmaker.Search.data.impl.SearchTrackRepositoryImpl
+import com.example.playlistmaker.Search.data.impl.TrackHistoryRepositoryImpl
 import com.example.playlistmaker.Search.data.network.RetrofitClient
 import com.example.playlistmaker.Search.domain.api.HistoryTrackRepository
 import com.example.playlistmaker.Search.domain.api.SearchTrackInteractor
 import com.example.playlistmaker.Search.domain.api.SearchTrackRepository
 import com.example.playlistmaker.Search.domain.impl.HistoryTrackInteractorImpl
 import com.example.playlistmaker.Search.domain.impl.SearchTrackInteractorImpl
-import com.example.playlistmaker.Search.presentation.TrackAdapter
-import com.example.playlistmaker.Search.presentation.TrackSerachController
+import com.example.playlistmaker.Settings.data.impl.ExternalNavigatorImpl
+import com.example.playlistmaker.Settings.data.impl.SettingsRepositoryImpl
+import com.example.playlistmaker.Settings.domain.api.ExternalNavigator
+import com.example.playlistmaker.Settings.domain.api.SettingsRepository
+import com.example.playlistmaker.Settings.domain.impl.SettingsInteractorImpl
+import com.example.playlistmaker.Settings.domain.impl.SharingInteractorImpl
 
 object Creator {
     fun getHistoryTrackInteractor(context: Context): HistoryTrackInteractorImpl {
@@ -42,15 +44,19 @@ object Creator {
         return PlayerRepositoryImpl()
     }
 
-    fun getTrackSearchController(
-        activity: Activity,
-        trackAdapter: TrackAdapter,
-        historyAdapter: TrackAdapter
-    ): TrackSerachController {
-        return TrackSerachController(activity, trackAdapter, historyAdapter)
+    fun getSettingsInteractor(context: Context): SettingsInteractorImpl {
+        return SettingsInteractorImpl(getSettingsRepository(context))
     }
 
-    fun getInfoController(activity: Activity): InfoController {
-        return InfoController(activity)
+    private fun getSettingsRepository(context: Context): SettingsRepository {
+        return SettingsRepositoryImpl(context)
+    }
+
+    fun getSharingInteractor(context: Context): SharingInteractorImpl {
+        return SharingInteractorImpl(context, getSharingRepository(context))
+    }
+
+    private fun getSharingRepository(context: Context): ExternalNavigator {
+        return ExternalNavigatorImpl(context)
     }
 }

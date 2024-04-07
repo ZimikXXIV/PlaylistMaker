@@ -2,7 +2,7 @@ package com.example.playlistmaker.Player.domain.impl
 
 import com.example.playlistmaker.Player.domain.api.PlayerInteractor
 import com.example.playlistmaker.Player.domain.api.PlayerRepository
-import com.example.playlistmaker.Player.domain.model.PlayerState
+import com.example.playlistmaker.Player.domain.model.PlayerStatus
 
 class PlayerInteractorImpl(private val playerRepository: PlayerRepository) : PlayerInteractor {
 
@@ -18,8 +18,8 @@ class PlayerInteractorImpl(private val playerRepository: PlayerRepository) : Pla
         playerRepository.pause()
     }
 
-    override fun getPlayerState(): PlayerState {
-        return playerRepository.getPlayerState()
+    override fun getPlayerStatus(): PlayerStatus {
+        return playerRepository.getPlayerStatus()
     }
 
     override fun getPositionStr(): String {

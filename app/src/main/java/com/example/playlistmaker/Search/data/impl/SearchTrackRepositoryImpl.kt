@@ -1,4 +1,4 @@
-package com.example.playlistmaker.Search.data
+package com.example.playlistmaker.Search.data.impl
 
 import com.example.playlistmaker.Search.data.dto.SearchRequest
 import com.example.playlistmaker.Search.data.dto.SearchResponse
