@@ -2,10 +2,9 @@ package com.example.playlistmaker.settings.ui
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
 import com.example.playlistmaker.databinding.ActivitySettingsBinding
 import com.example.playlistmaker.settings.presentation.viewmodel.SettingViewModel
-import com.example.playlistmaker.settings.presentation.viewmodel.SettingViewModel.Companion.getViewModelFactory
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 class SettingsActivity : AppCompatActivity() {
@@ -13,11 +12,7 @@ class SettingsActivity : AppCompatActivity() {
     private val binding by lazy {
         ActivitySettingsBinding.inflate(layoutInflater)
     }
-
-    private val viewModel: SettingViewModel by lazy {
-        ViewModelProvider(this, getViewModelFactory(this))[SettingViewModel::class.java]
-    }
-
+    private val viewModel by viewModel<SettingViewModel>()
     private fun setEvents() {
 
         binding.btnBack.setOnClickListener {

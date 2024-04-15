@@ -1,16 +1,17 @@
 package com.example.playlistmaker.search.data.impl
 
-import android.content.Context
-import android.content.Context.MODE_PRIVATE
+import android.content.SharedPreferences
 import com.example.playlistmaker.search.domain.api.HistoryTrackRepository
 import com.example.playlistmaker.search.domain.model.SearchConst
 import com.example.playlistmaker.search.domain.model.Track
 import com.google.gson.Gson
 
 
-class TrackHistoryRepositoryImpl(context: Context) :
+class HistoryTrackRepositoryImpl(
+    private val sharedPrefs: SharedPreferences,
+    private val gson: Gson
+) :
     HistoryTrackRepository {
-    private val sharedPrefs = context.getSharedPreferences(PLAYLISTMAKER_PREFERENCES, MODE_PRIVATE)
 
     private var trackHistory: ArrayList<Track> = ArrayList()
     override fun addToTrackHistoryWithSave(track: Track) {
@@ -25,7 +26,7 @@ class TrackHistoryRepositoryImpl(context: Context) :
     }
 
     override fun saveTrackHistory() {
-        val jsonTrackHistory = Gson().toJson(trackHistory)
+        val jsonTrackHistory = gson.toJson(trackHistory)
 
         sharedPrefs.edit()
             .putString(TRACK_HISTORY, jsonTrackHistory)
@@ -37,7 +38,7 @@ class TrackHistoryRepositoryImpl(context: Context) :
         val jsonTrackHistory = sharedPrefs.getString(TRACK_HISTORY, null)
 
         trackHistory = if (jsonTrackHistory != null)
-            Gson().fromJson(jsonTrackHistory, Array<Track>::class.java)
+            gson.fromJson(jsonTrackHistory, Array<Track>::class.java)
                 .toCollection(ArrayList<Track>())
         else
             ArrayList()

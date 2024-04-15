@@ -1,12 +1,12 @@
 package com.example.playlistmaker.creator
-
+/* Не актуален после dependency injection, сохранен для истории
 import android.content.Context
 import com.example.playlistmaker.player.data.PlayerRepositoryImpl
 import com.example.playlistmaker.player.domain.api.PlayerInteractor
 import com.example.playlistmaker.player.domain.api.PlayerRepository
 import com.example.playlistmaker.player.domain.impl.PlayerInteractorImpl
 import com.example.playlistmaker.search.data.impl.SearchTrackRepositoryImpl
-import com.example.playlistmaker.search.data.impl.TrackHistoryRepositoryImpl
+import com.example.playlistmaker.search.data.impl.HistoryTrackRepositoryImpl
 import com.example.playlistmaker.search.data.network.RetrofitClient
 import com.example.playlistmaker.search.domain.api.HistoryTrackInteractor
 import com.example.playlistmaker.search.domain.api.HistoryTrackRepository
@@ -26,7 +26,7 @@ object Creator {
         return HistoryTrackInteractorImpl(getHistoryTrackRepository(context))
     }
     private fun getHistoryTrackRepository(context: Context): HistoryTrackRepository {
-        return TrackHistoryRepositoryImpl(context)
+        return HistoryTrackRepositoryImpl(context)
     }
 
     fun getSearchTrackInteractor(context: Context): SearchTrackInteractor {
@@ -61,3 +61,5 @@ object Creator {
         return ExternalNavigatorImpl(context)
     }
 }
+
+ */

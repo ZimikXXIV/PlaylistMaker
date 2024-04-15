@@ -2,6 +2,7 @@ package com.example.playlistmaker.sharing.data.impl
 
 import android.content.Context
 import android.content.Intent
+import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
 import android.net.Uri
 import com.example.playlistmaker.R
 import com.example.playlistmaker.settings.domain.model.EmailData
@@ -16,12 +17,14 @@ class ExternalNavigatorImpl(private val context: Context) : ExternalNavigator {
         mailIntent.putExtra(Intent.EXTRA_EMAIL, arrayOf(mail.email))
         mailIntent.putExtra(Intent.EXTRA_SUBJECT, mail.subject)
         mailIntent.putExtra(Intent.EXTRA_TEXT, mail.text)
-
+        mailIntent.setFlags(FLAG_ACTIVITY_NEW_TASK)
         context.startActivity(mailIntent)
     }
 
     override fun openLink(openLink: String) {
         val linkIntent = Intent(Intent.ACTION_VIEW, Uri.parse(openLink))
+        linkIntent.setFlags(FLAG_ACTIVITY_NEW_TASK)
+
         context.startActivity(linkIntent)
     }
 
@@ -29,6 +32,7 @@ class ExternalNavigatorImpl(private val context: Context) : ExternalNavigator {
         val shareIntent = Intent(Intent.ACTION_SEND)
         shareIntent.putExtra(Intent.EXTRA_TEXT, shareLink)
         shareIntent.type = "text/plain"
+        shareIntent.setFlags(FLAG_ACTIVITY_NEW_TASK)
 
         context.startActivity(shareIntent)
     }

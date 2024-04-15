@@ -10,7 +10,6 @@ import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.playlistmaker.Debounce
 import com.example.playlistmaker.databinding.ActivitySearchBinding
@@ -19,8 +18,8 @@ import com.example.playlistmaker.search.domain.model.SearchConst
 import com.example.playlistmaker.search.domain.model.Track
 import com.example.playlistmaker.search.presentation.model.SearchStatus
 import com.example.playlistmaker.search.presentation.viewmodel.SearchViewModel
-import com.example.playlistmaker.search.presentation.viewmodel.SearchViewModel.Companion.getViewModelFactory
 import com.example.playlistmaker.search.ui.state.SearchState
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 class SearchActivity : AppCompatActivity(), TrackListClickListenerInterface {
@@ -28,9 +27,7 @@ class SearchActivity : AppCompatActivity(), TrackListClickListenerInterface {
     private val trackAdapter = TrackAdapter(this)
     private val historyAdapter = TrackAdapter(this)
 
-    private val searchViewModel: SearchViewModel by lazy {
-        ViewModelProvider(this, getViewModelFactory(this))[SearchViewModel::class.java]
-    }
+    private val searchViewModel by viewModel<SearchViewModel>()
 
     private val trackList = ArrayList<Track>()
     private var trackHistoryArray: ArrayList<Track> = ArrayList()
@@ -205,7 +202,6 @@ class SearchActivity : AppCompatActivity(), TrackListClickListenerInterface {
 
     override fun onClick(track: Track) {
         searchViewModel.addToTrackHistoryWithSave(track)
-        historyAdapter.notifyDataSetChanged()
     }
     override fun onRestoreInstanceState(
         savedInstanceState: Bundle?,

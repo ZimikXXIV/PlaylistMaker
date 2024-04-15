@@ -1,15 +1,11 @@
 package com.example.playlistmaker.search.presentation.viewmodel
 
-import android.content.Context
+
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.playlistmaker.Debounce.debounce
 import com.example.playlistmaker.Debounce.removeCallbacks
-import com.example.playlistmaker.creator.Creator
 import com.example.playlistmaker.search.domain.api.ConsumerData
 import com.example.playlistmaker.search.domain.api.HistoryTrackInteractor
 import com.example.playlistmaker.search.domain.api.SearchTrackInteractor
@@ -63,6 +59,13 @@ class SearchViewModel(
 
     fun addToTrackHistoryWithSave(track: Track) {
         trackHistory.addToTrackHistoryWithSave(track)
+        val trackHistoryArray = trackHistory.loadTrackHistory()
+        searchLiveData.postValue(
+            SearchState.History(
+                SearchStatus.SEARCH_HISTORY,
+                trackHistoryArray
+            )
+        )
     }
 
     fun clearHistory() {
@@ -113,16 +116,17 @@ class SearchViewModel(
     fun onDestroy() {
         removeCallbacks(searchRunnable)
     }
-
-    companion object {
-        fun getViewModelFactory(context: Context): ViewModelProvider.Factory =
-            viewModelFactory {
-                initializer {
-                    SearchViewModel(
-                        Creator.getHistoryTrackInteractor(context),
-                        Creator.getSearchTrackInteractor(context)
-                    )
+    /*  Не актуален после dependency injection, сохранен для истории
+        companion object {
+            fun getViewModelFactory(context: Context): ViewModelProvider.Factory =
+                viewModelFactory {
+                    initializer {
+                        SearchViewModel(
+                            Creator.getHistoryTrackInteractor(context),
+                            Creator.getSearchTrackInteractor(context)
+                        )
+                    }
                 }
-            }
-    }
+        }
+    */
 }

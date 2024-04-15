@@ -2,18 +2,18 @@ package com.example.playlistmaker.settings.data.impl
 
 
 import android.content.Context
+import android.content.SharedPreferences
 import android.content.res.Configuration
 import androidx.appcompat.app.AppCompatDelegate
 import com.example.playlistmaker.settings.domain.api.SettingsRepository
 import com.example.playlistmaker.settings.domain.model.ThemeSettings
 import com.google.gson.Gson
 
-class SettingsRepositoryImpl(private val context: Context) : SettingsRepository {
-
-    private val sharedPrefs =
-        context.getSharedPreferences(PLAYLISTMAKER_PREFERENCES, Context.MODE_PRIVATE)
-
-    private var darkTheme: ThemeSettings = ThemeSettings(false)
+class SettingsRepositoryImpl(
+    private val context: Context,
+    private val sharedPrefs: SharedPreferences,
+    private var darkTheme: ThemeSettings
+) : SettingsRepository {
 
     init {
         loadDarkTheme()
