@@ -10,8 +10,8 @@ import com.example.playlistmaker.sharing.domain.api.ExternalNavigator
 
 class ExternalNavigatorImpl(private val context: Context) : ExternalNavigator {
 
-    override fun openEmail(mail: EmailData) {
-
+    override fun openEmail() {
+        val mail = getSupportEmailData()
         val mailIntent = Intent(Intent.ACTION_SENDTO)
         mailIntent.data = Uri.parse("mailto:")
         mailIntent.putExtra(Intent.EXTRA_EMAIL, arrayOf(mail.email))
@@ -21,14 +21,16 @@ class ExternalNavigatorImpl(private val context: Context) : ExternalNavigator {
         context.startActivity(mailIntent)
     }
 
-    override fun openLink(openLink: String) {
+    override fun openLink() {
+        val openLink = getTermsLink()
         val linkIntent = Intent(Intent.ACTION_VIEW, Uri.parse(openLink))
         linkIntent.setFlags(FLAG_ACTIVITY_NEW_TASK)
 
         context.startActivity(linkIntent)
     }
 
-    override fun shareLink(shareLink: String) {
+    override fun shareLink() {
+        val shareLink = getShareAppLink()
         val shareIntent = Intent(Intent.ACTION_SEND)
         shareIntent.putExtra(Intent.EXTRA_TEXT, shareLink)
         shareIntent.type = "text/plain"
@@ -37,11 +39,11 @@ class ExternalNavigatorImpl(private val context: Context) : ExternalNavigator {
         context.startActivity(shareIntent)
     }
 
-    override fun getShareAppLink(): String {
+    private fun getShareAppLink(): String {
         return context.getString(R.string.share_link)
     }
 
-    override fun getSupportEmailData(): EmailData {
+    private fun getSupportEmailData(): EmailData {
         return EmailData(
             subject = context.getString(R.string.mail_subject),
             text = context.getString(R.string.mail_body),
@@ -49,7 +51,7 @@ class ExternalNavigatorImpl(private val context: Context) : ExternalNavigator {
         )
     }
 
-    override fun getTermsLink(): String {
+    private fun getTermsLink(): String {
         return context.getString(R.string.license_link)
     }
 
