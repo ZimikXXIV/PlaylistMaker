@@ -3,20 +3,16 @@ package com.example.playlistmaker.player.presentation.viewmodel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.playlistmaker.Debounce.debounce
 import com.example.playlistmaker.Debounce.removeCallbacks
-import com.example.playlistmaker.creator.Creator
 import com.example.playlistmaker.player.domain.api.PlayerInteractor
 import com.example.playlistmaker.player.domain.model.PlayerConst
 import com.example.playlistmaker.player.domain.model.PlayerStatus
+import com.example.playlistmaker.player.presentation.model.TrackInfo
 import com.example.playlistmaker.player.presentation.state.PlayerState
-import com.example.playlistmaker.search.domain.model.Track
 
 class PlayerViewModel(
-    track: Track, private val playerInteractor: PlayerInteractor
+    track: TrackInfo, private val playerInteractor: PlayerInteractor
 ) : ViewModel() {
 
     private var loadingLiveData = MutableLiveData<PlayerState>()
@@ -102,18 +98,6 @@ class PlayerViewModel(
     fun onDestroy() {
         removeCallbacks(setPositionRunnable)
         playerInteractor.release()
-    }
-
-    companion object {
-        fun getViewModelFactory(track: Track): ViewModelProvider.Factory =
-            viewModelFactory {
-                initializer {
-                    PlayerViewModel(
-                        track,
-                        Creator.getPlayerInteractor()
-                    )
-                }
-            }
     }
 
 }

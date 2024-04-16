@@ -3,7 +3,6 @@ package com.example.playlistmaker.player.ui
 import android.os.Build
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
@@ -16,6 +15,8 @@ import com.example.playlistmaker.player.presentation.state.PlayerState
 import com.example.playlistmaker.player.presentation.viewmodel.PlayerViewModel
 import com.example.playlistmaker.search.domain.model.Track
 import com.example.playlistmaker.search.ui.TrackHolder
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 
 
 class AudioPlayerActivity : AppCompatActivity() {
@@ -23,7 +24,12 @@ class AudioPlayerActivity : AppCompatActivity() {
     private val binding by lazy {
         ActivityAudioplayerBinding.inflate(layoutInflater)
     }
-    private lateinit var viewModel: PlayerViewModel
+
+    private lateinit var trackInfo: TrackInfo
+
+    private val viewModel: PlayerViewModel by viewModel {
+        parametersOf(trackInfo)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,15 +44,16 @@ class AudioPlayerActivity : AppCompatActivity() {
         } else {
             intent.getSerializableExtra(PlayerConst.TRACK_INFO)!! as Track
         }
+        trackInfo = TrackInfoMapper.map(track)
 
-        showTrackInfo(TrackInfoMapper.map(track))
+        showTrackInfo(trackInfo)
 
 
-
+        /*
         viewModel = ViewModelProvider(
             this,
-            PlayerViewModel.getViewModelFactory(track)
-        )[PlayerViewModel::class.java]
+            PlayerViewModel.getViewModelFactory(trackInfo)
+        )[PlayerViewModel::class.java]*/
 
         viewModel.getPlayerState().observe(this) { playerState ->
             when (playerState) {

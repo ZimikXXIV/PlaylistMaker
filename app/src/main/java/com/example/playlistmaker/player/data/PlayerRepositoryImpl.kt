@@ -6,9 +6,10 @@ import com.example.playlistmaker.player.domain.model.PlayerStatus
 import java.text.SimpleDateFormat
 import java.util.Locale
 
-class PlayerRepositoryImpl : PlayerRepository {
-    private val mediaPlayer = MediaPlayer()
-    private var playerStatus = PlayerStatus.DEFAULT
+class PlayerRepositoryImpl(
+    private val mediaPlayer: MediaPlayer,
+    private var playerStatus: PlayerStatus
+) : PlayerRepository {
 
     override fun createPlayer(previewUrl: String) {
 
