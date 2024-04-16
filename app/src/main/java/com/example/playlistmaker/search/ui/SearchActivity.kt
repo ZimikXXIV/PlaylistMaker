@@ -59,7 +59,7 @@ class SearchActivity : AppCompatActivity(), TrackListClickListenerInterface {
 
         historyAdapter.setTrackList(trackHistoryArray)
         binding.recyclerHistoryList.layoutManager =
-            LinearLayoutManager(binding.recyclerTrackList.context)
+            LinearLayoutManager(binding.recyclerHistoryList.context)
         binding.recyclerHistoryList.adapter = historyAdapter
 
 

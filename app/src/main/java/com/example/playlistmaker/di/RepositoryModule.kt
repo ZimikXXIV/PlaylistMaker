@@ -35,8 +35,7 @@ val repositoryModule = module {
     single<SettingsRepository> {
         SettingsRepositoryImpl(
             androidContext(),
-            get(named(SearchConst.SHAREDPREFERENCES_TAG)),
-            get()
+            get(named(SearchConst.SHAREDPREFERENCES_TAG))
         )
     }
 

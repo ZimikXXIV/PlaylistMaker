@@ -10,11 +10,11 @@ import com.example.playlistmaker.sharing.domain.api.SharingInteractor
 
 class SettingViewModel(
     private val sharingInteractor: SharingInteractor,
-    private val settingsInteractor: SettingsInteractor,
-    private var loadingLiveData: MutableLiveData<SettingsState>,
-    private var darkThemeSettings: ThemeSettings
+    private val settingsInteractor: SettingsInteractor
 ) : ViewModel() {
 
+    private var loadingLiveData = MutableLiveData<SettingsState>()
+    private var darkThemeSettings = settingsInteractor.getThemeSettings()
     fun getSettingsState(): LiveData<SettingsState> = loadingLiveData
 
     fun loadTheme() {

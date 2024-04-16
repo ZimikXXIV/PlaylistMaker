@@ -11,10 +11,10 @@ import com.google.gson.Gson
 
 class SettingsRepositoryImpl(
     private val context: Context,
-    private val sharedPrefs: SharedPreferences,
-    private var darkTheme: ThemeSettings
+    private val sharedPrefs: SharedPreferences
 ) : SettingsRepository {
 
+    private var darkTheme = ThemeSettings(false)
     init {
         loadDarkTheme()
     }

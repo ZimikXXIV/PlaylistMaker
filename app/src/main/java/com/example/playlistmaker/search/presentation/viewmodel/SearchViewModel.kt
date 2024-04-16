@@ -116,17 +116,4 @@ class SearchViewModel(
     fun onDestroy() {
         removeCallbacks(searchRunnable)
     }
-    /*  Не актуален после dependency injection, сохранен для истории
-        companion object {
-            fun getViewModelFactory(context: Context): ViewModelProvider.Factory =
-                viewModelFactory {
-                    initializer {
-                        SearchViewModel(
-                            Creator.getHistoryTrackInteractor(context),
-                            Creator.getSearchTrackInteractor(context)
-                        )
-                    }
-                }
-        }
-    */
 }

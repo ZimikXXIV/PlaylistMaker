@@ -99,17 +99,5 @@ class PlayerViewModel(
         removeCallbacks(setPositionRunnable)
         playerInteractor.release()
     }
-    /*
-        companion object {
-            fun getViewModelFactory(track: Track): ViewModelProvider.Factory =
-                viewModelFactory {
-                    initializer {
-                        PlayerViewModel(
-                            track,
-                            Creator.getPlayerInteractor()
-                        )
-                    }
-                }
-        }
-    */
+
 }
