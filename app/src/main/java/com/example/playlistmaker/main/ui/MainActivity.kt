@@ -6,12 +6,15 @@ import android.view.View
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import com.example.playlistmaker.R
+import com.example.playlistmaker.medialibrary.MediaLibraryActivity
 import com.example.playlistmaker.search.ui.SearchActivity
+import com.example.playlistmaker.settings.presentation.viewmodel.SettingViewModel
 import com.example.playlistmaker.settings.ui.SettingsActivity
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : AppCompatActivity() {
 
-
+    private val viewModel by viewModel<SettingViewModel>()
     fun init_form() {
         val packageIntent = this
         val searchButton = findViewById<Button>(R.id.btnSearch)
@@ -43,6 +46,8 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        viewModel.loadTheme()
 
         init_form()
 

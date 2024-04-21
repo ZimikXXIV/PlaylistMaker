@@ -29,7 +29,7 @@ val repositoryModule = module {
     }
 
     factory<PlayerRepository> {
-        PlayerRepositoryImpl(get(), get())
+        PlayerRepositoryImpl(get())
     }
 
     single<SettingsRepository> {

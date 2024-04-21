@@ -7,6 +7,7 @@
     <color name="YP_BlueLight">#9FBBF3</color>
     <color name="YP_Grey">#AEAFB4</color>>
     <color name="YP_GreyLight">#E6E8EB</color>>
+    <color name="YP_Red">#F56B6C</color>>
     <color name="Switch_track">@color/YP_GreyLight</color>
     <color name="Switch_thumb">@color/YP_Grey</color>
     <color name="Icon_Tint">@color/YP_Grey</color>

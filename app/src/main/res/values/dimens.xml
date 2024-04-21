@@ -8,7 +8,7 @@
     <dimen name="textview_padding">16dp</dimen>
     <dimen name="editview_margin">16dp</dimen>
     <dimen name="editview_padding">16dp</dimen>
-    <dimen name="head_text_size">26sp</dimen>
+    <dimen name="head_text_size">22sp</dimen>
     <dimen name="text_size_19sp">19sp</dimen>
     <dimen name="small_text_size">13sp</dimen>
     <dimen name="text_size_11sp">11sp</dimen>
@@ -22,6 +22,7 @@
     <dimen name="search_text_size">16dp</dimen>
     <dimen name="header_margin">4dp</dimen>
     <dimen name="margin_4dp">4dp</dimen>
+    <dimen name="margin_5dp">5dp</dimen>
     <dimen name="margin_8dp">8dp</dimen>
     <dimen name="margin_9dp">9dp</dimen>
     <dimen name="margin_10dp">10dp</dimen>
@@ -36,6 +37,8 @@
     <dimen name="margin_24dp">24dp</dimen>
     <dimen name="margin_26dp">26dp</dimen>
     <dimen name="margin_30dp">30dp</dimen>
+    <dimen name="margin_46dp">46dp</dimen>
+    <dimen name="margin_48dp">48dp</dimen>
     <dimen name="margin_55dp">55dp</dimen>
     <dimen name="margin_140dp">140dp</dimen>
     <dimen name="cover_size">45dp</dimen>

@@ -8,9 +8,9 @@ import java.util.Locale
 
 class PlayerRepositoryImpl(
     private val mediaPlayer: MediaPlayer,
-    private var playerStatus: PlayerStatus
 ) : PlayerRepository {
 
+    private var playerStatus = PlayerStatus.DEFAULT
     override fun createPlayer(previewUrl: String) {
 
         with(mediaPlayer) {
