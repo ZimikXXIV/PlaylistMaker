@@ -23,4 +23,7 @@
     <string name="year">Год</string>
     <string name="album">Альбом</string>
     <string name="duration">Длительность</string>
+    <string name="fragment_list_playlist_gag">Вы не создали ни одного плейлиста</string>
+    <string name="fragment_favorite_gag">Ваша медиатека пуста</string>
+    <string name="new_playlist">Новый плейлист</string>
 </resources>

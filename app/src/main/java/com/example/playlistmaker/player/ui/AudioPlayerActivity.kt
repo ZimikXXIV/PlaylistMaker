@@ -49,12 +49,6 @@ class AudioPlayerActivity : AppCompatActivity() {
         showTrackInfo(trackInfo)
 
 
-        /*
-        viewModel = ViewModelProvider(
-            this,
-            PlayerViewModel.getViewModelFactory(trackInfo)
-        )[PlayerViewModel::class.java]*/
-
         viewModel.getPlayerState().observe(this) { playerState ->
             when (playerState) {
                 is PlayerState.Content -> {

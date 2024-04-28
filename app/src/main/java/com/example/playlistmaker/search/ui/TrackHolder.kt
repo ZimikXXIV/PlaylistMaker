@@ -28,7 +28,6 @@ class TrackHolder(itemView: View, private val onClick: TrackListClickListenerInt
     private val cover: ImageView = itemView.findViewById(R.id.coverAlbum)
 
 
-
     fun bind(track: Track) {
 
         trackName.text = track.trackName
@@ -54,6 +53,9 @@ class TrackHolder(itemView: View, private val onClick: TrackListClickListenerInt
             .transform(RoundedCorners(dpToPx(2f)))
             .centerCrop()
             .into(cover)
+
+        artistName.requestLayout()
+
     }
 
     companion object {
