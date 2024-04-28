@@ -23,7 +23,7 @@ import com.example.playlistmaker.utils.Debounce
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
-class FragmentSearch : BindingFragment<FragmentSearchBinding>(), TrackListClickListenerInterface {
+class SearchFragment : BindingFragment<FragmentSearchBinding>(), TrackListClickListenerInterface {
 
     private val trackAdapter = TrackAdapter(this)
     private val historyAdapter = TrackAdapter(this)
@@ -202,21 +202,5 @@ class FragmentSearch : BindingFragment<FragmentSearchBinding>(), TrackListClickL
     override fun onClick(track: Track) {
         searchViewModel.addToTrackHistoryWithSave(track)
     }
-    /*
-    override fun onRestoreInstanceState(
-        savedInstanceState: Bundle?,
-        persistentState: PersistableBundle?
-    ) {
-        super.onRestoreInstanceState(savedInstanceState, persistentState)
-        if (savedInstanceState != null) {
-            binding.edtxtSearch.setText(
-                savedInstanceState.getString(
-                    SearchConst.SEARCH_TEXT, ""
-                )
-            )
-        }
-    }
-    */
-
 
 }

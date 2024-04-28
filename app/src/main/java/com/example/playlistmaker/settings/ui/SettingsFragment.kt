@@ -10,7 +10,7 @@ import com.example.playlistmaker.utils.BindingFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
-class FragmentSettings : BindingFragment<FragmentSettingsBinding>() {
+class SettingsFragment : BindingFragment<FragmentSettingsBinding>() {
 
     private val viewModel by viewModel<SettingViewModel>()
 
