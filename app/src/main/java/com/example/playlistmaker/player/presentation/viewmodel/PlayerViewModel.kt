@@ -3,13 +3,13 @@ package com.example.playlistmaker.player.presentation.viewmodel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.playlistmaker.Debounce.debounce
-import com.example.playlistmaker.Debounce.removeCallbacks
 import com.example.playlistmaker.player.domain.api.PlayerInteractor
 import com.example.playlistmaker.player.domain.model.PlayerConst
 import com.example.playlistmaker.player.domain.model.PlayerStatus
 import com.example.playlistmaker.player.presentation.model.TrackInfo
 import com.example.playlistmaker.player.presentation.state.PlayerState
+import com.example.playlistmaker.utils.Debounce.debounce
+import com.example.playlistmaker.utils.Debounce.removeCallbacks
 
 class PlayerViewModel(
     track: TrackInfo, private val playerInteractor: PlayerInteractor

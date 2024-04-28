@@ -5,6 +5,7 @@ import com.example.playlistmaker.medialibrary.viewmodel.MediaLibraryViewModel
 import com.example.playlistmaker.medialibrary.viewmodel.PlaylistViewModel
 import com.example.playlistmaker.player.presentation.model.TrackInfo
 import com.example.playlistmaker.player.presentation.viewmodel.PlayerViewModel
+import com.example.playlistmaker.root.presentation.MainViewModel
 import com.example.playlistmaker.search.presentation.viewmodel.SearchViewModel
 import com.example.playlistmaker.settings.presentation.viewmodel.SettingViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -34,6 +35,10 @@ val viewModelModule = module {
 
     viewModel {
         PlaylistViewModel()
+    }
+
+    viewModel {
+        MainViewModel(get())
     }
 
 }

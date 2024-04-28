@@ -4,8 +4,6 @@ package com.example.playlistmaker.search.presentation.viewmodel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.playlistmaker.Debounce.debounce
-import com.example.playlistmaker.Debounce.removeCallbacks
 import com.example.playlistmaker.search.domain.api.ConsumerData
 import com.example.playlistmaker.search.domain.api.HistoryTrackInteractor
 import com.example.playlistmaker.search.domain.api.SearchTrackInteractor
@@ -14,6 +12,8 @@ import com.example.playlistmaker.search.domain.model.SearchConst
 import com.example.playlistmaker.search.domain.model.Track
 import com.example.playlistmaker.search.presentation.model.SearchStatus
 import com.example.playlistmaker.search.ui.state.SearchState
+import com.example.playlistmaker.utils.Debounce.debounce
+import com.example.playlistmaker.utils.Debounce.removeCallbacks
 
 class SearchViewModel(
     private val trackHistory: HistoryTrackInteractor,
@@ -113,7 +113,7 @@ class SearchViewModel(
         searchSavedText = expression
     }
 
-    fun onDestroy() {
+    fun onDestroyView() {
         removeCallbacks(searchRunnable)
     }
 }

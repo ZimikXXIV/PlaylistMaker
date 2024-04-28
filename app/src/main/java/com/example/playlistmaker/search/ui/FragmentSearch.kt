@@ -2,27 +2,28 @@ package com.example.playlistmaker.search.ui
 
 import android.content.Context
 import android.os.Bundle
-import android.os.PersistableBundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.playlistmaker.Debounce
-import com.example.playlistmaker.databinding.ActivitySearchBinding
+import com.example.playlistmaker.databinding.FragmentSearchBinding
 import com.example.playlistmaker.search.domain.api.TrackListClickListenerInterface
 import com.example.playlistmaker.search.domain.model.SearchConst
 import com.example.playlistmaker.search.domain.model.Track
 import com.example.playlistmaker.search.presentation.model.SearchStatus
 import com.example.playlistmaker.search.presentation.viewmodel.SearchViewModel
 import com.example.playlistmaker.search.ui.state.SearchState
+import com.example.playlistmaker.utils.BindingFragment
+import com.example.playlistmaker.utils.Debounce
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
-class SearchActivity : AppCompatActivity(), TrackListClickListenerInterface {
+class FragmentSearch : BindingFragment<FragmentSearchBinding>(), TrackListClickListenerInterface {
 
     private val trackAdapter = TrackAdapter(this)
     private val historyAdapter = TrackAdapter(this)
@@ -32,18 +33,20 @@ class SearchActivity : AppCompatActivity(), TrackListClickListenerInterface {
     private val trackList = ArrayList<Track>()
     private var trackHistoryArray: ArrayList<Track> = ArrayList()
 
-    private val binding by lazy {
-        ActivitySearchBinding.inflate(layoutInflater)
+    override fun createBinding(
+        inflater: LayoutInflater,
+        container: ViewGroup?
+    ): FragmentSearchBinding {
+        return FragmentSearchBinding.inflate(inflater, container, false)
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(binding.root)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         setupAdapters()
         setEvents()
 
-        searchViewModel.getSearchLiveData().observe(this) { searchState ->
+        searchViewModel.getSearchLiveData().observe(viewLifecycleOwner) { searchState ->
             updateView(searchState)
         }
 
@@ -67,10 +70,6 @@ class SearchActivity : AppCompatActivity(), TrackListClickListenerInterface {
 
     private fun setEvents() {
 
-        binding.btnBack.setOnClickListener {
-            finish()
-        }
-
         binding.btnRefresh.setOnClickListener {
             searchViewModel.searchDebounce(binding.edtxtSearch.text.toString())
         }
@@ -82,7 +81,7 @@ class SearchActivity : AppCompatActivity(), TrackListClickListenerInterface {
         binding.btnClear.setOnClickListener {
             binding.edtxtSearch.text.clear()
             val inputMethodManager =
-                getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+                requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
             inputMethodManager?.hideSoftInputFromWindow(binding.edtxtSearch.windowToken, 0)
         }
 
@@ -183,9 +182,9 @@ class SearchActivity : AppCompatActivity(), TrackListClickListenerInterface {
     }
 
 
-    override fun onDestroy() {
-        super.onDestroy()
-        searchViewModel.onDestroy()
+    override fun onDestroyView() {
+        super.onDestroyView()
+        searchViewModel.onDestroyView()
     }
     override fun onStop() {
         super.onStop()
@@ -203,6 +202,7 @@ class SearchActivity : AppCompatActivity(), TrackListClickListenerInterface {
     override fun onClick(track: Track) {
         searchViewModel.addToTrackHistoryWithSave(track)
     }
+    /*
     override fun onRestoreInstanceState(
         savedInstanceState: Bundle?,
         persistentState: PersistableBundle?
@@ -216,6 +216,7 @@ class SearchActivity : AppCompatActivity(), TrackListClickListenerInterface {
             )
         }
     }
+    */
 
 
 }

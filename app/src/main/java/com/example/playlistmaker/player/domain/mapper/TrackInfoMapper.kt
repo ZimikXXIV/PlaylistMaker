@@ -1,9 +1,9 @@
 package com.example.playlistmaker.player.domain.mapper
 
 
-import com.example.playlistmaker.Utils
 import com.example.playlistmaker.player.presentation.model.TrackInfo
 import com.example.playlistmaker.search.domain.model.Track
+import com.example.playlistmaker.utils.Utils
 
 object TrackInfoMapper {
     fun map(track: Track): TrackInfo {

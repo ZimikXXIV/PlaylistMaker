@@ -14,5 +14,4 @@ class FragmentAdapter(fragmentManager: FragmentManager, lifecycle: Lifecycle) :
         return if (position == 0) FragmentFavorite.newInstance() else FragmentPlaylist.newInstance()
     }
 
-
 }
