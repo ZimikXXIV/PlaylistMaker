@@ -4,16 +4,16 @@ package com.example.playlistmaker.search.presentation.viewmodel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.playlistmaker.search.domain.api.ConsumerData
+import androidx.lifecycle.viewModelScope
 import com.example.playlistmaker.search.domain.api.HistoryTrackInteractor
 import com.example.playlistmaker.search.domain.api.SearchTrackInteractor
-import com.example.playlistmaker.search.domain.api.TrackConsumer
 import com.example.playlistmaker.search.domain.model.SearchConst
 import com.example.playlistmaker.search.domain.model.Track
 import com.example.playlistmaker.search.presentation.model.SearchStatus
 import com.example.playlistmaker.search.ui.state.SearchState
-import com.example.playlistmaker.utils.Debounce.debounce
-import com.example.playlistmaker.utils.Debounce.removeCallbacks
+import com.example.playlistmaker.utils.clickDebounce
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 
 class SearchViewModel(
     private val trackHistory: HistoryTrackInteractor,
@@ -25,12 +25,14 @@ class SearchViewModel(
     fun getSearchLiveData(): LiveData<SearchState> = searchLiveData
 
     private var searchSavedText: String? = String()
+    private var searchJob: Job? = null
 
-    val searchRunnable = Runnable {
-        val newSearchText = searchSavedText ?: ""
-        searchRequest(newSearchText)
+    private var trackSearchDebounce = clickDebounce<String>(
+        SearchConst.SEARCH_DEBOUNCE_DELAY_MILLIS, viewModelScope, true
+    ) { changedText ->
+
+        searchRequest(changedText)
     }
-
     init {
         loadTrackHistory()
     }
@@ -77,36 +79,38 @@ class SearchViewModel(
         )
     }
 
+    fun searchDebounce(changedText: String) {
+        if (searchSavedText == changedText) {
+            return
+        }
+        searchSavedText = changedText
+        trackSearchDebounce(changedText)
+    }
+
     private fun searchRequest(expression: String) {
         searchLiveData.postValue(SearchState.Loading(SearchStatus.PROGRESS_BAR))
-        searchTrackRetrofit.searchTrack(
-            expression,
-            object : TrackConsumer<List<Track>> {
-                override fun consume(data: ConsumerData<List<Track>>) {
-                    if (data is ConsumerData.Error) {
+
+        viewModelScope.launch {
+            searchTrackRetrofit
+                .searchTrack(expression)
+                .collect { pair ->
+                    if (pair.first == null) {
                         searchLiveData.postValue(
                             SearchState.Error(
                                 SearchStatus.ERROR_EMPTY,
-                                data.errorMessage
+                                pair.second!!
                             )
                         )
-                    } else if (data is ConsumerData.Data) {
+                    } else {
                         searchLiveData.postValue(
                             SearchState.Search(
                                 SearchStatus.SEARCH_RESULT,
-                                data.data
+                                pair.first!!
                             )
                         )
                     }
                 }
-
-            }
-        )
-    }
-
-    fun searchDebounce(expression: String) {
-        searchSavedText = expression
-        debounce(searchRunnable, SearchConst.SEARCH_DEBOUNCE_DELAY_MILLIS)
+        }
     }
 
     fun saveSearchText(expression: String) {
@@ -114,6 +118,6 @@ class SearchViewModel(
     }
 
     fun onDestroyView() {
-        removeCallbacks(searchRunnable)
+        searchJob?.cancel()
     }
 }

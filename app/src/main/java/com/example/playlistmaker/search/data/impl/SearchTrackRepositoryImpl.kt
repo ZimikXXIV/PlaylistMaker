@@ -7,17 +7,23 @@ import com.example.playlistmaker.search.domain.api.NetworkClient
 import com.example.playlistmaker.search.domain.api.SearchTrackRepository
 import com.example.playlistmaker.search.domain.mapper.TrackMapper
 import com.example.playlistmaker.search.domain.model.Track
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 
 class SearchTrackRepositoryImpl(private val networkClient: NetworkClient) : SearchTrackRepository {
-    override fun searchTrack(expression: String): ConsumerData<List<Track>> {
+    override fun searchTrack(expression: String): Flow<ConsumerData<List<Track>>> = flow {
         val response = networkClient.doRequest(SearchRequest(expression))
-        return when (response.resultCode) {
-            -1 -> ConsumerData.Error("Проверьте подключение к интернету")
+        when (response.resultCode) {
+            -1 -> {
+                emit(ConsumerData.Error("Проверьте подключение к интернету"))
+            }
 
-            200 -> ConsumerData.Data(TrackMapper.map((response as SearchResponse).results))
+            200 -> {
+                emit(ConsumerData.Data(TrackMapper.map((response as SearchResponse).results)))
+            }
 
             else -> {
-                ConsumerData.Error("Ошибка сервера")
+                emit(ConsumerData.Error("Ошибка сервера"))
             }
         }
     }

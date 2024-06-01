@@ -3,24 +3,23 @@ package com.example.playlistmaker.search.domain.impl
 import com.example.playlistmaker.search.domain.api.ConsumerData
 import com.example.playlistmaker.search.domain.api.SearchTrackInteractor
 import com.example.playlistmaker.search.domain.api.SearchTrackRepository
-import com.example.playlistmaker.search.domain.api.TrackConsumer
 import com.example.playlistmaker.search.domain.model.Track
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 
 class SearchTrackInteractorImpl(private val repository: SearchTrackRepository) :
     SearchTrackInteractor {
-    override fun searchTrack(expression: String, consumer: TrackConsumer<List<Track>>) {
-        val t = Thread {
-            //consumer.consume(repository.searchTrack(expression))
-            when (val consumedData = repository.searchTrack(expression)) {
+    override fun searchTrack(expression: String): Flow<Pair<List<Track>?, String?>> {
+        return repository.searchTrack(expression).map { result ->
+            when (result) {
                 is ConsumerData.Data -> {
-                    consumer.consume(consumedData)
+                    Pair(result.data, null)
                 }
 
                 is ConsumerData.Error -> {
-                    consumer.consume(consumedData)
+                    Pair(null, result.errorMessage)
                 }
             }
         }
-        t.start()
     }
 }

@@ -19,7 +19,6 @@ import com.example.playlistmaker.search.presentation.model.SearchStatus
 import com.example.playlistmaker.search.presentation.viewmodel.SearchViewModel
 import com.example.playlistmaker.search.ui.state.SearchState
 import com.example.playlistmaker.utils.BindingFragment
-import com.example.playlistmaker.utils.Debounce
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
@@ -64,7 +63,6 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>(), TrackListClickL
         binding.recyclerHistoryList.layoutManager =
             LinearLayoutManager(binding.recyclerHistoryList.context)
         binding.recyclerHistoryList.adapter = historyAdapter
-
 
     }
 
@@ -111,7 +109,6 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>(), TrackListClickL
 
         binding.edtxtSearch.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE
-                && Debounce.clickDebounce()
                 && binding.edtxtSearch.text.isNotEmpty()
             ) {
                 searchViewModel.searchDebounce(binding.edtxtSearch.text.toString())

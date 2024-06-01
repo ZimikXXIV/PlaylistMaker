@@ -6,4 +6,5 @@ object SearchConst {
     const val ITUNES_BASE_URL = "https://itunes.apple.com"
     const val SHAREDPREFERENCES_TAG = "playlistmaker_shared"
     const val SEARCH_DEBOUNCE_DELAY_MILLIS = 2000L
+    const val CLICK_DEBOUNCE_DELAY = 1000L
 }

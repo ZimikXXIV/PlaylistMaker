@@ -1,5 +1,6 @@
 package com.example.playlistmaker.search.ui
 
+import android.content.Context
 import android.content.Intent
 import android.content.res.Resources
 import android.util.TypedValue
@@ -13,8 +14,12 @@ import com.example.playlistmaker.R
 import com.example.playlistmaker.player.domain.model.PlayerConst
 import com.example.playlistmaker.player.ui.AudioPlayerActivity
 import com.example.playlistmaker.search.domain.api.TrackListClickListenerInterface
+import com.example.playlistmaker.search.domain.model.SearchConst
 import com.example.playlistmaker.search.domain.model.Track
-import com.example.playlistmaker.utils.Debounce.clickDebounce
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -28,6 +33,8 @@ class TrackHolder(itemView: View, private val onClick: TrackListClickListenerInt
     private val cover: ImageView = itemView.findViewById(R.id.coverAlbum)
 
 
+    private var isClickAllowed = true
+
     fun bind(track: Track) {
 
         trackName.text = track.trackName
@@ -38,13 +45,15 @@ class TrackHolder(itemView: View, private val onClick: TrackListClickListenerInt
         itemView.setOnClickListener {
             onClick?.onClick(track)
 
-            if (!clickDebounce()) {
-                return@setOnClickListener
-            }
+            CoroutineScope(Dispatchers.IO).launch {
 
-            val intent = Intent(itemView.context, AudioPlayerActivity::class.java)
-            intent.putExtra(PlayerConst.TRACK_INFO, track)
-            it.context.startActivity(intent)
+                if (isClickAllowed) {
+                    isClickAllowed = false
+                    delay(SearchConst.CLICK_DEBOUNCE_DELAY)
+                    openPlayer(it.context, track)
+                }
+
+            }
         }
 
         Glide.with(itemView)
@@ -56,6 +65,13 @@ class TrackHolder(itemView: View, private val onClick: TrackListClickListenerInt
 
         artistName.requestLayout()
 
+    }
+
+    private fun openPlayer(context: Context, track: Track) {
+        isClickAllowed = true
+        val intent = Intent(itemView.context, AudioPlayerActivity::class.java)
+        intent.putExtra(PlayerConst.TRACK_INFO, track)
+        context.startActivity(intent)
     }
 
     companion object {
