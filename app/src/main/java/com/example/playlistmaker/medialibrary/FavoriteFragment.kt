@@ -4,9 +4,10 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.example.playlistmaker.databinding.FragmentMedialibraryFavoriteBinding
 import com.example.playlistmaker.medialibrary.viewmodel.FavoriteViewModel
+import com.example.playlistmaker.utils.BindingFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class FragmentFavorite : BindingFragment<FragmentMedialibraryFavoriteBinding>() {
+class FavoriteFragment : BindingFragment<FragmentMedialibraryFavoriteBinding>() {
 
     private val viewModel by viewModel<FavoriteViewModel>()
 
@@ -18,6 +19,6 @@ class FragmentFavorite : BindingFragment<FragmentMedialibraryFavoriteBinding>() 
     }
 
     companion object {
-        fun newInstance() = FragmentFavorite()
+        fun newInstance() = FavoriteFragment()
     }
 }

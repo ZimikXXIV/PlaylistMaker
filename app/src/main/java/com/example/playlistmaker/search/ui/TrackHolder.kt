@@ -9,12 +9,12 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
-import com.example.playlistmaker.Debounce.clickDebounce
 import com.example.playlistmaker.R
 import com.example.playlistmaker.player.domain.model.PlayerConst
 import com.example.playlistmaker.player.ui.AudioPlayerActivity
 import com.example.playlistmaker.search.domain.api.TrackListClickListenerInterface
 import com.example.playlistmaker.search.domain.model.Track
+import com.example.playlistmaker.utils.Debounce.clickDebounce
 import java.text.SimpleDateFormat
 import java.util.Locale
 

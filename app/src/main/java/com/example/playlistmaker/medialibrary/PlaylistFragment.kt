@@ -4,9 +4,10 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.example.playlistmaker.databinding.FragmentMedialibraryPlaylistBinding
 import com.example.playlistmaker.medialibrary.viewmodel.PlaylistViewModel
+import com.example.playlistmaker.utils.BindingFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class FragmentPlaylist : BindingFragment<FragmentMedialibraryPlaylistBinding>() {
+class PlaylistFragment : BindingFragment<FragmentMedialibraryPlaylistBinding>() {
 
 
     private val viewModel by viewModel<PlaylistViewModel>()
@@ -19,6 +20,6 @@ class FragmentPlaylist : BindingFragment<FragmentMedialibraryPlaylistBinding>() 
     }
 
     companion object {
-        fun newInstance() = FragmentPlaylist()
+        fun newInstance() = PlaylistFragment()
     }
 }

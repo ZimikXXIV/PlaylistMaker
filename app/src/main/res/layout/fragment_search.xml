@@ -10,15 +10,10 @@
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/header_margin">
 
-        <ImageButton
-            android:id="@+id/btnBack"
-            android:visibility="visible"
-            app:srcCompat="@drawable/back_icon"
-            style="@style/HeaderBtnBackStyle"/>
-
         <TextView
             style="@style/HeaderTextViewStyle"
             android:text="@string/search_text" />
+
     </LinearLayout>
 
     <FrameLayout
