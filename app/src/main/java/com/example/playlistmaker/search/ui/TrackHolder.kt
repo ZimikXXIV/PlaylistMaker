@@ -23,9 +23,6 @@ class TrackHolder(itemView: View, private val onClick: TrackListClickListenerInt
     private val duration: TextView = itemView.findViewById(R.id.durationTextView)
     private val cover: ImageView = itemView.findViewById(R.id.coverAlbum)
 
-
-    private var isClickAllowed = true
-
     fun bind(track: Track) {
 
         trackName.text = track.trackName
