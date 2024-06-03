@@ -9,17 +9,9 @@ import kotlinx.coroutines.flow.map
 
 class SearchTrackInteractorImpl(private val repository: SearchTrackRepository) :
     SearchTrackInteractor {
-    override fun searchTrack(expression: String): Flow<Pair<List<Track>?, String?>> {
+    override fun searchTrack(expression: String): Flow<ConsumerData<List<Track>>> {
         return repository.searchTrack(expression).map { result ->
-            when (result) {
-                is ConsumerData.Data -> {
-                    Pair(result.data, null)
-                }
-
-                is ConsumerData.Error -> {
-                    Pair(null, result.errorMessage)
-                }
-            }
+            result
         }
     }
 }

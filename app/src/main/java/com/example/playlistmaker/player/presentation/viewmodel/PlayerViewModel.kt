@@ -30,11 +30,12 @@ class PlayerViewModel(
     }
 
     private fun debounceSetPosition() {
-
         playerJob?.cancel()
-        playerJob = viewModelScope.launch(Dispatchers.Main) {
-            delay(PlayerConst.DURATION_REFRESH_DELAY_MILLIS)
-            getCurrentPosition()
+        playerJob = viewModelScope.launch(Dispatchers.IO) {
+            while (getPlayerStatus() == PlayerStatus.PLAYING) {
+                delay(PlayerConst.DURATION_REFRESH_DELAY_MILLIS)
+                getCurrentPosition()
+            }
         }
 
     }
@@ -61,7 +62,7 @@ class PlayerViewModel(
         loadingLiveData.postValue(
             PlayerState.Content(
                 PlayerStatus.PLAYING,
-                getTrackPositionStr()
+                PlayerConst.DEFAULT_DURATION
             )
         )
         debounceSetPosition()
@@ -72,13 +73,14 @@ class PlayerViewModel(
         loadingLiveData.postValue(
             PlayerState.Content(
                 PlayerStatus.PAUSED,
-                getTrackPositionStr()
+                PlayerConst.DEFAULT_DURATION
             )
         )
         playerJob?.cancel()
     }
 
     private fun getCurrentPosition() {
+
         when (playerInteractor.getPlayerStatus()) {
             PlayerStatus.PLAYING -> {
                 loadingLiveData.postValue(
@@ -87,14 +89,12 @@ class PlayerViewModel(
                         getTrackPositionStr()
                     )
                 )
-                debounceSetPosition()
             }
-
             PlayerStatus.PREPARED, PlayerStatus.PAUSED, PlayerStatus.DEFAULT -> {
                 loadingLiveData.postValue(
                     PlayerState.Content(
                         playerInteractor.getPlayerStatus(),
-                        getTrackPositionStr()
+                        PlayerConst.DEFAULT_DURATION
                     )
                 )
             }
