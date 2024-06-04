@@ -92,7 +92,7 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>(), TrackListClickL
     private fun setEvents() {
 
         binding.btnRefresh.setOnClickListener {
-            searchViewModel.searchDebounce(binding.edtxtSearch.text.toString())
+            searchViewModel.searchDebounce(binding.edtxtSearch.text.toString(), true)
         }
 
         binding.btnClearHistory.setOnClickListener {
@@ -104,7 +104,7 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>(), TrackListClickL
             val inputMethodManager =
                 requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
             inputMethodManager?.hideSoftInputFromWindow(binding.edtxtSearch.windowToken, 0)
-            searchViewModel.searchDebounce(binding.edtxtSearch.text.toString())
+            searchViewModel.searchDebounce(binding.edtxtSearch.text.toString(), false)
         }
 
         val simpleTextWatcher = object : TextWatcher {
@@ -113,7 +113,7 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>(), TrackListClickL
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                searchViewModel.searchDebounce(binding.edtxtSearch.text.toString())
+                searchViewModel.searchDebounce(binding.edtxtSearch.text.toString(), false)
             }
 
             override fun afterTextChanged(s: Editable?) {
@@ -135,7 +135,7 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>(), TrackListClickL
             if (actionId == EditorInfo.IME_ACTION_DONE
                 && binding.edtxtSearch.text.isNotEmpty()
             ) {
-                searchViewModel.searchDebounce(binding.edtxtSearch.text.toString())
+                searchViewModel.searchDebounce(binding.edtxtSearch.text.toString(), false)
             }
             false
         }

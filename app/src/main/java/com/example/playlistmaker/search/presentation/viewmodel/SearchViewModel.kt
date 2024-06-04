@@ -68,7 +68,10 @@ class SearchViewModel(
         )
     }
 
-    fun searchDebounce(changedText: String) {
+    fun searchDebounce(
+        changedText: String,
+        isForcedSearch: Boolean
+    ) {
 
         searchJob?.cancel()
         if (changedText.isEmpty()) {
@@ -92,7 +95,9 @@ class SearchViewModel(
             return
         }
 
-        if (searchSavedText == changedText) {
+        if (searchSavedText == changedText
+            && !isForcedSearch
+        ) {
             return
         }
 
@@ -115,7 +120,7 @@ class SearchViewModel(
                     if (result is ConsumerData.Error) {
                         searchLiveData.postValue(
                             SearchState.Error(
-                                SearchStatus.ERROR_EMPTY,
+                                SearchStatus.ERROR_BAD_CONNECTION,
                                 result.errorMessage
                             )
                         )
