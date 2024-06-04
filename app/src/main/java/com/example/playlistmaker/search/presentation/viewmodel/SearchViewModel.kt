@@ -62,13 +62,6 @@ class SearchViewModel(
 
     fun addToTrackHistoryWithSave(track: Track) {
         trackHistory.addToTrackHistoryWithSave(track)
-        val trackHistoryArray = trackHistory.loadTrackHistory()
-        searchLiveData.postValue(
-            SearchState.History(
-                SearchStatus.SEARCH_HISTORY,
-                trackHistoryArray
-            )
-        )
     }
 
     fun clearHistory() {
