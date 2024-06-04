@@ -12,8 +12,9 @@ import com.example.playlistmaker.search.domain.model.SearchConst
 import com.example.playlistmaker.search.domain.model.Track
 import com.example.playlistmaker.search.presentation.model.SearchStatus
 import com.example.playlistmaker.search.ui.state.SearchState
-import com.example.playlistmaker.utils.debounce
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class SearchViewModel(
@@ -28,19 +29,13 @@ class SearchViewModel(
     private var searchSavedText: String? = String()
     private var searchJob: Job? = null
 
-    private var trackSearchDebounce = debounce<String>(
-        SearchConst.SEARCH_DEBOUNCE_DELAY_MILLIS, viewModelScope, true
-    ) { changedText ->
-
-        searchRequest(changedText)
-    }
     init {
         loadTrackHistory()
     }
 
     fun loadTrackHistory() {
         val trackHistoryArray = trackHistory.loadTrackHistory()
-        if (trackHistoryArray.count() > 0) {
+        if (trackHistoryArray.isNotEmpty()) {
             searchLiveData.postValue(
                 SearchState.History(
                     SearchStatus.SEARCH_HISTORY,
@@ -74,14 +69,26 @@ class SearchViewModel(
     }
 
     fun searchDebounce(changedText: String) {
-        if (changedText.isNullOrEmpty()) {
+
+        searchJob?.cancel()
+        if (changedText.isEmpty()) {
             val trackHistoryArray = trackHistory.loadTrackHistory()
-            searchLiveData.postValue(
-                SearchState.History(
-                    SearchStatus.SEARCH_HISTORY,
-                    trackHistoryArray
+
+            if (trackHistoryArray.count() != 0) {
+                searchLiveData.postValue(
+                    SearchState.History(
+                        SearchStatus.SEARCH_HISTORY,
+                        trackHistoryArray
+                    )
                 )
-            )
+            } else {
+                searchLiveData.postValue(
+                    SearchState.ClearHistory(
+                        SearchStatus.NONE
+                    )
+                )
+            }
+
             return
         }
 
@@ -90,7 +97,11 @@ class SearchViewModel(
         }
 
         searchSavedText = changedText
-        trackSearchDebounce(changedText)
+        searchJob = viewModelScope.launch(Dispatchers.IO) {
+            delay(SearchConst.SEARCH_DEBOUNCE_DELAY_MILLIS)
+            searchRequest(changedText)
+        }
+
     }
 
     private fun searchRequest(expression: String) {
@@ -111,7 +122,7 @@ class SearchViewModel(
                     } else {
                         val trackList = (result as ConsumerData.Data).data
 
-                        if (trackList.isNullOrEmpty()) {
+                        if (trackList.isEmpty()) {
                             searchLiveData.postValue(
                                 SearchState.Empty(SearchStatus.ERROR_EMPTY)
                             )
