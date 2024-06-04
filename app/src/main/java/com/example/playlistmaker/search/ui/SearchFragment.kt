@@ -78,7 +78,7 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>(), TrackListClickL
         binding.recyclerHistoryList.adapter = historyAdapter
 
     }
-    private var isClickAllowed = false
+
 
     override fun onClick(track: Track) {
         trackClickDebounce(track)
@@ -87,8 +87,7 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>(), TrackListClickL
     private fun openPlayer(track: Track) {
         val intent = Intent(activity, AudioPlayerActivity::class.java)
         intent.putExtra(PlayerConst.TRACK_INFO, track)
-        activity?.startActivity(intent)
-        isClickAllowed = true
+        requireActivity().startActivity(intent)
     }
     private fun setEvents() {
 

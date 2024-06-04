@@ -5,13 +5,10 @@ import com.example.playlistmaker.search.domain.api.SearchTrackInteractor
 import com.example.playlistmaker.search.domain.api.SearchTrackRepository
 import com.example.playlistmaker.search.domain.model.Track
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
 
 class SearchTrackInteractorImpl(private val repository: SearchTrackRepository) :
     SearchTrackInteractor {
     override fun searchTrack(expression: String): Flow<ConsumerData<List<Track>>> {
-        return repository.searchTrack(expression).map { result ->
-            result
-        }
+        return repository.searchTrack(expression)
     }
 }
