@@ -6,37 +6,31 @@ import android.net.NetworkCapabilities
 import com.example.playlistmaker.search.data.dto.NetworkResponse
 import com.example.playlistmaker.search.data.dto.SearchRequest
 import com.example.playlistmaker.search.domain.api.NetworkClient
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 class RetrofitClient(
     private val iTunesApi: iTunesApi,
     private val context: Context
 ) : NetworkClient {
-    /*
-    private val retrofit by lazy {
-        Retrofit.Builder()
-            .baseUrl(SearchConst.ITUNES_BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-    }
-    */
 
-
-    override fun doRequest(dto: Any): NetworkResponse {
+    override suspend fun doRequest(dto: Any): NetworkResponse {
         if (!isConnected()) {
             return NetworkResponse().apply { resultCode = -1 }
         }
-        return try {
-            if (dto is SearchRequest) {
-                val resp = iTunesApi.searchTrack(dto.expression).execute()
 
-                val body = resp.body() ?: NetworkResponse()
+        if (dto !is SearchRequest) {
+            return NetworkResponse().apply { resultCode = 400 }
+        }
 
-                body.apply { resultCode = resp.code() }
-            } else {
-                NetworkResponse().apply { resultCode = 400 }
+        return withContext(Dispatchers.IO) {
+            try {
+                val resp = iTunesApi.searchTrack(dto.expression)
+
+                resp.apply { resultCode = 200 }
+            } catch (ex: Throwable) {
+                NetworkResponse().apply { resultCode = 500 }
             }
-        } catch (ex: Exception) {
-            NetworkResponse().apply { resultCode = -1 }
         }
     }
 

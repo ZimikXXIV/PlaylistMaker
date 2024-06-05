@@ -1,6 +1,7 @@
 package com.example.playlistmaker.search.ui
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -10,8 +11,11 @@ import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import androidx.core.view.isVisible
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.playlistmaker.databinding.FragmentSearchBinding
+import com.example.playlistmaker.player.domain.model.PlayerConst
+import com.example.playlistmaker.player.ui.AudioPlayerActivity
 import com.example.playlistmaker.search.domain.api.TrackListClickListenerInterface
 import com.example.playlistmaker.search.domain.model.SearchConst
 import com.example.playlistmaker.search.domain.model.Track
@@ -19,7 +23,7 @@ import com.example.playlistmaker.search.presentation.model.SearchStatus
 import com.example.playlistmaker.search.presentation.viewmodel.SearchViewModel
 import com.example.playlistmaker.search.ui.state.SearchState
 import com.example.playlistmaker.utils.BindingFragment
-import com.example.playlistmaker.utils.Debounce
+import com.example.playlistmaker.utils.debounce
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
@@ -33,6 +37,7 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>(), TrackListClickL
     private val trackList = ArrayList<Track>()
     private var trackHistoryArray: ArrayList<Track> = ArrayList()
 
+    private lateinit var trackClickDebounce: (Track) -> Unit
     override fun createBinding(
         inflater: LayoutInflater,
         container: ViewGroup?
@@ -42,6 +47,13 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>(), TrackListClickL
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        trackClickDebounce = debounce<Track>(
+            SearchConst.CLICK_DEBOUNCE_DELAY, viewLifecycleOwner.lifecycleScope, false
+        ) { track ->
+            searchViewModel.addToTrackHistoryWithSave(track)
+            openPlayer(track)
+        }
 
         setupAdapters()
         setEvents()
@@ -65,13 +77,22 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>(), TrackListClickL
             LinearLayoutManager(binding.recyclerHistoryList.context)
         binding.recyclerHistoryList.adapter = historyAdapter
 
-
     }
 
+
+    override fun onClick(track: Track) {
+        trackClickDebounce(track)
+    }
+
+    private fun openPlayer(track: Track) {
+        val intent = Intent(activity, AudioPlayerActivity::class.java)
+        intent.putExtra(PlayerConst.TRACK_INFO, track)
+        requireActivity().startActivity(intent)
+    }
     private fun setEvents() {
 
         binding.btnRefresh.setOnClickListener {
-            searchViewModel.searchDebounce(binding.edtxtSearch.text.toString())
+            searchViewModel.searchDebounce(binding.edtxtSearch.text.toString(), true)
         }
 
         binding.btnClearHistory.setOnClickListener {
@@ -83,6 +104,7 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>(), TrackListClickL
             val inputMethodManager =
                 requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
             inputMethodManager?.hideSoftInputFromWindow(binding.edtxtSearch.windowToken, 0)
+            searchViewModel.searchDebounce(binding.edtxtSearch.text.toString(), false)
         }
 
         val simpleTextWatcher = object : TextWatcher {
@@ -91,7 +113,7 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>(), TrackListClickL
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                searchViewModel.searchDebounce(binding.edtxtSearch.text.toString())
+                searchViewModel.searchDebounce(binding.edtxtSearch.text.toString(), false)
             }
 
             override fun afterTextChanged(s: Editable?) {
@@ -111,10 +133,9 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>(), TrackListClickL
 
         binding.edtxtSearch.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE
-                && Debounce.clickDebounce()
                 && binding.edtxtSearch.text.isNotEmpty()
             ) {
-                searchViewModel.searchDebounce(binding.edtxtSearch.text.toString())
+                searchViewModel.searchDebounce(binding.edtxtSearch.text.toString(), false)
             }
             false
         }
@@ -171,6 +192,7 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>(), TrackListClickL
 
     }
 
+
     fun updateHistoryList(historyTrackList: List<Track>) {
         historyAdapter.setTrackList(historyTrackList)
         historyAdapter.notifyDataSetChanged()
@@ -199,8 +221,5 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>(), TrackListClickL
         )
     }
 
-    override fun onClick(track: Track) {
-        searchViewModel.addToTrackHistoryWithSave(track)
-    }
 
 }

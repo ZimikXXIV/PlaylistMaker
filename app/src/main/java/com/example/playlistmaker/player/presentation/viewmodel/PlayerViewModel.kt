@@ -3,21 +3,23 @@ package com.example.playlistmaker.player.presentation.viewmodel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.playlistmaker.player.domain.api.PlayerInteractor
 import com.example.playlistmaker.player.domain.model.PlayerConst
 import com.example.playlistmaker.player.domain.model.PlayerStatus
 import com.example.playlistmaker.player.presentation.model.TrackInfo
 import com.example.playlistmaker.player.presentation.state.PlayerState
-import com.example.playlistmaker.utils.Debounce.debounce
-import com.example.playlistmaker.utils.Debounce.removeCallbacks
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class PlayerViewModel(
     track: TrackInfo, private val playerInteractor: PlayerInteractor
 ) : ViewModel() {
 
     private var loadingLiveData = MutableLiveData<PlayerState>()
-    private val setPositionRunnable = Runnable { getCurrentPosition() }
-
+    private var playerJob: Job? = null
     fun getPlayerState(): LiveData<PlayerState> = loadingLiveData
     private fun getPlayerStatus(): PlayerStatus {
         return playerInteractor.getPlayerStatus()
@@ -25,6 +27,17 @@ class PlayerViewModel(
 
     private fun getTrackPositionStr(): String {
         return playerInteractor.getPositionStr()
+    }
+
+    private fun debounceSetPosition() {
+        playerJob?.cancel()
+        playerJob = viewModelScope.launch(Dispatchers.IO) {
+            while (getPlayerStatus() == PlayerStatus.PLAYING) {
+                delay(PlayerConst.DURATION_REFRESH_DELAY_MILLIS)
+                getCurrentPosition()
+            }
+        }
+
     }
 
     init {
@@ -52,7 +65,7 @@ class PlayerViewModel(
                 PlayerConst.DEFAULT_DURATION
             )
         )
-        debounce(setPositionRunnable, PlayerConst.DURATION_REFRESH_DELAY_MILLIS)
+        debounceSetPosition()
     }
 
     private fun pausePlayer() {
@@ -63,10 +76,11 @@ class PlayerViewModel(
                 PlayerConst.DEFAULT_DURATION
             )
         )
-        removeCallbacks(setPositionRunnable)
+        playerJob?.cancel()
     }
 
     private fun getCurrentPosition() {
+
         when (playerInteractor.getPlayerStatus()) {
             PlayerStatus.PLAYING -> {
                 loadingLiveData.postValue(
@@ -75,9 +89,7 @@ class PlayerViewModel(
                         getTrackPositionStr()
                     )
                 )
-                debounce(setPositionRunnable, PlayerConst.DURATION_REFRESH_DELAY_MILLIS)
             }
-
             PlayerStatus.PREPARED, PlayerStatus.PAUSED, PlayerStatus.DEFAULT -> {
                 loadingLiveData.postValue(
                     PlayerState.Content(
@@ -96,7 +108,7 @@ class PlayerViewModel(
     }
 
     fun onDestroy() {
-        removeCallbacks(setPositionRunnable)
+        playerJob?.cancel()
         playerInteractor.release()
     }
 

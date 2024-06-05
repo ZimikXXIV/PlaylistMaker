@@ -68,6 +68,7 @@ class AudioPlayerActivity : AppCompatActivity() {
     }
 
     private fun preparePlayer(playerStatus: PlayerStatus, playerTime: String) {
+
         when (playerStatus) {
             PlayerStatus.PLAYING -> {
                 binding.playBtn.setImageResource(R.drawable.pause_button_icon)

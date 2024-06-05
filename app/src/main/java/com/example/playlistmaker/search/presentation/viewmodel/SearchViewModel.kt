@@ -4,16 +4,18 @@ package com.example.playlistmaker.search.presentation.viewmodel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.playlistmaker.search.domain.api.ConsumerData
 import com.example.playlistmaker.search.domain.api.HistoryTrackInteractor
 import com.example.playlistmaker.search.domain.api.SearchTrackInteractor
-import com.example.playlistmaker.search.domain.api.TrackConsumer
 import com.example.playlistmaker.search.domain.model.SearchConst
 import com.example.playlistmaker.search.domain.model.Track
 import com.example.playlistmaker.search.presentation.model.SearchStatus
 import com.example.playlistmaker.search.ui.state.SearchState
-import com.example.playlistmaker.utils.Debounce.debounce
-import com.example.playlistmaker.utils.Debounce.removeCallbacks
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class SearchViewModel(
     private val trackHistory: HistoryTrackInteractor,
@@ -25,11 +27,7 @@ class SearchViewModel(
     fun getSearchLiveData(): LiveData<SearchState> = searchLiveData
 
     private var searchSavedText: String? = String()
-
-    val searchRunnable = Runnable {
-        val newSearchText = searchSavedText ?: ""
-        searchRequest(newSearchText)
-    }
+    private var searchJob: Job? = null
 
     init {
         loadTrackHistory()
@@ -37,7 +35,7 @@ class SearchViewModel(
 
     fun loadTrackHistory() {
         val trackHistoryArray = trackHistory.loadTrackHistory()
-        if (trackHistoryArray.count() > 0) {
+        if (trackHistoryArray.isNotEmpty()) {
             searchLiveData.postValue(
                 SearchState.History(
                     SearchStatus.SEARCH_HISTORY,
@@ -59,13 +57,6 @@ class SearchViewModel(
 
     fun addToTrackHistoryWithSave(track: Track) {
         trackHistory.addToTrackHistoryWithSave(track)
-        val trackHistoryArray = trackHistory.loadTrackHistory()
-        searchLiveData.postValue(
-            SearchState.History(
-                SearchStatus.SEARCH_HISTORY,
-                trackHistoryArray
-            )
-        )
     }
 
     fun clearHistory() {
@@ -77,36 +68,80 @@ class SearchViewModel(
         )
     }
 
-    private fun searchRequest(expression: String) {
-        searchLiveData.postValue(SearchState.Loading(SearchStatus.PROGRESS_BAR))
-        searchTrackRetrofit.searchTrack(
-            expression,
-            object : TrackConsumer<List<Track>> {
-                override fun consume(data: ConsumerData<List<Track>>) {
-                    if (data is ConsumerData.Error) {
-                        searchLiveData.postValue(
-                            SearchState.Error(
-                                SearchStatus.ERROR_EMPTY,
-                                data.errorMessage
-                            )
-                        )
-                    } else if (data is ConsumerData.Data) {
-                        searchLiveData.postValue(
-                            SearchState.Search(
-                                SearchStatus.SEARCH_RESULT,
-                                data.data
-                            )
-                        )
-                    }
-                }
+    fun searchDebounce(
+        changedText: String,
+        isForcedSearch: Boolean
+    ) {
 
+        searchJob?.cancel()
+        if (changedText.isEmpty()) {
+            val trackHistoryArray = trackHistory.loadTrackHistory()
+
+            if (trackHistoryArray.count() != 0) {
+                searchLiveData.postValue(
+                    SearchState.History(
+                        SearchStatus.SEARCH_HISTORY,
+                        trackHistoryArray
+                    )
+                )
+            } else {
+                searchLiveData.postValue(
+                    SearchState.ClearHistory(
+                        SearchStatus.NONE
+                    )
+                )
             }
-        )
+
+            return
+        }
+
+        if (searchSavedText == changedText
+            && !isForcedSearch
+        ) {
+            return
+        }
+
+        searchSavedText = changedText
+        searchJob = viewModelScope.launch(Dispatchers.IO) {
+            delay(SearchConst.SEARCH_DEBOUNCE_DELAY_MILLIS)
+            searchRequest(changedText)
+        }
+
     }
 
-    fun searchDebounce(expression: String) {
-        searchSavedText = expression
-        debounce(searchRunnable, SearchConst.SEARCH_DEBOUNCE_DELAY_MILLIS)
+    private fun searchRequest(expression: String) {
+
+        searchLiveData.postValue(SearchState.Loading(SearchStatus.PROGRESS_BAR))
+
+        viewModelScope.launch {
+            searchTrackRetrofit
+                .searchTrack(expression)
+                .collect { result ->
+                    if (result is ConsumerData.Error) {
+                        searchLiveData.postValue(
+                            SearchState.Error(
+                                SearchStatus.ERROR_BAD_CONNECTION,
+                                result.errorMessage
+                            )
+                        )
+                    } else {
+                        val trackList = (result as ConsumerData.Data).data
+
+                        if (trackList.isEmpty()) {
+                            searchLiveData.postValue(
+                                SearchState.Empty(SearchStatus.ERROR_EMPTY)
+                            )
+                        } else {
+                            searchLiveData.postValue(
+                                SearchState.Search(
+                                    SearchStatus.SEARCH_RESULT,
+                                    trackList
+                                )
+                            )
+                        }
+                    }
+                }
+        }
     }
 
     fun saveSearchText(expression: String) {
@@ -114,6 +149,6 @@ class SearchViewModel(
     }
 
     fun onDestroyView() {
-        removeCallbacks(searchRunnable)
+        searchJob?.cancel()
     }
 }

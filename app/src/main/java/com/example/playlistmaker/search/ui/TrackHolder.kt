@@ -1,6 +1,5 @@
 package com.example.playlistmaker.search.ui
 
-import android.content.Intent
 import android.content.res.Resources
 import android.util.TypedValue
 import android.view.View
@@ -10,11 +9,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
-import com.example.playlistmaker.player.domain.model.PlayerConst
-import com.example.playlistmaker.player.ui.AudioPlayerActivity
 import com.example.playlistmaker.search.domain.api.TrackListClickListenerInterface
 import com.example.playlistmaker.search.domain.model.Track
-import com.example.playlistmaker.utils.Debounce.clickDebounce
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -27,7 +23,6 @@ class TrackHolder(itemView: View, private val onClick: TrackListClickListenerInt
     private val duration: TextView = itemView.findViewById(R.id.durationTextView)
     private val cover: ImageView = itemView.findViewById(R.id.coverAlbum)
 
-
     fun bind(track: Track) {
 
         trackName.text = track.trackName
@@ -38,13 +33,7 @@ class TrackHolder(itemView: View, private val onClick: TrackListClickListenerInt
         itemView.setOnClickListener {
             onClick?.onClick(track)
 
-            if (!clickDebounce()) {
-                return@setOnClickListener
-            }
 
-            val intent = Intent(itemView.context, AudioPlayerActivity::class.java)
-            intent.putExtra(PlayerConst.TRACK_INFO, track)
-            it.context.startActivity(intent)
         }
 
         Glide.with(itemView)
