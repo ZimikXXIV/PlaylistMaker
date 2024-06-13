@@ -54,16 +54,35 @@ class AudioPlayerActivity : AppCompatActivity() {
                 is PlayerState.Content -> {
                     preparePlayer(playerState.playerSatus, playerState.playerTime)
                 }
-
+                is PlayerState.Favotite -> {
+                    renderLikeButton(playerState.isFavotite)
+                }
                 else -> {
                     preparePlayer(PlayerStatus.DEFAULT, PlayerConst.DEFAULT_DURATION)
                 }
             }
         }
 
+        binding.likeBtn.setOnClickListener {
+            viewModel.likePressed()
+        }
+
         binding.playBtn.setOnClickListener {
             viewModel.changeStatus()
         }
+
+        viewModel.checkIsFavorite();
+
+    }
+
+    private fun renderLikeButton(isFavorite: Boolean) {
+
+        if (isFavorite) {
+            binding.likeBtn.setImageResource(R.drawable.liked_icon)
+        } else {
+            binding.likeBtn.setImageResource(R.drawable.like_icon)
+        }
+
 
     }
 

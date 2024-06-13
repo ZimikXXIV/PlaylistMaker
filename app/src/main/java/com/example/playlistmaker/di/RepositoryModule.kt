@@ -1,5 +1,8 @@
 package com.example.playlistmaker.di
 
+import com.example.playlistmaker.medialibrary.data.db.TrackDbConvertor
+import com.example.playlistmaker.medialibrary.data.impl.FavoriteRepositoryImpl
+import com.example.playlistmaker.medialibrary.domain.api.FavoriteRepository
 import com.example.playlistmaker.player.data.PlayerRepositoryImpl
 import com.example.playlistmaker.player.domain.api.PlayerRepository
 import com.example.playlistmaker.search.data.impl.HistoryTrackRepositoryImpl
@@ -42,4 +45,11 @@ val repositoryModule = module {
     single<ExternalNavigator> {
         ExternalNavigatorImpl(androidContext())
     }
+
+    factory { TrackDbConvertor() }
+
+    single<FavoriteRepository> {
+        FavoriteRepositoryImpl(get(), get())
+    }
+
 }

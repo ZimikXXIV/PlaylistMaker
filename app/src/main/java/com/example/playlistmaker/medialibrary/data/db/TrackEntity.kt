@@ -1,7 +1,12 @@
-package com.example.playlistmaker.player.presentation.model
+package com.example.playlistmaker.medialibrary.data.db
 
-data class TrackInfo(
-    val trackId: Int,
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+
+@Entity(tableName = "track_table")
+data class TrackEntity(
+    @PrimaryKey
+    val Id: Int,
     val trackName: String?,
     val artistName: String?,
     val collectionName: String?,
@@ -10,6 +15,6 @@ data class TrackInfo(
     val country: String?,
     val trackTimeMillis: String?,
     val artworkUrl100: String?,
-    val artworkUrl512: String?,
     val previewUrl: String?
 )
+
