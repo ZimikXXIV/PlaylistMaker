@@ -15,6 +15,7 @@ data class TrackEntity(
     val country: String?,
     val trackTimeMillis: String?,
     val artworkUrl100: String?,
-    val previewUrl: String?
+    val previewUrl: String?,
+    var dateADD: String?
 )
 

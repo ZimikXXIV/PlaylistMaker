@@ -4,10 +4,12 @@ import com.example.playlistmaker.medialibrary.data.db.AppDatabase
 import com.example.playlistmaker.medialibrary.data.db.TrackDbConvertor
 import com.example.playlistmaker.medialibrary.data.db.TrackEntity
 import com.example.playlistmaker.medialibrary.domain.api.FavoriteRepository
-import com.example.playlistmaker.player.presentation.model.TrackInfo
+import com.example.playlistmaker.player.domain.model.TrackInfo
 import com.example.playlistmaker.search.domain.model.Track
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import java.text.SimpleDateFormat
+import java.util.Date
 
 class FavoriteRepositoryImpl(
     private val appDatabase: AppDatabase,
@@ -29,7 +31,8 @@ class FavoriteRepositoryImpl(
     }
 
     override suspend fun insertTrack(track: TrackInfo) {
-        val trackEntity = convertFromTrackInfo(track)
+        var trackEntity = convertFromTrackInfo(track)
+        trackEntity.dateADD = SimpleDateFormat("yyyy/dd/M hh:mm:ss").format(Date())
         appDatabase.trackDao().insertTrack(trackEntity)
     }
 

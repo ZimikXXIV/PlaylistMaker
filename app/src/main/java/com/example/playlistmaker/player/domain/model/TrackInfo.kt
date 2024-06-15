@@ -1,4 +1,4 @@
-package com.example.playlistmaker.player.presentation.model
+package com.example.playlistmaker.player.domain.model
 
 data class TrackInfo(
     val trackId: Int,

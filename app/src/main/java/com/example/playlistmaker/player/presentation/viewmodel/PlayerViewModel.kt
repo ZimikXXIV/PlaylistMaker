@@ -8,7 +8,7 @@ import com.example.playlistmaker.medialibrary.domain.api.FavoriteInteractor
 import com.example.playlistmaker.player.domain.api.PlayerInteractor
 import com.example.playlistmaker.player.domain.model.PlayerConst
 import com.example.playlistmaker.player.domain.model.PlayerStatus
-import com.example.playlistmaker.player.presentation.model.TrackInfo
+import com.example.playlistmaker.player.domain.model.TrackInfo
 import com.example.playlistmaker.player.presentation.state.PlayerState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job

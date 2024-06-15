@@ -1,6 +1,6 @@
 package com.example.playlistmaker.medialibrary.data.db
 
-import com.example.playlistmaker.player.presentation.model.TrackInfo
+import com.example.playlistmaker.player.domain.model.TrackInfo
 import com.example.playlistmaker.search.domain.model.Track
 import com.example.playlistmaker.utils.Utils
 
@@ -16,7 +16,8 @@ class TrackDbConvertor {
             country = track.country,
             trackTimeMillis = track.trackTimeMillis,
             artworkUrl100 = track.artworkUrl100,
-            previewUrl = track.previewUrl
+            previewUrl = track.previewUrl,
+            dateADD = null
         )
     }
 

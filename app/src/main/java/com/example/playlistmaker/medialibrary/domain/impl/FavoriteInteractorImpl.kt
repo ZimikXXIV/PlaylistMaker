@@ -2,7 +2,7 @@ package com.example.playlistmaker.medialibrary.domain.impl
 
 import com.example.playlistmaker.medialibrary.domain.api.FavoriteInteractor
 import com.example.playlistmaker.medialibrary.domain.api.FavoriteRepository
-import com.example.playlistmaker.player.presentation.model.TrackInfo
+import com.example.playlistmaker.player.domain.model.TrackInfo
 import com.example.playlistmaker.search.domain.model.Track
 import kotlinx.coroutines.flow.Flow
 
