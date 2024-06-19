@@ -1,7 +1,7 @@
 package com.example.playlistmaker.player.domain.mapper
 
 
-import com.example.playlistmaker.player.presentation.model.TrackInfo
+import com.example.playlistmaker.player.domain.model.TrackInfo
 import com.example.playlistmaker.search.domain.model.Track
 import com.example.playlistmaker.utils.Utils
 
@@ -15,7 +15,8 @@ object TrackInfoMapper {
             releaseDate = track.releaseDate,
             primaryGenreName = track.releaseDate.toString().take(4),
             country = track.country,
-            trackTimeMillis = Utils.convertTimeToString(track.trackTimeMillis, "mm:ss"),
+            trackTimeMillis = track.trackTimeMillis,
+            artworkUrl100 = track.artworkUrl100,
             artworkUrl512 = Utils.getIamgeByResolution(track.artworkUrl100, "512x512"),
             previewUrl = track.previewUrl
         )

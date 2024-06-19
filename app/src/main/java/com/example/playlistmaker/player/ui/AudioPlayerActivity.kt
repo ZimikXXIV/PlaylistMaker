@@ -10,7 +10,7 @@ import com.example.playlistmaker.databinding.ActivityAudioplayerBinding
 import com.example.playlistmaker.player.domain.mapper.TrackInfoMapper
 import com.example.playlistmaker.player.domain.model.PlayerConst
 import com.example.playlistmaker.player.domain.model.PlayerStatus
-import com.example.playlistmaker.player.presentation.model.TrackInfo
+import com.example.playlistmaker.player.domain.model.TrackInfo
 import com.example.playlistmaker.player.presentation.state.PlayerState
 import com.example.playlistmaker.player.presentation.viewmodel.PlayerViewModel
 import com.example.playlistmaker.search.domain.model.Track
@@ -54,16 +54,35 @@ class AudioPlayerActivity : AppCompatActivity() {
                 is PlayerState.Content -> {
                     preparePlayer(playerState.playerSatus, playerState.playerTime)
                 }
-
+                is PlayerState.Favotite -> {
+                    renderLikeButton(playerState.isFavotite)
+                }
                 else -> {
                     preparePlayer(PlayerStatus.DEFAULT, PlayerConst.DEFAULT_DURATION)
                 }
             }
         }
 
+        binding.likeBtn.setOnClickListener {
+            viewModel.likePressed()
+        }
+
         binding.playBtn.setOnClickListener {
             viewModel.changeStatus()
         }
+
+        viewModel.checkIsFavorite();
+
+    }
+
+    private fun renderLikeButton(isFavorite: Boolean) {
+
+        if (isFavorite) {
+            binding.likeBtn.setImageResource(R.drawable.liked_icon)
+        } else {
+            binding.likeBtn.setImageResource(R.drawable.like_icon)
+        }
+
 
     }
 

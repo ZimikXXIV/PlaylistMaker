@@ -11,8 +11,6 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
 import com.example.playlistmaker.search.domain.api.TrackListClickListenerInterface
 import com.example.playlistmaker.search.domain.model.Track
-import java.text.SimpleDateFormat
-import java.util.Locale
 
 
 class TrackHolder(itemView: View, private val onClick: TrackListClickListenerInterface?) :
@@ -27,8 +25,7 @@ class TrackHolder(itemView: View, private val onClick: TrackListClickListenerInt
 
         trackName.text = track.trackName
         artistName.text = track.artistName
-        duration.text =
-            SimpleDateFormat("mm:ss", Locale.getDefault()).format(track.trackTimeMillis!!.toLong())
+        duration.text = track.trackTimeMillis
 
         itemView.setOnClickListener {
             onClick?.onClick(track)

@@ -9,7 +9,7 @@
         android:label="FragmentSettings" />
     <fragment
         android:id="@+id/fragmentMediaLibrary"
-        android:name="com.example.playlistmaker.medialibrary.MediaLibraryFragment"
+        android:name="com.example.playlistmaker.medialibrary.ui.MediaLibraryFragment"
         android:label="FragmentMediaLibrary" />
     <fragment
         android:id="@+id/fragmentSearch"

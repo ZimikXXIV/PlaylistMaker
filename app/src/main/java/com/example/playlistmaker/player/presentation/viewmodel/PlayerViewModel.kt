@@ -4,10 +4,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.playlistmaker.medialibrary.domain.api.FavoriteInteractor
 import com.example.playlistmaker.player.domain.api.PlayerInteractor
 import com.example.playlistmaker.player.domain.model.PlayerConst
 import com.example.playlistmaker.player.domain.model.PlayerStatus
-import com.example.playlistmaker.player.presentation.model.TrackInfo
+import com.example.playlistmaker.player.domain.model.TrackInfo
 import com.example.playlistmaker.player.presentation.state.PlayerState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -15,11 +16,16 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class PlayerViewModel(
-    track: TrackInfo, private val playerInteractor: PlayerInteractor
+    private val track: TrackInfo,
+    private val playerInteractor: PlayerInteractor,
+    private val favoriteInteractor: FavoriteInteractor
 ) : ViewModel() {
 
     private var loadingLiveData = MutableLiveData<PlayerState>()
     private var playerJob: Job? = null
+    private var trackFind: Job? = null
+    private var dbInteract: Job? = null
+    private var isFavorite: Boolean = false
     fun getPlayerState(): LiveData<PlayerState> = loadingLiveData
     private fun getPlayerStatus(): PlayerStatus {
         return playerInteractor.getPlayerStatus()
@@ -38,6 +44,49 @@ class PlayerViewModel(
             }
         }
 
+    }
+    private fun deleteTrack(track: TrackInfo) {
+        dbInteract?.cancel()
+        dbInteract = viewModelScope.launch(Dispatchers.IO) {
+            favoriteInteractor.deleteTrack(track)
+        }
+    }
+
+    private fun insertTrack(track: TrackInfo) {
+        dbInteract?.cancel()
+        dbInteract = viewModelScope.launch(Dispatchers.IO) {
+            favoriteInteractor.insertTrack(track)
+        }
+    }
+
+    fun checkIsFavorite() {
+        trackFind?.cancel()
+        trackFind = viewModelScope.launch(Dispatchers.IO) {
+            favoriteInteractor.getTrack(track).collect { tracks ->
+                isFavorite = !tracks.isNullOrEmpty()
+                loadingLiveData.postValue(
+                    PlayerState.Favotite(isFavorite)
+                )
+            }
+        }
+    }
+
+    fun likePressed() {
+        trackFind?.cancel()
+        trackFind = viewModelScope.launch(Dispatchers.IO) {
+            favoriteInteractor.getTrack(track).collect { tracks ->
+                if (tracks.isNullOrEmpty()) {
+                    insertTrack(track)
+                    isFavorite = true
+                } else {
+                    deleteTrack(track)
+                    isFavorite = false
+                }
+                loadingLiveData.postValue(
+                    PlayerState.Favotite(isFavorite)
+                )
+            }
+        }
     }
 
     init {

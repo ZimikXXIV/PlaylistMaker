@@ -1,4 +1,4 @@
-package com.example.playlistmaker.player.presentation.model
+package com.example.playlistmaker.player.domain.model
 
 data class TrackInfo(
     val trackId: Int,
@@ -9,6 +9,7 @@ data class TrackInfo(
     val primaryGenreName: String?,
     val country: String?,
     val trackTimeMillis: String?,
+    val artworkUrl100: String?,
     val artworkUrl512: String?,
     val previewUrl: String?
 )

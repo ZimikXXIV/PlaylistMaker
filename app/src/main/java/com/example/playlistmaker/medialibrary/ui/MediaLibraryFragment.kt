@@ -1,4 +1,4 @@
-package com.example.playlistmaker.medialibrary
+package com.example.playlistmaker.medialibrary.ui
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentMedialibraryBinding
-import com.example.playlistmaker.medialibrary.viewmodel.MediaLibraryViewModel
+import com.example.playlistmaker.medialibrary.presentation.viewmodel.MediaLibraryViewModel
 import com.example.playlistmaker.utils.BindingFragment
 import com.google.android.material.tabs.TabLayoutMediator
 import org.koin.androidx.viewmodel.ext.android.viewModel
