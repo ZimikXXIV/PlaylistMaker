@@ -3,30 +3,64 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     style="@style/MainLayoutVertical">
 
+
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnCNewPlaylist"
+        android:id="@+id/btnCreateNewPlaylist"
         style="@style/refreshSearchButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="@dimen/margin_24dp"
+        android:layout_marginBottom="@dimen/margin_16dp"
         android:text="@string/new_playlist"
         app:backgroundTint="?attr/colorOnPrimary" />
 
-    <ImageView
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewPlaylists"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginHorizontal="@dimen/margin_12dp"
+        android:padding="@dimen/margin_4dp"
+        android:visibility="gone" />
+
+    <LinearLayout
+        android:id="@+id/layoutPlaylistProgressBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginTop="@dimen/margin_48dp"
-        app:srcCompat="@drawable/empty_error" />
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="@dimen/margin_140dp"
+        android:orientation="vertical"
+        android:visibility="gone">
 
-    <TextView
-        android:id="@+id/textView"
-        style="@style/MedialibraryGagTextView"
+        <ProgressBar
+            android:id="@+id/loadingPlaylistProgressBar"
+            android:layout_width="@dimen/progress_bar_size"
+            android:layout_height="@dimen/progress_bar_size"
+            android:layout_gravity="center"
+            android:indeterminateTint="@color/YP_Blue" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layoutEmptyPlaylistCards"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:gravity="center"
-        android:text="@string/fragment_list_playlist_gag" />
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/margin_48dp"
+            app:srcCompat="@drawable/empty_error" />
+
+        <TextView
+            android:id="@+id/textView"
+            style="@style/MedialibraryGagTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:gravity="center"
+            android:text="@string/fragment_list_playlist_gag" />
+    </LinearLayout>
 </LinearLayout>

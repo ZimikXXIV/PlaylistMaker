@@ -62,6 +62,12 @@
         <item name="thumbTint">@color/Switch_thumb</item>
         <item name="trackTint">@color/Switch_track</item>
     </style>
+
+    <style name="DialogTheme" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="colorPrimary">?attr/colorOnPrimary</item>
+    </style>
+
+
     <style name = "SearchEditViewStyle">
         <item name="android:layout_width">match_parent</item>
         <item name="tint">@color/Search_Hint_Color</item>

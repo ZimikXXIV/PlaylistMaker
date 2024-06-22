@@ -9,8 +9,12 @@
         android:label="FragmentSettings" />
     <fragment
         android:id="@+id/fragmentMediaLibrary"
-        android:name="com.example.playlistmaker.medialibrary.ui.MediaLibraryFragment"
-        android:label="FragmentMediaLibrary" />
+        android:name="com.example.playlistmaker.medialibrary.ui.Fragments.MediaLibraryFragment"
+        android:label="FragmentMediaLibrary">
+        <action
+            android:id="@+id/action_fragmentMediaLibrary_to_newPlaylistFragment"
+            app:destination="@id/newPlaylistFragment" />
+    </fragment>
     <fragment
         android:id="@+id/fragmentSearch"
         android:name="com.example.playlistmaker.search.ui.SearchFragment"
@@ -23,4 +27,8 @@
         android:id="@+id/audioPlayerActivity"
         android:name="com.example.playlistmaker.player.ui.AudioPlayerActivity"
         android:label="AudioPlayerActivity" />
+    <fragment
+        android:id="@+id/newPlaylistFragment"
+        android:name="com.example.playlistmaker.playlist.ui.NewPlaylistFragment"
+        android:label="NewPlaylistFragment" />
 </navigation>

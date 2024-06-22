@@ -1,4 +1,4 @@
-package com.example.playlistmaker.medialibrary.ui
+package com.example.playlistmaker.medialibrary.ui.Fragments
 
 import android.content.Intent
 import android.os.Bundle
