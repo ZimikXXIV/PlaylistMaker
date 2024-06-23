@@ -1,4 +1,4 @@
-package com.example.playlistmaker.medialibrary.ui
+package com.example.playlistmaker.medialibrary.ui.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -17,7 +17,7 @@ class PlaylistAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PlaylistViewHolder {
         val view =
-            LayoutInflater.from(parent.context).inflate(R.layout.playlist_list, parent, false)
+            LayoutInflater.from(parent.context).inflate(R.layout.playlist_card, parent, false)
         return PlaylistViewHolder(view)
     }
 

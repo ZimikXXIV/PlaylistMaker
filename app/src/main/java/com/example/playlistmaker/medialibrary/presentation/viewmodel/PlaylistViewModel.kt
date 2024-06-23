@@ -13,7 +13,7 @@ import kotlinx.coroutines.launch
 class PlaylistViewModel(private val playlistInteractor: PlaylistInteractor) : ViewModel() {
 
     private var playlistLiveData = MutableLiveData<PlaylistCardState>()
-    private var getFavorite: Job? = null
+    private var getPlaylist: Job? = null
     fun getplaylistCardLiveData(): LiveData<PlaylistCardState> = playlistLiveData
 
 
@@ -22,8 +22,8 @@ class PlaylistViewModel(private val playlistInteractor: PlaylistInteractor) : Vi
     }
 
     fun fillData() {
-        getFavorite?.cancel()
-        getFavorite = viewModelScope.launch(Dispatchers.IO) {
+        getPlaylist?.cancel()
+        getPlaylist = viewModelScope.launch(Dispatchers.IO) {
             playlistInteractor.getPlaylists().collect { playlists ->
                 playlistLiveData.postValue(PlaylistCardState.ProgressBar())
                 if (playlists.isNullOrEmpty()) {

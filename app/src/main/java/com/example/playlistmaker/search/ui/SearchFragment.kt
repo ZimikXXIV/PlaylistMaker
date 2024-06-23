@@ -1,7 +1,6 @@
 package com.example.playlistmaker.search.ui
 
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -12,10 +11,11 @@ import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentSearchBinding
 import com.example.playlistmaker.player.domain.model.PlayerConst
-import com.example.playlistmaker.player.ui.AudioPlayerActivity
 import com.example.playlistmaker.search.domain.api.TrackListClickListenerInterface
 import com.example.playlistmaker.search.domain.model.SearchConst
 import com.example.playlistmaker.search.domain.model.Track
@@ -85,9 +85,9 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>(), TrackListClickL
     }
 
     private fun openPlayer(track: Track) {
-        val intent = Intent(activity, AudioPlayerActivity::class.java)
-        intent.putExtra(PlayerConst.TRACK_INFO, track)
-        requireActivity().startActivity(intent)
+        val args = Bundle()
+        args.putSerializable(PlayerConst.TRACK_INFO, track)
+        findNavController().navigate(R.id.action_fragmentSearch_to_audioPlayerFragment, args)
     }
     private fun setEvents() {
 

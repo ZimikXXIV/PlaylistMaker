@@ -2,6 +2,7 @@ package com.example.playlistmaker.playlist.data.impl
 
 
 import com.example.playlistmaker.medialibrary.domain.PlaylistCard
+import com.example.playlistmaker.player.domain.model.TrackInfo
 import com.example.playlistmaker.playlist.data.Entity.PlaylistEntity
 import com.example.playlistmaker.playlist.data.Entity.PlaylistWithTracksEntity
 import com.example.playlistmaker.playlist.data.PlaylistDbConvertor
@@ -15,7 +16,7 @@ class PlaylistRepositoryImpl(
     private val appDatabase: AppDatabase,
     private val playlistDbConvertor: PlaylistDbConvertor
 ) : PlaylistRepository {
-    override suspend fun insertTrack(playlist: Playlist) {
+    override suspend fun insertPlaylist(playlist: Playlist) {
         val playlistEntity = convertFromTrackInfo(playlist)
         appDatabase.playlistDao().insertPlaylist(playlistEntity)
     }
@@ -31,6 +32,11 @@ class PlaylistRepositoryImpl(
 
     private fun convertToPlaylist(playlistWithTracks: List<PlaylistWithTracksEntity>): List<PlaylistCard> {
         return playlistWithTracks.map { playlist -> playlistDbConvertor.map(playlist) }
+    }
+
+    override suspend fun insertTrack(track: TrackInfo, playlist: PlaylistCard) {
+        val trackPlaylist = playlistDbConvertor.map(track, playlist)
+        appDatabase.playlistDao().insertTracks(trackPlaylist)
     }
 
 }

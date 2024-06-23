@@ -17,26 +17,25 @@ class NewPlaylistViewModel(
     private var jobSave: Job? = null
 
     private suspend fun insertPlaylist(playlist: Playlist) {
-        playlistInteractor.insertTrack(playlist)
+        playlistInteractor.insertPlaylist(playlist)
     }
 
 
     fun savePlaylist(
         caption: String,
         description: String?,
-        coverPlaylist: String?
+        coverPlaylist: Uri?
     ) {
         jobSave?.cancel()
 
         jobSave = viewModelScope.launch {
-            var imgUri: Uri? = null
-            if (!coverPlaylist.isNullOrEmpty()) {
-                imgUri = fileSaveInteractor.savePhoto(coverPlaylist)
-            }
+
+            if (coverPlaylist != null) fileSaveInteractor.savePhoto(coverPlaylist.toString())
+
             val savedPlaylist = Playlist(
                 caption = caption,
                 description = description,
-                coverPath = imgUri.toString()
+                coverPath = coverPlaylist?.toString()
             )
             insertPlaylist(savedPlaylist)
         }

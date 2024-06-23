@@ -72,7 +72,7 @@ class NewPlaylistFragment : BindingFragment<FragmentNewPlaylistBinding>() {
             viewModel.savePlaylist(
                 caption = binding.edtxtName.text.toString(),
                 description = binding.edtxtDescription.text.toString(),
-                coverPlaylist = imgUri.toString()
+                coverPlaylist = imgUri
             )
             findNavController().navigateUp()
             Toast.makeText(
@@ -97,6 +97,8 @@ class NewPlaylistFragment : BindingFragment<FragmentNewPlaylistBinding>() {
                 .setNeutralButton(R.string.new_playlist_alert_cancel) { dialog, which -> }
                 .setPositiveButton(R.string.new_playlist_alert_confirm) { dialog, which -> findNavController().navigateUp() }
                 .show()
+        } else {
+            findNavController().navigateUp()
         }
     }
 

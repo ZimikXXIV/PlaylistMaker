@@ -27,7 +27,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".player.ui.AudioPlayerActivity"
+            android:name=".player.ui.AudioPlayerFragment"
             android:windowSoftInputMode="adjustPan"
             android:exported="false" />
     </application>

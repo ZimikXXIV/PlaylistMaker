@@ -12,23 +12,45 @@
         android:name="com.example.playlistmaker.medialibrary.ui.Fragments.MediaLibraryFragment"
         android:label="FragmentMediaLibrary">
         <action
+            android:id="@+id/action_fragmentMediaLibrary_to_playlistFragment2"
+            app:destination="@id/playlistFragment" />
+        <action
             android:id="@+id/action_fragmentMediaLibrary_to_newPlaylistFragment"
             app:destination="@id/newPlaylistFragment" />
+        <action
+            android:id="@+id/action_fragmentMediaLibrary_to_audioPlayerFragment"
+            app:destination="@id/audioPlayerFragment" />
     </fragment>
     <fragment
         android:id="@+id/fragmentSearch"
         android:name="com.example.playlistmaker.search.ui.SearchFragment"
         android:label="FragmentSearch">
         <action
-            android:id="@+id/action_fragmentSearch_to_audioPlayerActivity"
-            app:destination="@id/audioPlayerActivity" />
+            android:id="@+id/action_fragmentSearch_to_audioPlayerFragment"
+            app:destination="@id/audioPlayerFragment" />
     </fragment>
-    <activity
-        android:id="@+id/audioPlayerActivity"
-        android:name="com.example.playlistmaker.player.ui.AudioPlayerActivity"
-        android:label="AudioPlayerActivity" />
     <fragment
         android:id="@+id/newPlaylistFragment"
         android:name="com.example.playlistmaker.playlist.ui.NewPlaylistFragment"
         android:label="NewPlaylistFragment" />
+    <fragment
+        android:id="@+id/audioPlayerFragment"
+        android:name="com.example.playlistmaker.player.ui.AudioPlayerFragment"
+        android:label="AudioPlayerFragment">
+        <action
+            android:id="@+id/action_audioPlayerFragment_to_newPlaylistFragment"
+            app:destination="@id/newPlaylistFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/favoriteFragment"
+        android:name="com.example.playlistmaker.medialibrary.ui.Fragments.FavoriteFragment"
+        android:label="FavoriteFragment" />
+    <fragment
+        android:id="@+id/playlistFragment"
+        android:name="com.example.playlistmaker.medialibrary.ui.Fragments.PlaylistFragment"
+        android:label="PlaylistFragment">
+        <action
+            android:id="@+id/action_playlistFragment_to_newPlaylistFragment2"
+            app:destination="@id/newPlaylistFragment" />
+    </fragment>
 </navigation>

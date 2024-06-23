@@ -11,8 +11,8 @@ import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentMedialibraryPlaylistBinding
 import com.example.playlistmaker.medialibrary.domain.PlaylistCard
 import com.example.playlistmaker.medialibrary.presentation.viewmodel.PlaylistViewModel
-import com.example.playlistmaker.medialibrary.ui.PlaylistAdapter
 import com.example.playlistmaker.medialibrary.ui.State.PlaylistCardState
+import com.example.playlistmaker.medialibrary.ui.adapters.PlaylistAdapter
 import com.example.playlistmaker.utils.BindingFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -76,6 +76,11 @@ class PlaylistFragment : BindingFragment<FragmentMedialibraryPlaylistBinding>() 
 
             else -> {}
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.fillData()
     }
 
     companion object {

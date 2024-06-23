@@ -14,11 +14,12 @@
         android:layout_marginVertical="@dimen/margin_8dp"
         android:layout_marginStart="@dimen/margin_13dp"
         android:layout_marginEnd="@dimen/margin_8dp"
+        app:layout_constraintDimensionRatio="1:1"
         app:srcCompat="@drawable/placeholder_ico" />
 
     <LinearLayout
         android:id="@+id/trackInfo"
-        android:layout_width="0dp"
+        android:layout_width="@dimen/empty_dp"
         android:layout_height="wrap_content"
         android:layout_marginVertical="@dimen/margin_14dp"
         android:layout_weight="1"
@@ -38,7 +39,7 @@
 
             <TextView
                 android:id="@+id/artistNameTextView"
-                android:layout_width="0dp"
+                android:layout_width="@dimen/empty_dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 style="@style/TrackInfoTextView"

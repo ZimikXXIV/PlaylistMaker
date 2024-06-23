@@ -1,18 +1,18 @@
 package com.example.playlistmaker.medialibrary.ui.Fragments
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentMedialibraryFavoriteBinding
 import com.example.playlistmaker.medialibrary.presentation.viewmodel.FavoriteViewModel
 import com.example.playlistmaker.medialibrary.ui.State.FavoriteState
 import com.example.playlistmaker.player.domain.model.PlayerConst
-import com.example.playlistmaker.player.ui.AudioPlayerActivity
 import com.example.playlistmaker.search.domain.api.TrackListClickListenerInterface
 import com.example.playlistmaker.search.domain.model.SearchConst
 import com.example.playlistmaker.search.domain.model.Track
@@ -28,6 +28,7 @@ class FavoriteFragment : BindingFragment<FragmentMedialibraryFavoriteBinding>(),
     private val favoriteTrackAdapter = TrackAdapter(this)
     private lateinit var trackClickDebounce: (Track) -> Unit
     private val favoriteList = ArrayList<Track>()
+
     override fun createBinding(
         inflater: LayoutInflater,
         container: ViewGroup?
@@ -86,9 +87,9 @@ class FavoriteFragment : BindingFragment<FragmentMedialibraryFavoriteBinding>(),
     }
 
     fun openPlayer(track: Track) {
-        val intent = Intent(activity, AudioPlayerActivity::class.java)
-        intent.putExtra(PlayerConst.TRACK_INFO, track)
-        requireActivity().startActivity(intent)
+        val args = Bundle()
+        args.putSerializable(PlayerConst.TRACK_INFO, track)
+        findNavController().navigate(R.id.action_fragmentMediaLibrary_to_audioPlayerFragment, args)
     }
 
     override fun onClick(track: Track) {

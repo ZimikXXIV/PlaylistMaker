@@ -1,4 +1,4 @@
-package com.example.playlistmaker.medialibrary.ui
+package com.example.playlistmaker.medialibrary.ui.adapters
 
 import android.content.res.Resources
 import android.util.TypedValue
@@ -10,43 +10,39 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
 import com.example.playlistmaker.medialibrary.domain.PlaylistCard
-import com.example.playlistmaker.search.ui.TrackHolder
+import com.example.playlistmaker.medialibrary.domain.api.PlaylistSheetClickListenerInterface
+import com.example.playlistmaker.utils.Utils
 
 
-class PlaylistViewHolder(itemView: View) :
+class BottomSheetHolder(itemView: View, private val onClick: PlaylistSheetClickListenerInterface?) :
     RecyclerView.ViewHolder(itemView) {
 
     private val caption: TextView = itemView.findViewById(R.id.titlePlaylist)
     private val trackCount: TextView = itemView.findViewById(R.id.trackCount)
     private val cover: ImageView = itemView.findViewById(R.id.coverPlaylist)
 
-
     fun bind(playlist: PlaylistCard) {
 
         caption.text = playlist.caption
 
-        trackCount.text = "%s %s".format(
+        trackCount.text = itemView.context.getString(R.string.track_count_in_playlist).format(
             playlist.countTrack.toString(),
-            getStringCountTracks(playlist.countTrack)
+            Utils.getStringCountTracks(playlist.countTrack)
         )
+
+        itemView.setOnClickListener {
+            onClick?.onClick(playlist)
+        }
 
         Glide.with(itemView)
             .load(playlist.coverImg)
             .placeholder(R.drawable.placeholder_ico)
-            .transform(RoundedCorners(TrackHolder.dpToPx(2f)))
             .centerCrop()
+            .transform(RoundedCorners(dpToPx(2f)))
             .into(cover)
 
         caption.requestLayout()
 
-    }
-
-    fun getStringCountTracks(trackCount: Int): String {
-        return when (trackCount) {
-            1 -> "трек"
-            2, 3, 4 -> "трека"
-            else -> "треков"
-        }
     }
 
     companion object {

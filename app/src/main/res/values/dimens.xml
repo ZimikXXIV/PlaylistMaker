@@ -12,6 +12,7 @@
     <dimen name="text_size_19sp">19sp</dimen>
     <dimen name="small_text_size">13sp</dimen>
     <dimen name="text_size_11sp">11sp</dimen>
+    <dimen name="text_size_12sp">13sp</dimen>
     <dimen name="text_size_13sp">13sp</dimen>
     <dimen name="text_size_14sp">14sp</dimen>
     <dimen name="text_size_16sp">16sp</dimen>
@@ -48,4 +49,5 @@
     <dimen name="empty_dp">0dp</dimen>
     <dimen name="height_52dp">52dp</dimen>
     <dimen name="progress_bar_size">44dp</dimen>
+    <dimen name="bottom_sheet_peek_height">505dp</dimen>
 </resources>
