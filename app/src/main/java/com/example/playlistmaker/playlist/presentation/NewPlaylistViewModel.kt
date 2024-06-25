@@ -15,6 +15,11 @@ class NewPlaylistViewModel(
 ) : ViewModel() {
 
     private var jobSave: Job? = null
+    private var savedUri: Uri? = null
+
+    fun saveUri(uri: Uri) {
+        savedUri = uri
+    }
 
     private suspend fun insertPlaylist(playlist: Playlist) {
         playlistInteractor.insertPlaylist(playlist)
@@ -23,19 +28,18 @@ class NewPlaylistViewModel(
 
     fun savePlaylist(
         caption: String,
-        description: String?,
-        coverPlaylist: Uri?
+        description: String?
     ) {
         jobSave?.cancel()
 
         jobSave = viewModelScope.launch {
-
-            if (coverPlaylist != null) fileSaveInteractor.savePhoto(coverPlaylist.toString())
+            var savedFile: Uri? = null
+            if (savedUri != null) savedFile = fileSaveInteractor.savePhoto(savedUri.toString())
 
             val savedPlaylist = Playlist(
                 caption = caption,
                 description = description,
-                coverPath = coverPlaylist?.toString()
+                coverPath = savedFile?.toString()
             )
             insertPlaylist(savedPlaylist)
         }

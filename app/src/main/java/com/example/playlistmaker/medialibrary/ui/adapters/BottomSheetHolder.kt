@@ -11,7 +11,6 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
 import com.example.playlistmaker.medialibrary.domain.PlaylistCard
 import com.example.playlistmaker.medialibrary.domain.api.PlaylistSheetClickListenerInterface
-import com.example.playlistmaker.utils.Utils
 
 
 class BottomSheetHolder(itemView: View, private val onClick: PlaylistSheetClickListenerInterface?) :
@@ -25,10 +24,13 @@ class BottomSheetHolder(itemView: View, private val onClick: PlaylistSheetClickL
 
         caption.text = playlist.caption
 
-        trackCount.text = itemView.context.getString(R.string.track_count_in_playlist).format(
-            playlist.countTrack.toString(),
-            Utils.getStringCountTracks(playlist.countTrack)
-        )
+        trackCount.text =
+            itemView.context.resources.getQuantityString(
+                R.plurals.tracks_plurals,
+                playlist.countTrack,
+                playlist.countTrack
+            )
+
 
         itemView.setOnClickListener {
             onClick?.onClick(playlist)

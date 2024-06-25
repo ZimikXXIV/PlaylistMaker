@@ -37,8 +37,8 @@ class NewPlaylistFragment : BindingFragment<FragmentNewPlaylistBinding>() {
             checkIsSaved()
         }
 
-        binding.edtxtName.doAfterTextChanged {
-            if (binding.edtxtName.text.isNullOrEmpty()) {
+        binding.inputEditTextName.doAfterTextChanged {
+            if (binding.inputEditTextName.text.isNullOrEmpty()) {
                 binding.btnCreatePlaylist.background.setTint(resources.getColor(R.color.YP_Grey))
                 binding.btnCreatePlaylist.isEnabled = false
             } else {
@@ -50,7 +50,7 @@ class NewPlaylistFragment : BindingFragment<FragmentNewPlaylistBinding>() {
         val pickMedia =
             registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
                 if (uri != null) {
-                    imgUri = uri
+                    viewModel.saveUri(uri)
                     isSelectedImg = true
                     binding.coverPlaylist.setImageURI(uri)
                 }
@@ -70,16 +70,15 @@ class NewPlaylistFragment : BindingFragment<FragmentNewPlaylistBinding>() {
 
         binding.btnCreatePlaylist.setOnClickListener {
             viewModel.savePlaylist(
-                caption = binding.edtxtName.text.toString(),
-                description = binding.edtxtDescription.text.toString(),
-                coverPlaylist = imgUri
+                caption = binding.inputEditTextName.text.toString(),
+                description = binding.inputEditTextDescription.text.toString()
             )
             findNavController().navigateUp()
             Toast.makeText(
                 requireContext(),
                 String.format(
                     getString(R.string.new_playlist_created),
-                    binding.edtxtName.text.toString()
+                    binding.inputEditTextName.text.toString()
                 ),
                 Toast.LENGTH_LONG
             ).show()
@@ -88,10 +87,10 @@ class NewPlaylistFragment : BindingFragment<FragmentNewPlaylistBinding>() {
     }
 
     private fun checkIsSaved() {
-        if (isSelectedImg &&
-            (!binding.edtxtName.text.isNullOrEmpty() || !binding.edtxtDescription.text.isNullOrEmpty())
+        if (isSelectedImg ||
+            !binding.inputEditTextName.text.isNullOrEmpty() || !binding.inputEditTextDescription.text.isNullOrEmpty()
         ) {
-            MaterialAlertDialogBuilder(requireContext(), R.style.DialogTheme)
+            MaterialAlertDialogBuilder(requireContext())
                 .setTitle(R.string.new_playlist_alert_title)
                 .setMessage(R.string.new_playlist_alert_message)
                 .setNeutralButton(R.string.new_playlist_alert_cancel) { dialog, which -> }

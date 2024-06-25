@@ -75,10 +75,14 @@ class AudioPlayerFragment : BindingFragment<FragmentAudioplayerBinding>(),
 
         bottomSheetBehavior = BottomSheetBehavior.from(binding.standardBottomSheet)
 
+
         bottomSheetBehavior.addBottomSheetCallback(object :
             BottomSheetBehavior.BottomSheetCallback() {
             override fun onStateChanged(bottomSheet: View, newState: Int) {
                 // newState — новое состояние BottomSheet
+
+                binding.overlay.isVisible = newState != BottomSheetBehavior.STATE_HIDDEN
+
                 when (newState) {
                     BottomSheetBehavior.STATE_EXPANDED -> {
                         // загружаем рекламный баннер
@@ -96,7 +100,8 @@ class AudioPlayerFragment : BindingFragment<FragmentAudioplayerBinding>(),
                 }
             }
 
-            override fun onSlide(bottomSheet: View, slideOffset: Float) {}
+            override fun onSlide(bottomSheet: View, slideOffset: Float) {
+            }
         })
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
 

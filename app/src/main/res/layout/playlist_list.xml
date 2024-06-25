@@ -7,14 +7,25 @@
     android:background="?android:attr/selectableItemBackground"
     android:orientation="horizontal">
 
-    <ImageView
-        android:id="@+id/coverPlaylist"
-        android:layout_width="@dimen/cover_size"
-        android:layout_height="@dimen/cover_size"
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginVertical="@dimen/margin_8dp"
         android:layout_marginStart="@dimen/margin_13dp"
         android:layout_marginEnd="@dimen/margin_8dp"
-        app:srcCompat="@drawable/placeholder_ico" />
+        app:cardCornerRadius="8dp"
+        app:cardElevation="1dp">
+
+        <ImageView
+            android:id="@+id/coverPlaylist"
+            android:layout_width="@dimen/cover_size"
+            android:layout_height="@dimen/cover_size"
+            android:layout_gravity="center"
+
+            android:scaleType="centerCrop"
+            app:srcCompat="@drawable/placeholder_ico" />
+    </androidx.cardview.widget.CardView>
 
     <LinearLayout
         android:id="@+id/playlistInfo"

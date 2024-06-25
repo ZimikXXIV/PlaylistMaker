@@ -18,4 +18,6 @@
     <color name="Track_List_Under_Name_Color">@color/YP_White</color>
     <color name="Error_Search_Icon">@color/YP_White</color>
     <color name="Bottom_Sheet_Holder">@color/YP_White</color>
+    <color name="Alert_Button_Text">@color/YP_White</color>
+    <color name="Input_Playlist">@color/YP_White</color>
 </resources>
