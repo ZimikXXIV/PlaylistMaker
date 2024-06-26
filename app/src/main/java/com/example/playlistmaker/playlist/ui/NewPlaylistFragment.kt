@@ -1,6 +1,5 @@
 package com.example.playlistmaker.playlist.ui
 
-import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -22,7 +21,6 @@ class NewPlaylistFragment : BindingFragment<FragmentNewPlaylistBinding>() {
 
     private val viewModel by viewModel<NewPlaylistViewModel>()
     private var isSelectedImg: Boolean = false
-    private var imgUri: Uri? = null
     override fun createBinding(
         inflater: LayoutInflater,
         container: ViewGroup?
@@ -90,7 +88,7 @@ class NewPlaylistFragment : BindingFragment<FragmentNewPlaylistBinding>() {
         if (isSelectedImg ||
             !binding.inputEditTextName.text.isNullOrEmpty() || !binding.inputEditTextDescription.text.isNullOrEmpty()
         ) {
-            MaterialAlertDialogBuilder(requireContext())
+            MaterialAlertDialogBuilder(requireContext(), R.style.AlertDialogTheme)
                 .setTitle(R.string.new_playlist_alert_title)
                 .setMessage(R.string.new_playlist_alert_message)
                 .setNeutralButton(R.string.new_playlist_alert_cancel) { dialog, which -> }
