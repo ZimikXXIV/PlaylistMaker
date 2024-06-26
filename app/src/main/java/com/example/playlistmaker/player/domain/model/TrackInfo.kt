@@ -1,5 +1,8 @@
 package com.example.playlistmaker.player.domain.model
 
+import java.io.Serializable
+
+
 data class TrackInfo(
     val trackId: Int,
     val trackName: String?,
@@ -12,4 +15,4 @@ data class TrackInfo(
     val artworkUrl100: String?,
     val artworkUrl512: String?,
     val previewUrl: String?
-)
+) : Serializable

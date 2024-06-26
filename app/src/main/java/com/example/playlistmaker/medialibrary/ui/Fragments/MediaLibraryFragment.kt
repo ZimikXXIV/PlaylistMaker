@@ -1,4 +1,4 @@
-package com.example.playlistmaker.medialibrary.ui
+package com.example.playlistmaker.medialibrary.ui.Fragments
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -38,6 +38,7 @@ class MediaLibraryFragment : BindingFragment<FragmentMedialibraryBinding>() {
         }
 
         tabMediator.attach()
+
     }
 
     override fun onDestroyView() {

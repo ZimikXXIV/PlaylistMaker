@@ -4,12 +4,15 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.playlistmaker.R
+import com.example.playlistmaker.medialibrary.domain.PlaylistCard
 import com.example.playlistmaker.medialibrary.domain.api.FavoriteInteractor
 import com.example.playlistmaker.player.domain.api.PlayerInteractor
 import com.example.playlistmaker.player.domain.model.PlayerConst
 import com.example.playlistmaker.player.domain.model.PlayerStatus
 import com.example.playlistmaker.player.domain.model.TrackInfo
 import com.example.playlistmaker.player.presentation.state.PlayerState
+import com.example.playlistmaker.playlist.domain.api.PlaylistInteractor
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -18,14 +21,16 @@ import kotlinx.coroutines.launch
 class PlayerViewModel(
     private val track: TrackInfo,
     private val playerInteractor: PlayerInteractor,
-    private val favoriteInteractor: FavoriteInteractor
+    private val favoriteInteractor: FavoriteInteractor,
+    private val playlistInteractor: PlaylistInteractor
 ) : ViewModel() {
 
     private var loadingLiveData = MutableLiveData<PlayerState>()
     private var playerJob: Job? = null
-    private var trackFind: Job? = null
     private var dbInteract: Job? = null
     private var isFavorite: Boolean = false
+
+
     fun getPlayerState(): LiveData<PlayerState> = loadingLiveData
     private fun getPlayerStatus(): PlayerStatus {
         return playerInteractor.getPlayerStatus()
@@ -60,20 +65,20 @@ class PlayerViewModel(
     }
 
     fun checkIsFavorite() {
-        trackFind?.cancel()
-        trackFind = viewModelScope.launch(Dispatchers.IO) {
+        dbInteract?.cancel()
+        dbInteract = viewModelScope.launch(Dispatchers.IO) {
             favoriteInteractor.getTrack(track).collect { tracks ->
                 isFavorite = !tracks.isNullOrEmpty()
                 loadingLiveData.postValue(
-                    PlayerState.Favotite(isFavorite)
+                    PlayerState.Favorite(isFavorite)
                 )
             }
         }
     }
 
     fun likePressed() {
-        trackFind?.cancel()
-        trackFind = viewModelScope.launch(Dispatchers.IO) {
+        dbInteract?.cancel()
+        dbInteract = viewModelScope.launch(Dispatchers.IO) {
             favoriteInteractor.getTrack(track).collect { tracks ->
                 if (tracks.isNullOrEmpty()) {
                     insertTrack(track)
@@ -83,7 +88,7 @@ class PlayerViewModel(
                     isFavorite = false
                 }
                 loadingLiveData.postValue(
-                    PlayerState.Favotite(isFavorite)
+                    PlayerState.Favorite(isFavorite)
                 )
             }
         }
@@ -149,6 +154,42 @@ class PlayerViewModel(
             }
 
             else -> {}
+        }
+    }
+
+    fun fillPlaylist() {
+        dbInteract?.cancel()
+        dbInteract = viewModelScope.launch(Dispatchers.IO) {
+            playlistInteractor.getPlaylists().collect { playlists ->
+                loadingLiveData.postValue(PlayerState.LoadPlaylist())
+                if (playlists.isNullOrEmpty()) {
+                    loadingLiveData.postValue(PlayerState.LoadedPlaylist(emptyList<PlaylistCard>()))
+                } else loadingLiveData.postValue(PlayerState.LoadedPlaylist(playlists))
+            }
+        }
+    }
+
+    fun saveTrackToPlaylist(playlist: PlaylistCard) {
+
+        if (playlist.trackList.contains(track)) {
+            loadingLiveData.postValue(
+                PlayerState.ErrAddToPlaylist(
+                    R.string.error_add_track_to_playlist,
+                    playlist.caption
+                )
+            )
+            return
+        }
+
+        dbInteract?.cancel()
+        dbInteract = viewModelScope.launch {
+            playlistInteractor.insertTrack(track, playlist)
+            loadingLiveData.postValue(
+                PlayerState.AddToPlaylist(
+                    R.string.add_track_to_playlist,
+                    playlist.caption
+                )
+            )
         }
     }
 
