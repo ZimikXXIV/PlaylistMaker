@@ -13,6 +13,7 @@ import com.example.playlistmaker.utils.Utils
 class PlaylistDbConvertor {
     fun map(playlist: Playlist): PlaylistEntity {
         return PlaylistEntity(
+            playlistId = playlist.playlistId,
             playlistCaption = playlist.caption,
             playlistDescription = playlist.description,
             coverPath = playlist.coverPath
@@ -21,6 +22,7 @@ class PlaylistDbConvertor {
 
     fun map(playlist: PlaylistEntity): Playlist {
         return Playlist(
+            playlistId = playlist.playlistId,
             caption = playlist.playlistCaption,
             description = playlist.playlistDescription,
             coverPath = playlist.coverPath
@@ -31,7 +33,9 @@ class PlaylistDbConvertor {
         return PlaylistCard(
             id = playlist.playlist.playlistId,
             caption = playlist.playlist.playlistCaption,
+            description = playlist.playlist.playlistDescription,
             countTrack = playlist.playlistTrack.size,
+            durationTrack = playlist.playlistTrack.sumOf { it.trackTimeMillis ?: 0L },
             coverImg = if (playlist.playlist.coverPath.isNullOrEmpty()) null else Uri.parse(playlist.playlist.coverPath),
             trackList = playlist.playlistTrack.map { track -> map(track) }
         )
@@ -47,8 +51,9 @@ class PlaylistDbConvertor {
             primaryGenreName = track.primaryGenreName,
             country = track.country,
             trackTimeMillis = track.trackTimeMillis,
+            trackTimeMillisStr = Utils.convertTimeToString(track.trackTimeMillis, "mm:ss"),
             artworkUrl100 = track.artworkUrl100,
-            artworkUrl512 = Utils.getIamgeByResolution(track.artworkUrl100, "512x512"),
+            artworkUrl512 = Utils.getImageByResolution(track.artworkUrl100, "512x512"),
             previewUrl = track.previewUrl
         )
     }

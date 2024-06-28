@@ -24,8 +24,8 @@ import com.example.playlistmaker.player.domain.model.TrackInfo
 import com.example.playlistmaker.player.presentation.state.PlayerState
 import com.example.playlistmaker.player.presentation.viewmodel.PlayerViewModel
 import com.example.playlistmaker.search.domain.model.Track
-import com.example.playlistmaker.search.ui.TrackHolder
 import com.example.playlistmaker.utils.BindingFragment
+import com.example.playlistmaker.utils.Utils
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
@@ -222,12 +222,12 @@ class AudioPlayerFragment : BindingFragment<FragmentAudioplayerBinding>(),
         binding.yearTrackInfo.text = track.releaseDate.toString().take(4)
         binding.albumTrackInfo.text = track.collectionName
         binding.durationTrack.text = PlayerConst.DEFAULT_DURATION
-        binding.durationTrackInfo.text = track.trackTimeMillis
+        binding.durationTrackInfo.text = track.trackTimeMillisStr
 
         Glide.with(this)
             .load(track.artworkUrl512)
             .placeholder(R.drawable.placeholder_big_icon)
-            .transform(RoundedCorners(TrackHolder.dpToPx(8f)))
+            .transform(RoundedCorners(Utils.dpToPx(8f)))
             //.fitCenter()//.centerCrop()
             .into(binding.coverAlbum)
     }

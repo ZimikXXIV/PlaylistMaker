@@ -16,7 +16,9 @@
     <dimen name="text_size_13sp">13sp</dimen>
     <dimen name="text_size_14sp">14sp</dimen>
     <dimen name="text_size_16sp">16sp</dimen>
+    <dimen name="text_size_18sp">18sp</dimen>
     <dimen name="text_size_22sp">22sp</dimen>
+    <dimen name="text_size_24sp">24sp</dimen>
     <dimen name="search_corner_radius">8dp</dimen>
     <dimen name="refresh_corner_radius">54dp</dimen>
     <dimen name="drawable_padding">16dp</dimen>
@@ -52,4 +54,6 @@
     <dimen name="height_52dp">52dp</dimen>
     <dimen name="progress_bar_size">44dp</dimen>
     <dimen name="bottom_sheet_peek_height">505dp</dimen>
+    <dimen name="bottom_sheet_peek_height_playlist">200dp</dimen>
+    <dimen name="bottom_sheet_peek_height_menu">417dp</dimen>
 </resources>

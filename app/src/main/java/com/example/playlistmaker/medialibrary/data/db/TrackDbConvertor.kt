@@ -31,8 +31,9 @@ class TrackDbConvertor {
             primaryGenreName = track.primaryGenreName,
             country = track.country,
             trackTimeMillis = track.trackTimeMillis,
+            trackTimeMillisStr = Utils.convertTimeToString(track.trackTimeMillis, "mm:ss"),
             artworkUrl100 = track.artworkUrl100,
-            artworkUrl512 = Utils.getIamgeByResolution(track.artworkUrl100, "512x512"),
+            artworkUrl512 = Utils.getImageByResolution(track.artworkUrl100, "512x512"),
             previewUrl = track.previewUrl
         )
     }

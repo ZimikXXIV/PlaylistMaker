@@ -23,4 +23,5 @@
     <color name="Alert_Button_Text">@color/YP_Black</color>
     <color name="Input_Playlist">@color/YP_Grey</color>
     <color name="Placeholder_Playlist">@color/YP_White</color>
+    <color name="Bottom_Sheet_Color_Holder">@color/YP_Light</color>
 </resources>

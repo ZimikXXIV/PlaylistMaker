@@ -1,9 +1,11 @@
-package com.example.playlistmaker.medialibrary.ui.Fragments
+package com.example.playlistmaker.medialibrary.ui.adapters
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
+import com.example.playlistmaker.medialibrary.ui.Fragments.FavoriteFragment
+import com.example.playlistmaker.medialibrary.ui.Fragments.PlaylistFragment
 
 class AdapterFragment(fragmentManager: FragmentManager, lifecycle: Lifecycle) :
     FragmentStateAdapter(fragmentManager, lifecycle) {

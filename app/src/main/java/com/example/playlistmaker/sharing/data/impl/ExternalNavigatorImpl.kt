@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
 import android.net.Uri
+import androidx.core.content.ContextCompat.startActivity
 import com.example.playlistmaker.R
 import com.example.playlistmaker.settings.domain.model.EmailData
 import com.example.playlistmaker.sharing.domain.api.ExternalNavigator
@@ -18,6 +19,7 @@ class ExternalNavigatorImpl(private val context: Context) : ExternalNavigator {
         mailIntent.putExtra(Intent.EXTRA_SUBJECT, mail.subject)
         mailIntent.putExtra(Intent.EXTRA_TEXT, mail.text)
         mailIntent.setFlags(FLAG_ACTIVITY_NEW_TASK)
+
         context.startActivity(mailIntent)
     }
 
@@ -53,6 +55,18 @@ class ExternalNavigatorImpl(private val context: Context) : ExternalNavigator {
 
     private fun getTermsLink(): String {
         return context.getString(R.string.license_link)
+    }
+
+    override fun shareString(shareText: String) {
+        val shareString = Intent(Intent.ACTION_SEND)
+        shareString.type = "text/plain"
+        shareString.putExtra(Intent.EXTRA_TEXT, shareText)
+        shareString.addFlags(FLAG_ACTIVITY_NEW_TASK)
+
+        val chooserIntent = Intent.createChooser(shareString, null)
+        chooserIntent.addFlags(FLAG_ACTIVITY_NEW_TASK)
+
+        startActivity(context, chooserIntent, null)
     }
 
 }

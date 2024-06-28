@@ -1,4 +1,4 @@
-package com.example.playlistmaker.playlist.ui
+package com.example.playlistmaker.playlist.ui.Fragments
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -21,6 +21,7 @@ class NewPlaylistFragment : BindingFragment<FragmentNewPlaylistBinding>() {
 
     private val viewModel by viewModel<NewPlaylistViewModel>()
     private var isSelectedImg: Boolean = false
+
     override fun createBinding(
         inflater: LayoutInflater,
         container: ViewGroup?
@@ -92,11 +93,16 @@ class NewPlaylistFragment : BindingFragment<FragmentNewPlaylistBinding>() {
                 .setTitle(R.string.new_playlist_alert_title)
                 .setMessage(R.string.new_playlist_alert_message)
                 .setNeutralButton(R.string.new_playlist_alert_cancel) { dialog, which -> }
-                .setPositiveButton(R.string.new_playlist_alert_confirm) { dialog, which -> findNavController().navigateUp() }
+                .setPositiveButton(R.string.new_playlist_alert_confirm) { _, _ -> findNavController().navigateUp() }
                 .show()
         } else {
             findNavController().navigateUp()
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+
     }
 
     companion object {

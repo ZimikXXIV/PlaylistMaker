@@ -1,7 +1,8 @@
 package com.example.playlistmaker.playlist.domain.model
 
 data class Playlist(
+    val playlistId: Int,
     val caption: String,
     val description: String?,
-    val coverPath: String?
+    var coverPath: String?
 )

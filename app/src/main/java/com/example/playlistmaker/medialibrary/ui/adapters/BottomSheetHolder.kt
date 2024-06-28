@@ -1,7 +1,5 @@
 package com.example.playlistmaker.medialibrary.ui.adapters
 
-import android.content.res.Resources
-import android.util.TypedValue
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
@@ -11,6 +9,7 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
 import com.example.playlistmaker.medialibrary.domain.PlaylistCard
 import com.example.playlistmaker.medialibrary.domain.api.PlaylistSheetClickListenerInterface
+import com.example.playlistmaker.utils.Utils
 
 
 class BottomSheetHolder(itemView: View, private val onClick: PlaylistSheetClickListenerInterface?) :
@@ -40,20 +39,10 @@ class BottomSheetHolder(itemView: View, private val onClick: PlaylistSheetClickL
             .load(playlist.coverImg)
             .placeholder(R.drawable.placeholder_ico)
             .centerCrop()
-            .transform(RoundedCorners(dpToPx(2f)))
+            .transform(RoundedCorners(Utils.dpToPx(2f)))
             .into(cover)
 
         caption.requestLayout()
 
-    }
-
-    companion object {
-        fun dpToPx(dp: Float): Int {
-            return TypedValue.applyDimension(
-                TypedValue.COMPLEX_UNIT_DIP,
-                dp,
-                Resources.getSystem().displayMetrics
-            ).toInt()
-        }
     }
 }

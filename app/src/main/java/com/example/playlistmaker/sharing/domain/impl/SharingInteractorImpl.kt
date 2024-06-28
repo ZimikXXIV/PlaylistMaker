@@ -18,4 +18,8 @@ class SharingInteractorImpl(
         externalNavigator.openEmail()
     }
 
+    override fun shareString(shareText: String) {
+        externalNavigator.shareString(shareText)
+    }
+
 }

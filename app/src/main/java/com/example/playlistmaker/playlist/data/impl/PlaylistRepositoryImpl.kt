@@ -39,5 +39,24 @@ class PlaylistRepositoryImpl(
         appDatabase.playlistDao().insertTracks(trackPlaylist)
     }
 
+    override fun getPlaylist(playlistId: Int): Flow<List<PlaylistCard>> = flow {
+        val playlists = appDatabase.playlistDao().getPlaylistWithTracks(playlistId)
+        emit(convertToPlaylist(playlists))
+    }
+
+    override suspend fun deleteTrack(playlist: PlaylistCard, track: TrackInfo) {
+        appDatabase.playlistDao().deleteTrack(playlist.id, track.trackId)
+    }
+
+    override suspend fun deletePlaylist(playlistId: Int) {
+        appDatabase.playlistDao().deleteAllFromPlaylist(playlistId)
+        appDatabase.playlistDao().deletePlaylist(playlistId)
+    }
+
+    override suspend fun updatePlaylist(playlist: Playlist) {
+        val playlistEntity = playlistDbConvertor.map(playlist)
+        appDatabase.playlistDao().updatePlaylist(playlistEntity)
+    }
+
 }
 

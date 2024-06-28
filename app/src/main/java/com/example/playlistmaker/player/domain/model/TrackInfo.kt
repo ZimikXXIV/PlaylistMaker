@@ -11,7 +11,8 @@ data class TrackInfo(
     val releaseDate: String?,
     val primaryGenreName: String?,
     val country: String?,
-    val trackTimeMillis: String?,
+    val trackTimeMillis: Long?,
+    val trackTimeMillisStr: String?,
     val artworkUrl100: String?,
     val artworkUrl512: String?,
     val previewUrl: String?

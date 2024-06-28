@@ -37,6 +37,7 @@ class NewPlaylistViewModel(
             if (savedUri != null) savedFile = fileSaveInteractor.savePhoto(savedUri.toString())
 
             val savedPlaylist = Playlist(
+                playlistId = 0,
                 caption = caption,
                 description = description,
                 coverPath = savedFile?.toString()
