@@ -1,50 +1,39 @@
 package com.example.playlistmaker.playlist.ui.Fragments
 
-import android.net.Uri
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.widget.doAfterTextChanged
 import androidx.navigation.fragment.findNavController
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.FitCenter
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
-import com.example.playlistmaker.databinding.FragmentEditPlaylistBinding
 import com.example.playlistmaker.playlist.presentation.EditPlaylistViewModel
 import com.example.playlistmaker.playlist.ui.State.EditPlaylistState
-import com.example.playlistmaker.utils.BindingFragment
+import com.example.playlistmaker.utils.Utils
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class EditPlaylistFragment : BindingFragment<FragmentEditPlaylistBinding>() {
+class EditPlaylistFragment : NewPlaylistFragment() {
 
     private val viewModel by viewModel<EditPlaylistViewModel>()
-    private var isSelectedImg: Boolean = false
-
-    override fun createBinding(
-        inflater: LayoutInflater,
-        container: ViewGroup?
-    ): FragmentEditPlaylistBinding {
-        return FragmentEditPlaylistBinding.inflate(inflater, container, false)
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         val playlistId = arguments?.getInt(PLAYLIST_ID)
 
-        binding.btnBack.setOnClickListener {
-            findNavController().navigateUp()
-        }
+        binding.btnCreatePlaylist.text = getString(R.string.save_playlist)
 
         binding.inputEditTextName.doAfterTextChanged {
             if (binding.inputEditTextName.text.isNullOrEmpty()) {
-                binding.btnSavePlaylist.background.setTint(resources.getColor(R.color.YP_Grey))
-                binding.btnSavePlaylist.isEnabled = false
+                binding.btnCreatePlaylist.background.setTint(resources.getColor(R.color.YP_Grey))
+                binding.btnCreatePlaylist.isEnabled = false
             } else {
-                binding.btnSavePlaylist.background.setTint(resources.getColor(R.color.YP_Blue))
-                binding.btnSavePlaylist.isEnabled = true
+                binding.btnCreatePlaylist.background.setTint(resources.getColor(R.color.YP_Blue))
+                binding.btnCreatePlaylist.isEnabled = true
             }
         }
 
@@ -52,7 +41,6 @@ class EditPlaylistFragment : BindingFragment<FragmentEditPlaylistBinding>() {
             registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
                 if (uri != null) {
                     viewModel.saveUri(uri)
-                    isSelectedImg = true
                     binding.coverPlaylist.setImageURI(uri)
                 }
             }
@@ -69,7 +57,7 @@ class EditPlaylistFragment : BindingFragment<FragmentEditPlaylistBinding>() {
                 }
             })
 
-        binding.btnSavePlaylist.setOnClickListener {
+        binding.btnCreatePlaylist.setOnClickListener {
             viewModel.updateData(
                 caption = binding.inputEditTextName.text.toString(),
                 description = binding.inputEditTextDescription.text.toString()
@@ -81,7 +69,12 @@ class EditPlaylistFragment : BindingFragment<FragmentEditPlaylistBinding>() {
                 is EditPlaylistState.LoadedPlaylist -> {
                     binding.inputEditTextName.setText(editPlaylistState.playlist.caption)
                     binding.inputEditTextDescription.setText(editPlaylistState.playlist.description)
-                    binding.coverPlaylist.setImageURI(Uri.parse(editPlaylistState.playlist.coverPath))
+
+                    Glide.with(requireContext())
+                        .load(editPlaylistState.playlist.coverPath)
+                        .placeholder(R.drawable.new_playlist_placeholder)
+                        .transform(FitCenter(), RoundedCorners(Utils.dpToPx(8f)))
+                        .into(binding.coverPlaylist)
                 }
 
                 is EditPlaylistState.SavedPlaylist -> findNavController().navigateUp()

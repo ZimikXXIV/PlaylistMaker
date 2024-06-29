@@ -5,18 +5,17 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
 import com.example.playlistmaker.player.domain.model.TrackInfo
-import com.example.playlistmaker.playlist.domain.api.TrackInfoClickListenerInterface
-import com.example.playlistmaker.playlist.domain.api.TrackInfoLongClickListenerInterface
 import com.example.playlistmaker.utils.Utils
 
 
 class ViewPlaylistHolder(
     itemView: View,
-    private val onLongClick: TrackInfoLongClickListenerInterface?,
-    private val onClick: TrackInfoClickListenerInterface?
+    private val onLongClick: (input: TrackInfo) -> Unit,
+    private val onClick: (input: TrackInfo) -> Unit
 ) :
     RecyclerView.ViewHolder(itemView) {
 
@@ -32,19 +31,18 @@ class ViewPlaylistHolder(
         duration.text = Utils.convertTimeToString(track.trackTimeMillis, "mm:ss")
 
         itemView.setOnLongClickListener {
-            onLongClick?.onLongClick(track)
+            onLongClick(track)
             return@setOnLongClickListener true
         }
 
         itemView.setOnClickListener {
-            onClick?.onClick(track)
+            onClick(track)
         }
 
         Glide.with(itemView)
             .load(track.artworkUrl100)
             .placeholder(R.drawable.placeholder_ico)
-            .transform(RoundedCorners(Utils.dpToPx(2f)))
-            .centerCrop()
+            .transform(CenterCrop(), RoundedCorners(Utils.dpToPx(8f)))
             .into(cover)
 
         artistName.requestLayout()

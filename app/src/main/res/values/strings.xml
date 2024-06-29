@@ -45,6 +45,7 @@
     <string name="delete_track_cancel_alert">Нет</string>
     <string name="empty_track_confirm_alert">ОК</string>
     <string name="empty_track_message_alert">В этом плейлисте нет списка треков,\n которым можно поделиться</string>
+    <string name="empty_playlist_message_alert">В плейлист "%s" еще не добавлены треки</string>
     <string name="empty_string"> </string>
     <string name="bottom_sheet_menu_share">Поделиться</string>
     <string name="bottom_sheet_menu_edit">Редактировать информацию</string>

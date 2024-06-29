@@ -34,7 +34,8 @@ class TrackDbConvertor {
             trackTimeMillisStr = Utils.convertTimeToString(track.trackTimeMillis, "mm:ss"),
             artworkUrl100 = track.artworkUrl100,
             artworkUrl512 = Utils.getImageByResolution(track.artworkUrl100, "512x512"),
-            previewUrl = track.previewUrl
+            previewUrl = track.previewUrl,
+            dateAdd = track.dateADD
         )
     }
 

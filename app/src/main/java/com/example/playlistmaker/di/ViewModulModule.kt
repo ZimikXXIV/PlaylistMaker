@@ -6,7 +6,6 @@ import com.example.playlistmaker.medialibrary.presentation.viewmodel.PlaylistVie
 import com.example.playlistmaker.player.domain.model.TrackInfo
 import com.example.playlistmaker.player.presentation.viewmodel.PlayerViewModel
 import com.example.playlistmaker.playlist.presentation.EditPlaylistViewModel
-import com.example.playlistmaker.playlist.presentation.NewPlaylistViewModel
 import com.example.playlistmaker.playlist.presentation.ViewPlaylistViewModel
 import com.example.playlistmaker.root.presentation.MainViewModel
 import com.example.playlistmaker.search.presentation.viewmodel.SearchViewModel
@@ -42,10 +41,6 @@ val viewModelModule = module {
 
     viewModel {
         MainViewModel(get())
-    }
-
-    viewModel {
-        NewPlaylistViewModel(get(), get())
     }
 
     viewModel {

@@ -15,5 +15,6 @@ data class TrackInfo(
     val trackTimeMillisStr: String?,
     val artworkUrl100: String?,
     val artworkUrl512: String?,
-    val previewUrl: String?
+    val previewUrl: String?,
+    val dateAdd: String?
 ) : Serializable

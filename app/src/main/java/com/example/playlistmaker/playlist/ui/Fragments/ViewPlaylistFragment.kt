@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
@@ -13,7 +14,6 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.FitCenter
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentViewPlaylistBinding
 import com.example.playlistmaker.medialibrary.domain.PlaylistCard
@@ -21,8 +21,6 @@ import com.example.playlistmaker.medialibrary.ui.adapters.BottomSheetAdapter
 import com.example.playlistmaker.player.domain.mapper.TrackInfoMapper
 import com.example.playlistmaker.player.domain.model.PlayerConst
 import com.example.playlistmaker.player.domain.model.TrackInfo
-import com.example.playlistmaker.playlist.domain.api.TrackInfoClickListenerInterface
-import com.example.playlistmaker.playlist.domain.api.TrackInfoLongClickListenerInterface
 import com.example.playlistmaker.playlist.presentation.ViewPlaylistViewModel
 import com.example.playlistmaker.playlist.ui.State.ViewPlaylistState
 import com.example.playlistmaker.playlist.ui.ViewPlaylistAdapter
@@ -34,14 +32,14 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.concurrent.TimeUnit
 
-class ViewPlaylistFragment : BindingFragment<FragmentViewPlaylistBinding>(),
-    TrackInfoLongClickListenerInterface, TrackInfoClickListenerInterface {
+class ViewPlaylistFragment : BindingFragment<FragmentViewPlaylistBinding>() {
 
     private val viewModel by viewModel<ViewPlaylistViewModel>()
-    private val trackAdapter = ViewPlaylistAdapter(this, this)
+    private val trackAdapter = ViewPlaylistAdapter(::deleteTrackWithAlert, ::openTrack)
     private val playlistCardAdapter = BottomSheetAdapter(null)
     private lateinit var bottomSheetBehaviorList: BottomSheetBehavior<LinearLayout>
     private lateinit var bottomSheetBehaviorMenu: BottomSheetBehavior<LinearLayout>
+
     private var savedPlaylist: PlaylistCard? = null
     private lateinit var openTrackDebounce: (TrackInfo) -> Unit
 
@@ -119,11 +117,23 @@ class ViewPlaylistFragment : BindingFragment<FragmentViewPlaylistBinding>(),
                     Glide.with(requireContext())
                         .load(viewPlaylistState.playlistCard.coverImg)
                         .placeholder(R.drawable.placeholder_ico)
-                        .transform(FitCenter(), RoundedCorners(Utils.dpToPx(8f)))
+                        .transform(FitCenter())
                         .into(binding.coverPlaylist)
 
                     trackAdapter.setTrackList(viewPlaylistState.playlistCard.trackList)
                     playlistCardAdapter.setPlaylistList(listOf(viewPlaylistState.playlistCard))
+
+                    if (viewPlaylistState.playlistCard.trackList.isEmpty()) {
+                        Toast.makeText(
+                            context,
+                            getString(R.string.empty_playlist_message_alert).format(
+                                viewPlaylistState.playlistCard.caption
+                            ),
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        binding.btnMenu.isVisible = false
+                    }
+
                 }
 
                 is ViewPlaylistState.DeletedPlaylist -> {
@@ -222,12 +232,12 @@ class ViewPlaylistFragment : BindingFragment<FragmentViewPlaylistBinding>(),
         )
         var trackIdx = 0
         savedPlaylist!!.trackList.forEach { track ->
-            msg += "${trackIdx++}. ${track.artistName} - ${track.trackName} (${track.trackTimeMillisStr})\n"
+            msg += "\n ${trackIdx++}. ${track.artistName} - ${track.trackName} (${track.trackTimeMillisStr})"
         }
-        return msg.trimEnd()
+        return msg
     }
 
-    override fun onLongClick(track: TrackInfo) {
+    private fun deleteTrackWithAlert(track: TrackInfo) {
         MaterialAlertDialogBuilder(requireContext(), R.style.AlertDialogTheme)
             .setTitle(R.string.delete_track_alert)
             .setMessage(R.string.empty_string)
@@ -241,7 +251,7 @@ class ViewPlaylistFragment : BindingFragment<FragmentViewPlaylistBinding>(),
             .show()
     }
 
-    override fun onClick(track: TrackInfo) {
+    private fun openTrack(track: TrackInfo) {
         openTrackDebounce(track)
     }
 

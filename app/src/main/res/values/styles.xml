@@ -204,8 +204,10 @@
 
 
     <style name="TextInputLayoutStyle" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
-        <item name="boxStrokeColor">@color/YP_Blue</item>
+        <item name="boxStrokeColor">@color/text_input_layout_stroke_color</item>
+        <item name="boxStrokeWidth">1dp</item>
         <item name="hintTextColor">@color/YP_Blue</item>
+        <item name="background">@drawable/fill_round_rect</item>
         <item name="android:textColor">?attr/colorOnPrimary</item>
         <item name="android:textColorHint">?attr/colorOnPrimary</item>
         <item name="colorControlActivated">@color/YP_Blue</item>

@@ -228,7 +228,6 @@ class AudioPlayerFragment : BindingFragment<FragmentAudioplayerBinding>(),
             .load(track.artworkUrl512)
             .placeholder(R.drawable.placeholder_big_icon)
             .transform(RoundedCorners(Utils.dpToPx(8f)))
-            //.fitCenter()//.centerCrop()
             .into(binding.coverAlbum)
     }
 

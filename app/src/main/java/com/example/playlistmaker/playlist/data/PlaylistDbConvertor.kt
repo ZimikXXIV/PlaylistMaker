@@ -6,7 +6,7 @@ import com.example.playlistmaker.medialibrary.domain.PlaylistCard
 import com.example.playlistmaker.player.domain.model.TrackInfo
 import com.example.playlistmaker.playlist.data.Entity.PlaylistEntity
 import com.example.playlistmaker.playlist.data.Entity.PlaylistTracksEntity
-import com.example.playlistmaker.playlist.data.Entity.PlaylistWithTracksEntity
+import com.example.playlistmaker.playlist.data.Entity.PlaylistWithTracks
 import com.example.playlistmaker.playlist.domain.model.Playlist
 import com.example.playlistmaker.utils.Utils
 
@@ -29,7 +29,7 @@ class PlaylistDbConvertor {
         )
     }
 
-    fun map(playlist: PlaylistWithTracksEntity): PlaylistCard {
+    fun map(playlist: PlaylistWithTracks): PlaylistCard {
         return PlaylistCard(
             id = playlist.playlist.playlistId,
             caption = playlist.playlist.playlistCaption,
@@ -43,7 +43,7 @@ class PlaylistDbConvertor {
 
     fun map(track: PlaylistTracksEntity): TrackInfo {
         return TrackInfo(
-            trackId = track.trackAppleId,
+            trackId = track.trackId,
             trackName = track.trackName,
             artistName = track.artistName,
             collectionName = track.collectionName,
@@ -54,15 +54,14 @@ class PlaylistDbConvertor {
             trackTimeMillisStr = Utils.convertTimeToString(track.trackTimeMillis, "mm:ss"),
             artworkUrl100 = track.artworkUrl100,
             artworkUrl512 = Utils.getImageByResolution(track.artworkUrl100, "512x512"),
-            previewUrl = track.previewUrl
+            previewUrl = track.previewUrl,
+            dateAdd = track.dateAdd
         )
     }
 
-    fun map(track: TrackInfo, playlist: PlaylistCard): PlaylistTracksEntity {
+    fun map(track: TrackInfo): PlaylistTracksEntity {
         return PlaylistTracksEntity(
-            trackId = 0,
-            trackAppleId = track.trackId,
-            fkPlaylistId = playlist.id,
+            trackId = track.trackId,
             trackName = track.trackName,
             artistName = track.artistName,
             collectionName = track.collectionName,
@@ -72,7 +71,7 @@ class PlaylistDbConvertor {
             trackTimeMillis = track.trackTimeMillis,
             artworkUrl100 = track.artworkUrl100,
             previewUrl = track.previewUrl,
-            dateADD = null
+            dateAdd = null
         )
     }
 }

@@ -46,23 +46,23 @@
         app:layout_constraintTop_toBottomOf="@id/headerText">
 
         <ImageView
-        android:id="@+id/coverPlaylist"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+            android:id="@+id/coverPlaylist"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:background="?attr/colorPrimary"
-        android:src="@drawable/new_playlist_placeholder"
-        android:clickable="true"
+            android:clickable="true"
+            android:src="@drawable/new_playlist_placeholder"
             android:scaleType="centerCrop" />
     </androidx.cardview.widget.CardView>
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/edtxtName"
         style="@style/TextInputLayoutStyle"
+        android:theme="@style/TextInputLayoutStyle"
         android:layout_width="0dp"
         android:layout_marginHorizontal="@dimen/margin_16dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_32dp"
-        android:theme="@style/TextInputLayoutStyle"
         android:hint="@string/playlist_name"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

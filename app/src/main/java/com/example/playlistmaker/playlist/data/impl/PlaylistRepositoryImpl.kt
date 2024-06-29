@@ -4,13 +4,16 @@ package com.example.playlistmaker.playlist.data.impl
 import com.example.playlistmaker.medialibrary.domain.PlaylistCard
 import com.example.playlistmaker.player.domain.model.TrackInfo
 import com.example.playlistmaker.playlist.data.Entity.PlaylistEntity
-import com.example.playlistmaker.playlist.data.Entity.PlaylistWithTracksEntity
+import com.example.playlistmaker.playlist.data.Entity.PlaylistJoinTrackEntity
+import com.example.playlistmaker.playlist.data.Entity.PlaylistWithTracks
 import com.example.playlistmaker.playlist.data.PlaylistDbConvertor
 import com.example.playlistmaker.playlist.domain.api.PlaylistRepository
 import com.example.playlistmaker.playlist.domain.model.Playlist
 import com.example.playlistmaker.root.data.db.AppDatabase
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import java.text.SimpleDateFormat
+import java.util.Date
 
 class PlaylistRepositoryImpl(
     private val appDatabase: AppDatabase,
@@ -30,13 +33,15 @@ class PlaylistRepositoryImpl(
         emit(convertToPlaylist(playlists))
     }
 
-    private fun convertToPlaylist(playlistWithTracks: List<PlaylistWithTracksEntity>): List<PlaylistCard> {
+    private fun convertToPlaylist(playlistWithTracks: List<PlaylistWithTracks>): List<PlaylistCard> {
         return playlistWithTracks.map { playlist -> playlistDbConvertor.map(playlist) }
     }
 
     override suspend fun insertTrack(track: TrackInfo, playlist: PlaylistCard) {
-        val trackPlaylist = playlistDbConvertor.map(track, playlist)
+        val trackPlaylist = playlistDbConvertor.map(track)
+        trackPlaylist.dateAdd = SimpleDateFormat("yyyy/dd/M hh:mm:ss").format(Date())
         appDatabase.playlistDao().insertTracks(trackPlaylist)
+        appDatabase.playlistDao().insertJoin(PlaylistJoinTrackEntity(playlist.id, track.trackId))
     }
 
     override fun getPlaylist(playlistId: Int): Flow<List<PlaylistCard>> = flow {
@@ -45,11 +50,17 @@ class PlaylistRepositoryImpl(
     }
 
     override suspend fun deleteTrack(playlist: PlaylistCard, track: TrackInfo) {
-        appDatabase.playlistDao().deleteTrack(playlist.id, track.trackId)
+        appDatabase.playlistDao()
+            .deletePlaylistJoinTrack(PlaylistJoinTrackEntity(playlist.id, track.trackId))
+        appDatabase.playlistDao().deleteTrack(track.trackId)
     }
 
     override suspend fun deletePlaylist(playlistId: Int) {
-        appDatabase.playlistDao().deleteAllFromPlaylist(playlistId)
+        val listTracks = appDatabase.playlistDao().getAllJoinByPlaylist(playlistId)
+        listTracks.forEach { join ->
+            appDatabase.playlistDao().deletePlaylistJoinTrack(join)
+            appDatabase.playlistDao().deleteTrack(join.trackId)
+        }
         appDatabase.playlistDao().deletePlaylist(playlistId)
     }
 

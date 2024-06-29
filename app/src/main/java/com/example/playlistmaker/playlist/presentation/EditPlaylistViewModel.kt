@@ -27,6 +27,32 @@ class EditPlaylistViewModel(
         savedUri = uri
     }
 
+    private suspend fun insertPlaylist(playlist: Playlist) {
+        playlistInteractor.insertPlaylist(playlist)
+    }
+
+
+    fun savePlaylist(
+        caption: String,
+        description: String?
+    ) {
+        jobSave?.cancel()
+
+        jobSave = viewModelScope.launch {
+            var savedFile: Uri? = null
+            if (savedUri != null) savedFile = fileSaveInteractor.savePhoto(savedUri.toString())
+
+            val savedPlaylist = Playlist(
+                playlistId = 0,
+                caption = caption,
+                description = description,
+                coverPath = savedFile?.toString()
+            )
+            insertPlaylist(savedPlaylist)
+        }
+
+    }
+
     private suspend fun updatePlaylist(playlist: Playlist) {
         playlistInteractor.updatePlaylist(playlist)
         editPlaylistState.postValue(EditPlaylistState.SavedPlaylist())
@@ -40,6 +66,7 @@ class EditPlaylistViewModel(
                 description = playlist.last().description,
                 coverPath = playlist.last().coverImg.toString()
             )
+            savedUri = playlist.last().coverImg
             savedPlaylistId = loadedPlaylist.playlistId
             editPlaylistState.postValue(EditPlaylistState.LoadedPlaylist(loadedPlaylist))
 
@@ -77,6 +104,5 @@ class EditPlaylistViewModel(
         }
 
     }
-
 
 }
