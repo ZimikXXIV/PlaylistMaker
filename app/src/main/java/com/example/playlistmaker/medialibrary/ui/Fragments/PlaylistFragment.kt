@@ -5,24 +5,31 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentMedialibraryPlaylistBinding
 import com.example.playlistmaker.medialibrary.domain.PlaylistCard
+import com.example.playlistmaker.medialibrary.domain.api.PlaylistViewClickListenerInterface
 import com.example.playlistmaker.medialibrary.presentation.viewmodel.PlaylistViewModel
 import com.example.playlistmaker.medialibrary.ui.State.PlaylistCardState
 import com.example.playlistmaker.medialibrary.ui.adapters.PlaylistAdapter
+import com.example.playlistmaker.playlist.ui.Fragments.ViewPlaylistFragment
+import com.example.playlistmaker.search.domain.model.SearchConst
 import com.example.playlistmaker.utils.BindingFragment
+import com.example.playlistmaker.utils.debounce
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class PlaylistFragment : BindingFragment<FragmentMedialibraryPlaylistBinding>() {
+class PlaylistFragment : BindingFragment<FragmentMedialibraryPlaylistBinding>(),
+    PlaylistViewClickListenerInterface {
 
 
     private val viewModel by viewModel<PlaylistViewModel>()
 
-    private val playlistCardAdapter = PlaylistAdapter()
+    private val playlistCardAdapter = PlaylistAdapter(this)
     private val playlistCards = ArrayList<PlaylistCard>()
+    private lateinit var playlistClickDebounce: (PlaylistCard) -> Unit
 
     override fun createBinding(
         inflater: LayoutInflater,
@@ -33,6 +40,12 @@ class PlaylistFragment : BindingFragment<FragmentMedialibraryPlaylistBinding>() 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        playlistClickDebounce = debounce<PlaylistCard>(
+            SearchConst.CLICK_DEBOUNCE_DELAY, viewLifecycleOwner.lifecycleScope, false
+        ) { playlist ->
+            openPlaylistView(playlist)
+        }
 
         binding.btnCreateNewPlaylist.setOnClickListener() {
             findNavController().navigate(R.id.action_fragmentMediaLibrary_to_newPlaylistFragment)
@@ -47,6 +60,16 @@ class PlaylistFragment : BindingFragment<FragmentMedialibraryPlaylistBinding>() 
             updateView(playlistCardState)
         }
 
+    }
+
+    override fun onClick(playlist: PlaylistCard) {
+        playlistClickDebounce(playlist)
+    }
+
+    private fun openPlaylistView(playlist: PlaylistCard) {
+        val args = Bundle()
+        args.putSerializable(ViewPlaylistFragment.PLAYLIST_ID, playlist.id)
+        findNavController().navigate(R.id.action_fragmentMediaLibrary_to_viewPlaylistFragment, args)
     }
 
     fun updateView(playlistCardState: PlaylistCardState) {

@@ -5,14 +5,18 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.bitmap.FitCenter
+import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
 import com.example.playlistmaker.medialibrary.domain.PlaylistCard
-import com.example.playlistmaker.search.ui.TrackHolder
+import com.example.playlistmaker.medialibrary.domain.api.PlaylistViewClickListenerInterface
+import com.example.playlistmaker.utils.Utils
 
 
-class PlaylistViewHolder(itemView: View) :
+class PlaylistViewHolder(
+    itemView: View,
+    private val onClick: PlaylistViewClickListenerInterface?
+) :
     RecyclerView.ViewHolder(itemView) {
 
     private val caption: TextView = itemView.findViewById(R.id.titlePlaylist)
@@ -31,11 +35,14 @@ class PlaylistViewHolder(itemView: View) :
                 playlist.countTrack
             )
 
+        cover.setOnClickListener {
+            onClick?.onClick(playlist = playlist)
+        }
 
         Glide.with(itemView)
             .load(playlist.coverImg)
             .placeholder(R.drawable.placeholder_ico)
-            .transform(FitCenter(), RoundedCorners(TrackHolder.dpToPx(8f)))
+            .transform(CenterCrop(), RoundedCorners(Utils.dpToPx(8f)))
             .into(cover)
 
         caption.requestLayout()

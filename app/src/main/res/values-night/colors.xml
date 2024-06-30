@@ -20,5 +20,7 @@
     <color name="Bottom_Sheet_Holder">@color/YP_White</color>
     <color name="Alert_Button_Text">@color/YP_White</color>
     <color name="Input_Playlist">@color/YP_White</color>
+    <color name="Input_Playlist_Stroke">@color/YP_Black</color>
     <color name="Placeholder_Playlist">@color/YP_Black</color>
+    <color name="Bottom_Sheet_Color_Holder">@color/YP_White</color>
 </resources>

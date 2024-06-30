@@ -1,4 +1,4 @@
-package com.example.playlistmaker.playlist.ui
+package com.example.playlistmaker.playlist.ui.Fragments
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -12,15 +12,16 @@ import androidx.core.widget.doAfterTextChanged
 import androidx.navigation.fragment.findNavController
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentNewPlaylistBinding
-import com.example.playlistmaker.playlist.presentation.NewPlaylistViewModel
+import com.example.playlistmaker.playlist.presentation.EditPlaylistViewModel
 import com.example.playlistmaker.utils.BindingFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class NewPlaylistFragment : BindingFragment<FragmentNewPlaylistBinding>() {
+open class NewPlaylistFragment : BindingFragment<FragmentNewPlaylistBinding>() {
 
-    private val viewModel by viewModel<NewPlaylistViewModel>()
+    private val viewModel by viewModel<EditPlaylistViewModel>()
     private var isSelectedImg: Boolean = false
+
     override fun createBinding(
         inflater: LayoutInflater,
         container: ViewGroup?
@@ -91,12 +92,17 @@ class NewPlaylistFragment : BindingFragment<FragmentNewPlaylistBinding>() {
             MaterialAlertDialogBuilder(requireContext(), R.style.AlertDialogTheme)
                 .setTitle(R.string.new_playlist_alert_title)
                 .setMessage(R.string.new_playlist_alert_message)
-                .setNeutralButton(R.string.new_playlist_alert_cancel) { dialog, which -> }
-                .setPositiveButton(R.string.new_playlist_alert_confirm) { dialog, which -> findNavController().navigateUp() }
+                .setNeutralButton(R.string.new_playlist_alert_cancel) { _, _ -> }
+                .setPositiveButton(R.string.new_playlist_alert_confirm) { _, _ -> findNavController().navigateUp() }
                 .show()
         } else {
             findNavController().navigateUp()
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+
     }
 
     companion object {

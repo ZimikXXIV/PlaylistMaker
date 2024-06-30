@@ -1,7 +1,5 @@
 package com.example.playlistmaker.search.ui
 
-import android.content.res.Resources
-import android.util.TypedValue
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
@@ -11,6 +9,7 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
 import com.example.playlistmaker.search.domain.api.TrackListClickListenerInterface
 import com.example.playlistmaker.search.domain.model.Track
+import com.example.playlistmaker.utils.Utils
 
 
 class TrackHolder(itemView: View, private val onClick: TrackListClickListenerInterface?) :
@@ -25,7 +24,7 @@ class TrackHolder(itemView: View, private val onClick: TrackListClickListenerInt
 
         trackName.text = track.trackName
         artistName.text = track.artistName
-        duration.text = track.trackTimeMillis
+        duration.text = Utils.convertTimeToString(track.trackTimeMillis, "mm:ss")
 
         itemView.setOnClickListener {
             onClick?.onClick(track)
@@ -36,21 +35,11 @@ class TrackHolder(itemView: View, private val onClick: TrackListClickListenerInt
         Glide.with(itemView)
             .load(track.artworkUrl100)
             .placeholder(R.drawable.placeholder_ico)
-            .transform(RoundedCorners(dpToPx(2f)))
+            .transform(RoundedCorners(Utils.dpToPx(2f)))
             .centerCrop()
             .into(cover)
 
         artistName.requestLayout()
 
-    }
-
-    companion object {
-        fun dpToPx(dp: Float): Int {
-            return TypedValue.applyDimension(
-                TypedValue.COMPLEX_UNIT_DIP,
-                dp,
-                Resources.getSystem().displayMetrics
-            ).toInt()
-        }
     }
 }

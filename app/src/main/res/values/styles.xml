@@ -204,8 +204,10 @@
 
 
     <style name="TextInputLayoutStyle" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
-        <item name="boxStrokeColor">@color/YP_Blue</item>
+        <item name="boxStrokeColor">@color/text_input_layout_stroke_color</item>
+        <item name="boxStrokeWidth">1dp</item>
         <item name="hintTextColor">@color/YP_Blue</item>
+        <item name="background">@drawable/fill_round_rect</item>
         <item name="android:textColor">?attr/colorOnPrimary</item>
         <item name="android:textColorHint">?attr/colorOnPrimary</item>
         <item name="colorControlActivated">@color/YP_Blue</item>
@@ -214,28 +216,46 @@
     </style>
 
     <style name="AlertDialogTheme" parent="ThemeOverlay.MaterialComponents.MaterialAlertDialog">
-        <item name="colorSurface">?attr/colorPrimary</item>
+        <item name="colorSurface">@color/YP_White</item>
         <item name="materialAlertDialogTitleTextStyle">@style/TitleTextStyle</item>
         <item name="materialAlertDialogBodyTextStyle">@style/BodyTextStyle</item>
         <item name="buttonBarPositiveButtonStyle">@style/PositiveButtonStyle</item>
-        <item name="buttonBarNeutralButtonStyle">@style/NegativeNeutralStyle</item>
+        <item name="buttonBarNegativeButtonStyle">@style/NegativeStyle</item>
+        <item name="buttonBarNeutralButtonStyle">@style/NeutralStyle</item>
     </style>
 
     <style name="TitleTextStyle" parent="MaterialAlertDialog.MaterialComponents.Title.Text">
-        <item name="android:textColor">?attr/colorOnPrimary</item>
-        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/YP_Black</item>
     </style>
 
     <style name="BodyTextStyle" parent="MaterialAlertDialog.MaterialComponents.Body.Text">
-        <item name="android:textColor">?attr/colorOnPrimary</item>
+        <item name="android:textColor">@color/YP_Black</item>
     </style>
 
     <style name="PositiveButtonStyle" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
-        <item name="android:textColor">?attr/colorOnPrimary</item>
+        <item name="android:textColor">@color/YP_Blue</item>
     </style>
 
-    <style name="NegativeNeutralStyle" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
-        <item name="android:textColor">?attr/colorOnPrimary</item>
+    <style name="NegativeStyle" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
+        <item name="android:textColor">@color/YP_Blue</item>
     </style>
+
+    <style name="NeutralStyle" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
+        <item name="android:textColor">@color/YP_Grey</item>
+    </style>
+
+    <style name="BottomSheetMenuTextStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">@dimen/margin_21dp</item>
+        <item name="android:layout_marginBottom">@dimen/margin_12dp</item>
+        <item name="android:paddingStart">@dimen/textview_margin</item>
+        <item name="android:textColor">?attr/colorOnPrimary</item>
+        <item name="android:textSize">@dimen/text_size_16sp</item>
+        <item name="android:drawableTint">?attr/colorOnPrimary</item>
+        <item name="fontFamily">@font/ys_display_regular</item>
+        <item name="android:clickable">true</item>
+    </style>
+
 
 </resources>
