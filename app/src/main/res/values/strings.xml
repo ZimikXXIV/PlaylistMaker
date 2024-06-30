@@ -52,6 +52,9 @@
     <string name="bottom_sheet_menu_delete">Удалить плейлист</string>
     <string name="delete_playlist">Хотите удалить плейлист "%s"?</string>
     <string name="save_playlist">Сохранить</string>
+    <string name="share_playlist_name">Плейлист: %s</string>
+    <string name="share_playlist_description">\nОписание: %s</string>
+    <string name="share_playlist_tracks">\n%d. %s - %s (%s)</string>
     <plurals name="tracks_plurals">
         <item quantity="zero">%d треков</item>
         <item quantity="one">%d трек</item>
@@ -68,5 +71,6 @@
         <item quantity="many">%d минут</item>
         <item quantity="other">%d минут</item>
     </plurals>
+
 
 </resources>

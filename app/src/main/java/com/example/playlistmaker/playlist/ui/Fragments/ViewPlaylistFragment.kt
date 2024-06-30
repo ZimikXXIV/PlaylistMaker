@@ -226,8 +226,8 @@ class ViewPlaylistFragment : BindingFragment<FragmentViewPlaylistBinding>() {
 
     private fun getShareString(): String {
         val savedPlaylist = viewModel.getSavedPlaylistInfo()
-        var msg = "Плейлист: ${savedPlaylist.caption}\n"
-        msg += "Описание: ${savedPlaylist.description}\n"
+        var msg = getString(R.string.share_playlist_name).format(savedPlaylist.caption)
+        msg += getString(R.string.share_playlist_description).format(savedPlaylist.description)
         msg += resources.getQuantityString(
             R.plurals.tracks_plurals,
             savedPlaylist.countTrack,
@@ -235,7 +235,12 @@ class ViewPlaylistFragment : BindingFragment<FragmentViewPlaylistBinding>() {
         )
         var trackIdx = 0
         savedPlaylist.trackList.forEach { track ->
-            msg += "\n ${trackIdx++}. ${track.artistName} - ${track.trackName} (${track.trackTimeMillisStr})"
+            msg += getString(R.string.share_playlist_tracks).format(
+                trackIdx++,
+                track.artistName,
+                track.trackName,
+                track.trackTimeMillisStr
+            )
         }
         return msg
     }
