@@ -148,6 +148,10 @@ class ViewPlaylistFragment : BindingFragment<FragmentViewPlaylistBinding>() {
         })
 
         binding.btnMenu.setOnClickListener {
+            bottomSheetBehaviorMenu.state = BottomSheetBehavior.STATE_HALF_EXPANDED
+        }
+
+        binding.btnMenuShare.setOnClickListener {
             if (viewModel.getSavedPlaylistInfo().trackList.isEmpty()) {
                 Toast.makeText(
                     context,
@@ -156,13 +160,14 @@ class ViewPlaylistFragment : BindingFragment<FragmentViewPlaylistBinding>() {
                     ),
                     Toast.LENGTH_SHORT
                 ).show()
-            } else {
-                bottomSheetBehaviorMenu.state = BottomSheetBehavior.STATE_HALF_EXPANDED
-            }
-        }
 
-        binding.btnMenuShare.setOnClickListener {
-            sharePlaylist()
+                bottomSheetBehaviorMenu.state = BottomSheetBehavior.STATE_HIDDEN
+
+            } else {
+                sharePlaylist()
+            }
+
+
         }
 
         binding.btnMenuEdit.setOnClickListener {
