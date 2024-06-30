@@ -25,6 +25,10 @@ class EditPlaylistFragment : NewPlaylistFragment() {
 
         val playlistId = arguments?.getInt(PLAYLIST_ID)
 
+        binding.btnBack.setOnClickListener() {
+            findNavController().navigateUp()
+        }
+
         binding.btnCreatePlaylist.text = getString(R.string.save_playlist)
 
         binding.inputEditTextName.doAfterTextChanged {
