@@ -16,7 +16,6 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.FitCenter
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentViewPlaylistBinding
-import com.example.playlistmaker.medialibrary.domain.PlaylistCard
 import com.example.playlistmaker.medialibrary.ui.adapters.BottomSheetAdapter
 import com.example.playlistmaker.player.domain.mapper.TrackInfoMapper
 import com.example.playlistmaker.player.domain.model.PlayerConst
@@ -40,7 +39,7 @@ class ViewPlaylistFragment : BindingFragment<FragmentViewPlaylistBinding>() {
     private lateinit var bottomSheetBehaviorList: BottomSheetBehavior<LinearLayout>
     private lateinit var bottomSheetBehaviorMenu: BottomSheetBehavior<LinearLayout>
 
-    private var savedPlaylist: PlaylistCard? = null
+
     private lateinit var openTrackDebounce: (TrackInfo) -> Unit
 
     override fun createBinding(
@@ -95,7 +94,6 @@ class ViewPlaylistFragment : BindingFragment<FragmentViewPlaylistBinding>() {
         viewModel.getViewPlaylistState().observe(viewLifecycleOwner) { viewPlaylistState ->
             when (viewPlaylistState) {
                 is ViewPlaylistState.LoadedData -> {
-                    savedPlaylist = viewPlaylistState.playlistCard
                     val minutes =
                         TimeUnit.MILLISECONDS.toMinutes(viewPlaylistState.playlistCard.durationTrack)
 
@@ -122,17 +120,6 @@ class ViewPlaylistFragment : BindingFragment<FragmentViewPlaylistBinding>() {
 
                     trackAdapter.setTrackList(viewPlaylistState.playlistCard.trackList)
                     playlistCardAdapter.setPlaylistList(listOf(viewPlaylistState.playlistCard))
-
-                    if (viewPlaylistState.playlistCard.trackList.isEmpty()) {
-                        Toast.makeText(
-                            context,
-                            getString(R.string.empty_playlist_message_alert).format(
-                                viewPlaylistState.playlistCard.caption
-                            ),
-                            Toast.LENGTH_SHORT
-                        ).show()
-                        binding.btnMenu.isVisible = false
-                    }
 
                 }
 
@@ -161,7 +148,17 @@ class ViewPlaylistFragment : BindingFragment<FragmentViewPlaylistBinding>() {
         })
 
         binding.btnMenu.setOnClickListener {
-            bottomSheetBehaviorMenu.state = BottomSheetBehavior.STATE_HALF_EXPANDED
+            if (viewModel.getSavedPlaylistInfo().trackList.isEmpty()) {
+                Toast.makeText(
+                    context,
+                    getString(R.string.empty_playlist_message_alert).format(
+                        viewModel.getSavedPlaylistInfo().caption
+                    ),
+                    Toast.LENGTH_SHORT
+                ).show()
+            } else {
+                bottomSheetBehaviorMenu.state = BottomSheetBehavior.STATE_HALF_EXPANDED
+            }
         }
 
         binding.btnMenuShare.setOnClickListener {
@@ -170,7 +167,7 @@ class ViewPlaylistFragment : BindingFragment<FragmentViewPlaylistBinding>() {
 
         binding.btnMenuEdit.setOnClickListener {
             val args = Bundle()
-            args.putInt(EditPlaylistFragment.PLAYLIST_ID, savedPlaylist!!.id)
+            args.putInt(EditPlaylistFragment.PLAYLIST_ID, viewModel.getSavedPlaylistInfo().id)
             findNavController().navigate(
                 R.id.action_viewPlaylistFragment_to_editPlaylistFragment,
                 args
@@ -180,10 +177,10 @@ class ViewPlaylistFragment : BindingFragment<FragmentViewPlaylistBinding>() {
         binding.btnMenuDelete.setOnClickListener {
             MaterialAlertDialogBuilder(requireContext(), R.style.AlertDialogTheme)
                 .setTitle(R.string.empty_string)
-                .setMessage(getString(R.string.delete_playlist).format(savedPlaylist!!.caption))
+                .setMessage(getString(R.string.delete_playlist).format(viewModel.getSavedPlaylistInfo().caption))
                 .setNegativeButton(R.string.delete_track_cancel_alert) { _, _ -> }
                 .setPositiveButton(R.string.delete_track_confirm_alert) { _, _ ->
-                    viewModel.deletePlaylist(savedPlaylist!!)
+                    viewModel.deletePlaylist(viewModel.getSavedPlaylistInfo())
                 }
                 .show()
         }
@@ -211,7 +208,7 @@ class ViewPlaylistFragment : BindingFragment<FragmentViewPlaylistBinding>() {
     }
 
     private fun sharePlaylist() {
-        if ((savedPlaylist?.countTrack ?: 0) == 0) {
+        if (viewModel.getSavedPlaylistInfo().countTrack == 0) {
             MaterialAlertDialogBuilder(requireContext(), R.style.AlertDialogTheme)
                 .setTitle(R.string.empty_string)
                 .setMessage(R.string.empty_track_message_alert)
@@ -223,15 +220,16 @@ class ViewPlaylistFragment : BindingFragment<FragmentViewPlaylistBinding>() {
     }
 
     private fun getShareString(): String {
-        var msg = "Плейлист: ${savedPlaylist!!.caption}\n"
-        msg += "Описание: ${savedPlaylist!!.description}\n"
+        val savedPlaylist = viewModel.getSavedPlaylistInfo()
+        var msg = "Плейлист: ${savedPlaylist.caption}\n"
+        msg += "Описание: ${savedPlaylist.description}\n"
         msg += resources.getQuantityString(
             R.plurals.tracks_plurals,
-            savedPlaylist!!.countTrack,
-            savedPlaylist!!.countTrack
+            savedPlaylist.countTrack,
+            savedPlaylist.countTrack
         )
         var trackIdx = 0
-        savedPlaylist!!.trackList.forEach { track ->
+        savedPlaylist.trackList.forEach { track ->
             msg += "\n ${trackIdx++}. ${track.artistName} - ${track.trackName} (${track.trackTimeMillisStr})"
         }
         return msg
@@ -244,7 +242,7 @@ class ViewPlaylistFragment : BindingFragment<FragmentViewPlaylistBinding>() {
             .setNegativeButton(R.string.delete_track_cancel_alert) { _, _ -> }
             .setPositiveButton(R.string.delete_track_confirm_alert) { _, _ ->
                 viewModel.deleteTrack(
-                    savedPlaylist!!,
+                    viewModel.getSavedPlaylistInfo(),
                     track
                 )
             }

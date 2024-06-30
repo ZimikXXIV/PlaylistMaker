@@ -21,10 +21,12 @@ class ViewPlaylistViewModel(
     private var viewPlaylistState = MutableLiveData<ViewPlaylistState>()
     private var jobWorkWithDb: Job? = null
     private var playlistId: Int = 0
+    private var savedPlaylist: PlaylistCard? = null
 
 
     fun getViewPlaylistState(): MutableLiveData<ViewPlaylistState> = viewPlaylistState
 
+    fun getSavedPlaylistInfo(): PlaylistCard = savedPlaylist!!
 
     fun savePlaylistId(id: Int) {
         playlistId = id
@@ -37,7 +39,7 @@ class ViewPlaylistViewModel(
         jobWorkWithDb = viewModelScope.launch(Dispatchers.IO) {
             playlistInteractor.getPlaylist(playlistId).collect { playlist ->
                 viewPlaylistState.postValue(ViewPlaylistState.LoadedData(playlist.first()))
-
+                savedPlaylist = playlist.first()
             }
 
         }
